@@ -4,8 +4,8 @@ templateClass: tmpl-post
 ---
 {% extends "layouts/base.njk" %}
 
-
 {% block extraArticleHeader %}
+<h1>{{ title }}</h1>
    {% set wc = content | striptags | wordcount %}
    {% set wPerMinute = (wc / 240) + 1 %}
    <aside>
