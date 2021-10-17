@@ -172,10 +172,16 @@ module.exports = function (eleventyConfig) {
     return array.slice(0, n);
   });
 
+
+  const wordsCount = require('words-count').default;  
+  eleventyConfig.addFilter("universalWordCount", (data) => {
+    return wordsCount(data)
+  })
+
   eleventyConfig.addCollection("tagList", require("./_11ty/getTagList"));
 
   eleventyConfig.addPassthroughCopy("img");
-  // eleventyConfig.addPassthroughCopy({"css/dist": "css"});
+  eleventyConfig.addPassthroughCopy({"css/dist": "css"});
   // We need to copy cached.js only if GA is used
   eleventyConfig.addPassthroughCopy(GA_ID ? "js" : "js/*[!cached].*");
   eleventyConfig.addPassthroughCopy("fonts");

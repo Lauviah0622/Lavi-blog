@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Kosugi+Maru&display=swap');
 /* ================== normalize  ================== */
 /* autoprefixer: ignore next */
 /* modern normalize CSS */
@@ -383,11 +384,11 @@ body.dark-theme {
   font-style: italic;
   src: url("/fonts/DMMono-Regular.ttf") format("truetype");
 }
-@font-face {
+/* @font-face {
   font-family: "Kosugi Maru";
   font-display: swap;
   src: url("https://fonts.googleapis.com/css2?family=Kosugi+Maru&display=swap");
-}
+} */
 @font-face {
   font-family: "Inter UI var";
   font-weight: 100 900;
@@ -458,11 +459,9 @@ body {
   background-color: var(--color-bg);
   color: var(--color-text);
   overflow-x: hidden;
-
-
 }
 * {
-  transition: background-color .1s, color .1s;
+  transition: background-color 0.1s, color 0.1s;
 }
 h1,
 h2,
@@ -475,6 +474,14 @@ p {
   font-weight: var(--font-weight-normal);
   margin: 0;
 }
+.dark-theme h1,
+  .dark-theme h2,
+  .dark-theme h3,
+  .dark-theme h4,
+  .dark-theme h5,
+  .dark-theme h6 {
+    font-weight: 400;
+  }
 h1,
 h2,
 h3,
@@ -483,7 +490,8 @@ h5,
 h6 {
   line-height: 1.2;
 }
-li, blockquote  {
+li,
+blockquote {
   font-weight: var(--font-weight-normal);
 }
 h1 {
@@ -575,6 +583,10 @@ blockquote::before {
     background-color: var(--color-primary);
     border-radius: 2px;
   }
+blockquote > ol,
+  blockquote > ul {
+    padding: 0;
+  }
 code {
   font-size: 0.9em;
   font-family: var(--font-family-mono);
@@ -596,7 +608,7 @@ pre {
   border-radius: var(--block-border-radius);
   font-size: 0.9em;
   line-height: inherit;
-  overflow-x: scroll;
+  overflow-x: auto;
 }
 table {
   position: relative;
@@ -607,22 +619,27 @@ table {
   border-collapse: collapse;
   border-radius: 1ch;
 }
-table tr, table tbody, table thead {
+table tr,
+  table tbody,
+  table thead {
     width: 100%;
   }
-thead th, thead td {
+thead th,
+  thead td {
     border-top-width: 0;
   }
 thead {
   background-color: var(--color-bg-reverse);
   color: var(--color-text-reverse)
 }
-thead th, thead td  {
+thead th,
+  thead td {
     border-width: 0;
   }
-th, td {
-  border: .5px solid var(--color-primary);
-  padding: .5rem 2ch;
+th,
+td {
+  border: 0.5px solid var(--color-primary);
+  padding: 0.5rem 2ch;
   width: min(-webkit-min-content, 30ch);
   width: min(-moz-min-content, 30ch);
   width: min(min-content, 30ch)
@@ -637,7 +654,7 @@ tbody:last-of-type td {
   border-bottom-width: 0;
 }
 dialog {
-  position: fixed; 
+  position: fixed;
   bottom: 0;
   z-index: 9999;
   color: var(--color-secondary);
@@ -885,8 +902,6 @@ footer nav {
     width: 1.2em;
   }
 
-  
-
   .logo--mobile {
     padding: 1.5rem 0;
     z-index: 99;
@@ -987,7 +1002,19 @@ hr {
   top: 50%;
   padding-left: 2rem;
   transform: translateY(-50%);
-  font-size: 0.8em
+  font-size: 0.8em;
+
+  max-height: 70vh;
+  overflow-y: scroll;
+  
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+  scrollbar-width: none /* Firefox */
+}
+.post__toc::-webkit-scrollbar {
+    display: none;
+  }
+.post__toc {
+  scroll-behavior: smooth
 }
 .post__toc ol {
     list-style-type: none;
@@ -1016,6 +1043,7 @@ hr {
     color: var(--color-secondary);
   }
 .post__content {
+  padding-top: 3rem 
   /* purgecss start ignore */
 }
 .post__content h1,
@@ -1183,8 +1211,8 @@ hr {
     }
 
     .post__content pre {
-      margin-right:  0;
-      margin-left:  0;
+      margin-right: 0;
+      margin-left: 0;
       padding: 1.5rem 2ch;
       width: calc(100vw - 6ch);
     }
@@ -1193,7 +1221,6 @@ hr {
       display: block;
       width: calc(100vw - 6ch);
       overflow: auto;
-      
     }
 
   .post__cover {
@@ -1218,8 +1245,6 @@ hr {
     transform: none;
     padding: 3ch;
     border-radius: var(--block-border-radius)
-
- 
   }
 
     .post__toc h4 {
@@ -1236,10 +1261,10 @@ hr {
       padding-left: 2rem;
       width: auto;
     }
-    
+
     .post__toc li a {
       display: inline-block;
-      padding-bottom: .3em;
+      padding-bottom: 0.3em;
     }
 
     .post__toc li {
@@ -1313,4 +1338,3 @@ hr {
       "tags tags";
   }
 }
-

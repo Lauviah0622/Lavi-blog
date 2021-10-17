@@ -2,6 +2,7 @@
 title: 1 個 div 和 4 行 CSS 就能更了解瀏覽器渲染引擎
 date: 2020-09-26
 tags: ["css", "browser"]
+layout: layouts/post.njk
 ---
 
 <!-- summary -->  

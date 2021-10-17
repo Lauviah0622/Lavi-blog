@@ -17,7 +17,7 @@ templateClass: tmpl-post
   {% endfor %}
 </div>
 <h1 class="post__title" id="title">{{ title }}</h1>
-   {% set wc = content | striptags | wordcount %}
+   {% set wc = content | striptags | universalWordCount %}
    {% set wPerMinute = (wc / 240) + 1 %}
   <div class="post__time">
    <p>
@@ -47,6 +47,7 @@ templateClass: tmpl-post
 
 <div class="post__tags tags">
 
+{% if tags.length > 0 %}
 <h2>tags</h2>
   {% for tag in tags %}
     {% if tag != "posts"  %}
@@ -54,6 +55,8 @@ templateClass: tmpl-post
         <a href="{{tagUrl | url}}">{{tag}}</a>
       {% endif %}
   {% endfor %}
+
+  {% endif %}
 </div>
 
 {% macro getNextItemInCollection(collection) %}
@@ -148,6 +151,10 @@ templateClass: tmpl-post
         if (current == null) return 
         if (entry.isIntersecting) {
           current.classList.add('current');
+          
+
+          let scrollTo = current.offsetTop - 100;
+          current.offsetParent.scrollTo(0, scrollTo < 0 ? 0 : scrollTo);
           if (prevElement && prevElement != current) {
             prevElement.classList.remove('current');
           }

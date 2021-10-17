@@ -2,6 +2,7 @@
 title: 關於寫文章的問題
 date: 2021-05-01
 tags: ["personal"]
+layout: layouts/post.njk
 ---
 
 ![](img/post/0__sZgbB3MlYIJ6kS8J.jpg)

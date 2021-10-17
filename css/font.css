@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Kosugi+Maru&display=swap');
+
 @font-face {
   font-family: "Inter UI";
   font-style: normal;
@@ -64,11 +66,11 @@
   font-style: italic;
   src: url("/fonts/DMMono-Regular.ttf") format("truetype");
 }
-@font-face {
+/* @font-face {
   font-family: "Kosugi Maru";
   font-display: swap;
   src: url("https://fonts.googleapis.com/css2?family=Kosugi+Maru&display=swap");
-}
+} */
 
 @font-face {
   font-family: "Inter UI var";
