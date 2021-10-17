@@ -12,11 +12,13 @@ pagination:
   addAllPagesToCollections: true
 layout: layouts/home.njk
 eleventyComputed:
-  title: Tagged “{{ tag }}”
-permalink: /tags/{{ tag | slug }}/
+  title: "{{ tag | capitalize}}"
+permalink: /tag/{{ tag | slug }}/
 ---
 
-{% set postslist = collections[ tag ] %}
-{% include "postslist.njk" %}
+<h1 class="tag__title">
+  #{{ title }}
+</h1>
 
-<p>See <a href="{{ '/tags/' | url }}">all tags</a>.</p>
+{% set postslist = collections[ tag ] %}
+{% include "tag-postslist.njk" %}

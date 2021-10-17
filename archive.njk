@@ -1,9 +1,18 @@
 ---
 layout: layouts/home.njk
-permalink: /posts/
+eleventyNavigation:
+  key: Archive
+  order: 1
+pagination:
+  data: collections.posts
+  size: 15
+  alias: posts
+  reverse: true
+permalink: /posts/{% if pagination.pageNumber > 0 %}{{ pagination.pageNumber + 1 }}/{% endif %}
 ---
 
 <h1>Archive</h1>
 
-{% set postslist = collections.posts %}
-{% include "postslist.njk" %}
+{% set postslist = posts %}
+{% include "archive-postlist.njk" %}
+{% include "layouts/pagination.njk" %}

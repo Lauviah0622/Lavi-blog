@@ -7,7 +7,9 @@ export default {
       file: "js/min.js",
       format: "iife",
       sourcemap: true,
-      plugins: [terser()],
     },
+  ],
+  plugins: [
+    terser(),
   ],
 };

@@ -4,32 +4,108 @@ templateClass: tmpl-post
 ---
 {% extends "layouts/base.njk" %}
 
-{% block extraArticleHeader %}
-<h1>{{ title }}</h1>
-   {% set wc = content | striptags | wordcount %}
-   {% set wPerMinute = (wc / 240) + 1 %}
-   <aside>
-     {{ wPerMinute | round }} min read.
-   </aside>
-{% endblock %}
-
-{% set shareUrl = metadata.url + page.url %}
 
 {% block article %}
+
+
+<div class="post__tags tags">
+  {% for tag in tags %}
+    {% if tag != "posts"  %}
+      {% set tagUrl %}/tags/{{ tag | slug }}/{% endset %}
+        <a href="{{tagUrl | url}}">{{tag}}</a>
+      {% endif %}
+  {% endfor %}
+</div>
+<h1 class="post__title" id="title">{{ title }}</h1>
+   {% set wc = content | striptags | wordcount %}
+   {% set wPerMinute = (wc / 240) + 1 %}
+  <div class="post__time">
+   <p>
+      <time datetime="{{ date | htmlDateString }}">{{ date | readableDate }}{% if update %}, updated at<time datetime="{{ update | htmlDateString }}">
+          {{ update | readableDate }}</time>{% endif %}・{{ wPerMinute | round }}min read.
+      </time>
+      
+   </p>  
+     
+  </div>
+
+
+{% if image %}
+<figure class="post__cover">
+  <img src="{{image}}"/>
+</figure>
+{% endif %}
+
+<aside class="post__toc">
+  <h4 class="only-mobile">TOC</h4>
+  {{ content | toc | safe}}
+</aside>
+
+<article class="post__content">
 {{ content | safe }}
+</article>
 
-<h1>🙏🙏🙏</h1>
-<p>
-  Since you've made it this far, <a href="{{ shareUrl | safe }}" on-click="share">sharing</a> this article on your favorite social media network 
-  would be highly appreciated 💖! For feedback, please 
-  <a href="https://twitter.com/{{ metadata.author.twitterHandle }}" target="_blank" rel="noopener">ping me on Twitter.</a>
-</p>
+<div class="post__tags tags">
 
-<share-widget>
-  <button on-click="share" aria-label="Share" href="{{ shareUrl | safe }}">
-    <div></div>
-  </button>
-</share-widget>
+<h2>tags</h2>
+  {% for tag in tags %}
+    {% if tag != "posts"  %}
+      {% set tagUrl %}/tags/{{ tag | slug }}/{% endset %}
+        <a href="{{tagUrl | url}}">{{tag}}</a>
+      {% endif %}
+  {% endfor %}
+</div>
+
+{% macro getNextItemInCollection(collection) %}
+
+{% set currentItemIndex = 0 %}
+{% set countOfItems = collections[collection].length %}
+
+{% for item in collections[collection] %}
+  {% if item.url == page.url %}
+  	{% set currentItemIndex = loop.index0 %}
+	{% endif %}
+{% endfor %}
+
+{% set nextItemIndex = currentItemIndex + 1  %}
+{% set nextItem = collections[collection][nextItemIndex] %}
+
+{% set prevItemIndex = currentItemIndex - 1  %}
+{% set prevItem = collections[collection][prevItemIndex] %}
+
+
+
+<div class="post__link">
+  <div>
+    {% if prevItem %}
+    <span>Prev</span><a href="{{ prevItem.url | url }}" class="">{{ prevItem.data.title }}</a>
+    {% endif %}
+  </div>
+  <div>
+    {% if nextItem %}
+    <span>Next</span><a href="{{ nextItem.url | url }}" class="">{{ nextItem.data.title }}</a>
+    {% endif %}
+  </div>
+</div>
+
+
+{% endmacro %}
+
+{{ getNextItemInCollection('posts') }}
+
+<hr class="post__devider">
+
+{% set shareUrl = metadata.url + page.url %}
+<div class="utterances"></div>
+<script src="https://utteranc.es/client.js"
+        repo="Lauviah0622/Lavi-blog"
+        issue-term="title"
+        label="utterance"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script>
+
 
 <script type="application/ld+json">
 {
@@ -55,4 +131,41 @@ templateClass: tmpl-post
 }
 </script>
 
+<script csp-hash>
+  let prevElement;
+ const io = new IntersectionObserver(
+  (entries) => {
+    entries.forEach((entry) => {
+      const id = entry.target.id
+        if (id === "title") {
+          const title = document.querySelector(`#${id}`)
+          if (prevElement) {
+            prevElement.classList.remove('current');
+          }
+          return  
+        }
+        const current = document.querySelector(`[data-header="${id}"]`);
+        if (current == null) return 
+        if (entry.isIntersecting) {
+          current.classList.add('current');
+          if (prevElement && prevElement != current) {
+            prevElement.classList.remove('current');
+          }
+          prevElement = current
+        }
+        
+    });
+  },
+  {
+    rootMargin: "-10% 0% -70% 0%",
+  }
+);
+
+// Declares what to observe, and observes its properties.
+const boxElList = document.querySelectorAll('h1, h2, h3, h4');
+boxElList.forEach((el) => {
+    io.observe(el);
+})
+
+</script>
 {% endblock %}

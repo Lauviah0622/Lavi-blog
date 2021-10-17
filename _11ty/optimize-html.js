@@ -45,7 +45,7 @@ const purifyCss = async (rawContent, outputPath) => {
     !isAmp(content) &&
     !/data-style-override/.test(content)
   ) {
-    let before = require("fs").readFileSync("css/main.css", {
+    let before = require("fs").readFileSync("css/dist/main.css", {
       encoding: "utf-8",
     });
 
@@ -72,7 +72,7 @@ const purifyCss = async (rawContent, outputPath) => {
           extensions: ["html"],
         },
       ],*/
-      fontFace: true,
+      fontFace: false,
       variables: true,
     });
 
@@ -113,7 +113,7 @@ const optimizeAmp = async (rawContent, outputPath) => {
 module.exports = {
   initArguments: {},
   configFunction: async (eleventyConfig, pluginOptions = {}) => {
-    eleventyConfig.addTransform("purifyCss", purifyCss);
+    // eleventyConfig.addTransform("purifyCss", purifyCss); //TEMP
     eleventyConfig.addTransform("minifyHtml", minifyHtml);
     eleventyConfig.addTransform("optimizeAmp", optimizeAmp);
   },

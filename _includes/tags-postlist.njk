@@ -1,0 +1,23 @@
+<ul class="postlist postlist--shrink">
+{% for post in postslist | reverse %}
+   
+  <li>
+    <h1 class="postlist__title">
+      <a href="{{ post.url | url }}">
+        {% if post.data.title %}
+          {{ post.data.title}}
+        {% else %}
+          <code>{{ post.url }}</code>
+        {% endif %}
+      </a>
+    </h1>
+     {% set wc = content | striptags | wordcount %}
+    {% set wPerMinute = (wc / 200) + 1 %}
+     <div class="postlist__time">
+      <time datetime="{{ post.date | htmlDateString }}">
+        {{ post.date | readableDate }}
+      </time>
+    </div>
+  </li>
+{% endfor %}
+</ul>

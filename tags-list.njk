@@ -1,10 +1,29 @@
 ---
 permalink: /tags/
 layout: layouts/home.njk
+eleventyNavigation:
+  key: Tags
+  order: 2
 ---
-<h1>Tags</h1>
+<h1>All Tags</h1>
+<div class="tags__all tags tags--hightlight">
+{% for tag in collections.tagList %}
+{% set tagUrl %}/tag/{{ tag | slug }}/{% endset %}
+  <a href="{{ tagUrl | url }}">{{ tag }}</a>
+{% endfor %}
+</div>
 
 {% for tag in collections.tagList %}
-  {% set tagUrl %}/tags/{{ tag | slug }}/{% endset %}
-  <a href="{{ tagUrl | url }}" class="post-tag">{{ tag }}</a>
+  <div class="tag">
+    <h2 class="tags__tag">
+      {% set tagUrl %}/tag/{{ tag | slug }}/{% endset %}
+      <a href="{{ tagUrl | url }}">#{{ tag }}</a>
+    </h2>
+    {% set postslist = collections[ tag ] %}
+    {% include "tags-postlist.njk" %}
+
+    {% if not loop.last %}
+      <hr/>
+    {% endif %}
+  </div>
 {% endfor %}

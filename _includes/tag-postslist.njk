@@ -1,16 +1,7 @@
 <ul class="postlist">
 {% for post in postslist | reverse %}
    
-  <li >
-    <div class="postlist__tags tags">
-        {% for tag in post.data.tags %}
-          {% if tag != "posts"  %}
-            {% set tagUrl %}/tags/{{ tag | slug }}/{% endset %}
-              <a href="{{tagUrl | url}}">{{tag}}</a>
-          {% endif %}
-        {% endfor %}
-    </div>
-  
+  <li >  
     <h1 class="postlist__title">
       <a href="{{ post.url | url }}">
         {% if post.data.title %}
@@ -35,9 +26,9 @@
       </p>
       {% endif %}
 
+  </li>
     {% if not loop.last %}
       <hr>
     {% endif %}
-  </li>
 {% endfor %}
 </ul>

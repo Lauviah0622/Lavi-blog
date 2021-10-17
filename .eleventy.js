@@ -56,7 +56,11 @@ const localImages = require("./third_party/eleventy-plugin-local-images/.elevent
 const CleanCSS = require("clean-css");
 const GA_ID = require("./_data/metadata.json").googleAnalyticsId;
 
+
 module.exports = function (eleventyConfig) {
+
+
+
   eleventyConfig.addPlugin(pluginRss);
   eleventyConfig.addPlugin(pluginSyntaxHighlight);
   eleventyConfig.addPlugin(pluginNavigation);
@@ -68,29 +72,32 @@ module.exports = function (eleventyConfig) {
       "img,amp-img,amp-video,meta[property='og:image'],meta[name='twitter:image'],amp-story",
     verbose: false,
   });
-
   eleventyConfig.addPlugin(require("./_11ty/img-dim.js"));
   eleventyConfig.addPlugin(require("./_11ty/json-ld.js"));
   eleventyConfig.addPlugin(require("./_11ty/optimize-html.js"));
   eleventyConfig.addPlugin(require("./_11ty/apply-csp.js"));
+  eleventyConfig.addPlugin(require("./_11ty/summary.js"));
   eleventyConfig.setDataDeepMerge(true);
   eleventyConfig.addLayoutAlias("post", "layouts/post.njk");
-  eleventyConfig.addNunjucksAsyncFilter("addHash", function (
-    absolutePath,
-    callback
-  ) {
-    readFile(`_site${absolutePath}`, {
-      encoding: "utf-8",
-    })
-      .then((content) => {
-        return hasha.async(content);
-      })
-      .then((hash) => {
-        callback(null, `${absolutePath}?hash=${hash.substr(0, 10)}`);
-      })
-      .catch((error) => callback(error));
+  eleventyConfig.addPlugin(require("./_11ty/toc/toc.js"), {
+    tags: ["h2", "h3", "h4"],
+    wrapper: "nav",
   });
-
+  eleventyConfig.addNunjucksAsyncFilter(
+    "addHash",
+    function (absolutePath, callback) {
+      readFile(`_site${absolutePath}`, {
+        encoding: "utf-8",
+      })
+        .then((content) => {
+          return hasha.async(content);
+        })
+        .then((hash) => {
+          callback(null, `${absolutePath}?hash=${hash.substr(0, 10)}`);
+        })
+        .catch((error) => callback(error));
+    }
+  );
   async function lastModifiedDate(filename) {
     try {
       const { stdout } = await execFile("git", [
@@ -110,34 +117,36 @@ module.exports = function (eleventyConfig) {
   // Cache the lastModifiedDate call because shelling out to git is expensive.
   // This means the lastModifiedDate will never change per single eleventy invocation.
   const lastModifiedDateCache = new Map();
-  eleventyConfig.addNunjucksAsyncFilter("lastModifiedDate", function (
-    filename,
-    callback
-  ) {
-    const call = (result) => {
-      result.then((date) => callback(null, date));
-      result.catch((error) => callback(error));
-    };
-    const cached = lastModifiedDateCache.get(filename);
-    if (cached) {
-      return call(cached);
+  eleventyConfig.addNunjucksAsyncFilter(
+    "lastModifiedDate",
+    function (filename, callback) {
+      const call = (result) => {
+        result.then((date) => callback(null, date));
+        result.catch((error) => callback(error));
+      };
+      const cached = lastModifiedDateCache.get(filename);
+      if (cached) {
+        return call(cached);
+      }
+      const promise = lastModifiedDate(filename);
+      lastModifiedDateCache.set(filename, promise);
+      call(promise);
     }
-    const promise = lastModifiedDate(filename);
-    lastModifiedDateCache.set(filename, promise);
-    call(promise);
-  });
+  );
 
   eleventyConfig.addFilter("encodeURIComponent", function (str) {
     return encodeURIComponent(str);
   });
 
   eleventyConfig.addFilter("cssmin", function (code) {
-    return new CleanCSS({}).minify(code).styles;
+    return new CleanCSS({
+      optimizeFont: false,
+    }).minify(code).styles;
   });
 
   eleventyConfig.addFilter("readableDate", (dateObj) => {
     return DateTime.fromJSDate(dateObj, { zone: "utc" }).toFormat(
-      "dd LLL yyyy"
+      "LLL,d yyyy"
     );
   });
 
@@ -166,7 +175,7 @@ module.exports = function (eleventyConfig) {
   eleventyConfig.addCollection("tagList", require("./_11ty/getTagList"));
 
   eleventyConfig.addPassthroughCopy("img");
-  eleventyConfig.addPassthroughCopy("css");
+  // eleventyConfig.addPassthroughCopy({"css/dist": "css"});
   // We need to copy cached.js only if GA is used
   eleventyConfig.addPassthroughCopy(GA_ID ? "js" : "js/*[!cached].*");
   eleventyConfig.addPassthroughCopy("fonts");
@@ -175,7 +184,9 @@ module.exports = function (eleventyConfig) {
   // We need to rebuild upon JS change to update the CSP.
   eleventyConfig.addWatchTarget("./js/");
   // We need to rebuild on CSS change to inline it.
-  eleventyConfig.addWatchTarget("./css/");
+  // TEMP
+  // eleventyConfig.addWatchTarget("./css/");
+
   // Unfortunately this means .eleventyignore needs to be maintained redundantly.
   // But without this the JS build artefacts doesn't trigger a build.
   eleventyConfig.setUseGitIgnore(false);
@@ -186,12 +197,19 @@ module.exports = function (eleventyConfig) {
     breaks: true,
     linkify: true,
   }).use(markdownItAnchor, {
-    permalink: true,
-    permalinkClass: "direct-link",
-    permalinkSymbol: "#",
-  });
+      permalink: true,
+      permalinkClass: "direct-link",
+      permalinkSymbol: "#",
+      permalinkBefore: true,
+    })
+    .use(require("markdown-it-implicit-figures"), {
+      figcaption: true,
+      tabindex: true,
+    });
+
   eleventyConfig.setLibrary("md", markdownLibrary);
 
+  
   // Browsersync Overrides
   eleventyConfig.setBrowserSyncConfig({
     callbacks: {

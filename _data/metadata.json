@@ -17,8 +17,9 @@
     "url": "https://update-me.com/feed/feed.json"
   },
   "author": {
-    "name": "Author Name. Update me.",
-    "twitterHandle": "update_me"
+    "name": "Lavi",
+    "twitterHandle": "update_me",
+    "github": "https://github.com/Lauviah0622"
   },
   "publisher": {
     "name": "Publisher name. Update me."
