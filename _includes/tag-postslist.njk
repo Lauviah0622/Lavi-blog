@@ -12,7 +12,7 @@
       </a>
     </h1>
      {% set wc = post.templateContent | striptags | universalWordCount %}
-    {% set wPerMinute = (wc / 200) + 1 %}
+    {% set wPerMinute = (wc / 300) + 1 %}
      <div class="postlist__time">
       <time datetime="{{ post.date | htmlDateString }}">
         {{ post.date | readableDate }}
