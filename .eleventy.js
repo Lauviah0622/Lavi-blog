@@ -185,7 +185,7 @@ module.exports = function (eleventyConfig) {
   eleventyConfig.addWatchTarget("./js/");
   // We need to rebuild on CSS change to inline it.
   // TEMP
-  // eleventyConfig.addWatchTarget("./css/");
+  eleventyConfig.addWatchTarget("./css/");
 
   // Unfortunately this means .eleventyignore needs to be maintained redundantly.
   // But without this the JS build artefacts doesn't trigger a build.

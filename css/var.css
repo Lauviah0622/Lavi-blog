@@ -31,7 +31,7 @@
     --dark-bg-opacity: hsla(var(--primary-hue), var(--primary-saturation), 5%, 95%);
     --dark-bg-grey: hsl(var(--primary-hue), var(--primary-saturation), 15%);
     --dark-text: hsl(var(--text-hue), 30%, 90%);
-    --dark-text-secondary: hsl(var(--primary-hue), 20%, 60%);
+    --dark-text-secondary: hsl(var(--primary-hue), 35%, 70%);
   
     --font-base-size: 18px;
   
