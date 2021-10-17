@@ -1,0 +1,342 @@
+<!DOCTYPE html><html domain="lavi-blog.vercel.app" lang="en"><head><meta charset="utf-8"><meta content="width=device-width,initial-scale=1" name="viewport"><meta content="default-src 'self';object-src 'none';script-src 'self' 'sha256-Ky9qZOPnMhQV/s7Fdb9TYAOfU4KtWNqCZaFK8tSzXa0=' 'sha256-za/u+GpTRqxVmtY0/RJrU1alkYqdlDRMaW2bCpySaa8=' 'sha256-S74q1WGEGfQZyLlS1Dzl4+dKEQ+b0Z0yGiPJt7XNB5k=' 'sha256-AvHvdkAvA2liH7FoblyZGebwmSzE3eLp/zZiYQ+l2Qk=' https://utteranc.es/client.js;style-src 'unsafe-inline' 'self';img-src 'self' data:;frame-src https://utteranc.es/;font-src https://fonts.googleapis.com/ 'self'" http-equiv="Content-Security-Policy"><link href="/img/favicon/favicon-192x192.png?hash=2089033c93" rel="icon" type="image/png"><meta content="#f9c412" name="theme-color"><meta content="max-snippet:-1, max-image-preview: large, max-video-preview: -1" name="robots"><title>在 AWS 上面部署 LEMP server, PHPmyadmin, FTP</title><meta content="在 AWS 上面部署 LEMP server, PHPmyadmin, FTP" property="og:title"><meta content="LEMP 在這邊是指下面幾種技術的簡稱： Linux Nginx MySQL PHP 我們會利用這些技術在 AWS 來做一個 web server，並把我們的資料部署到 server 上。我們可以先大概看一下我們做了哪些事情： 設定 AWS，其中包含 建立一個 ubuntu 的..." name="description"><meta content="LEMP 在這邊是指下面幾種技術的簡稱： Linux Nginx MySQL PHP 我們會利用這些技術在 AWS 來做一個 web server，並把我們的資料部署到 server 上。我們可以先大概看一下我們做了哪些事情： 設定 AWS，其中包含 建立一個 ubuntu 的..." property="og:description"><meta content="summary_large_image" name="twitter:card"><meta content="@" name="twitter:site"><meta content="@" name="twitter:creator"><link href="https://lavi-blog.vercel.app/posts/deploy-on-aws/" rel="canonical"><meta content="no-referrer-when-downgrade" name="referrer"><link href="/feed/feed.xml" rel="alternate" type="application/atom+xml" title="Apprentice Log"><link href="/" rel="preconnect" crossorigin=""><script async="" src="/js/min.js?hash=c909e7f885" defer=""></script><script csp-hash="sha256-Ky9qZOPnMhQV/s7Fdb9TYAOfU4KtWNqCZaFK8tSzXa0=">if (/Mac OS X/.test(navigator.userAgent))document.documentElement.classList.add('apple')</script><style>/*! modern-normalize v1.1.0 | MIT License | https://github.com/sindresorhus/modern-normalize */
+*,::after,::before{box-sizing:border-box}html{-moz-tab-size:4;-o-tab-size:4;tab-size:4;line-height:1.15;-webkit-text-size-adjust:100%;font-size:var(--font-base-size);width:100vw;letter-spacing:.04ch}body{margin:0;font-family:system-ui,-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif,'Apple Color Emoji','Segoe UI Emoji';--color-primary:var(--light-primary);--color-secondary:var(--light-secondary);--color-text:var(--light-text);--color-text-reverse:var(--dark-text);--color-text-secondary:var(--light-text-secondary);--color-bg:hsl(var(--light-bg));--color-bg-reverse:var(--dark-bg);--color-bg-opacity:hsla(var(--light-bg), 0.9);--color-bg-secondary:var(--light-bg-grey);--font-weight-normal:400;background-color:var(--color-bg);color:var(--color-text);overflow-x:hidden}hr{height:0;color:inherit;margin:3rem auto;width:95%}strong{font-weight:bolder;font-weight:var(--font-weight-bold);color:var(--color-secondary)}code,pre{font-family:ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace}table{text-indent:0;border-color:inherit;position:relative;left:50%;overflow:hidden;transform:translateX(-50%);width:calc(100% + 4rem);border-collapse:collapse;border-radius:1ch}summary{display:list-item}:root{--primary-hue:200;--primary-saturation:20%;--primary-light:60%;--secondary-hue:22;--secondary-saturation:85%;--text-hue:200;--text-saturation:10%;--text-light:10%;--light-primary:hsl(
+      var(--primary-hue),
+      var(--primary-saturation),
+      var(--primary-light)
+    );--light-secondary:hsl(
+      var(--secondary-hue),
+      var(--secondary-saturation),
+      60%
+    );--light-text:hsl(var(--text-hue), var(--text-saturation), var(--text-light));--light-text-secondary:hsl(var(--primary-hue), var(--text-saturation), 45%);--light-bg:0, 0%, 98%;--light-bg-grey:hsl(var(--primary-hue), var(--primary-saturation), 90%);--dark-bg:hsl(var(--primary-hue), 15%, 5%);--dark-bg-reverse:hsl(var(--primary-hue), 20%, 20%);--dark-bg-opacity:hsla(var(--primary-hue), var(--primary-saturation), 5%, 95%);--dark-bg-grey:hsl(var(--primary-hue), var(--primary-saturation), 15%);--dark-text:hsl(var(--text-hue), 30%, 90%);--dark-text-secondary:hsl(var(--primary-hue), 35%, 70%);--font-base-size:18px;--font-family-serif:Lora, Georgia, Songti TC, Hiragino Mincho Pro, serif;--font-family-mono:"DM mono", monospace, "Kosugi Maru", "Noto Sans TC",
+      sans-serif;--font-weight-bold:600;--block-border-radius:1ch}body.dark-theme{--color-primary:var(--light-primary);--color-secondary:var(--light-secondary);--color-text:var(--dark-text);--color-text-reverse:var(--dark-text);--color-text-secondary:var(--dark-text-secondary);--color-bg:var(--dark-bg);--color-bg-reverse:var(--dark-bg-reverse);--color-bg-opacity:var(--dark-bg-opacity);--color-bg-secondary:var(--dark-bg-grey);--font-weight-normal:300}@font-face{font-display:optional;font-family:"Inter UI";font-style:normal;font-weight:400;src:url(/fonts/Inter-Regular.woff2) format("woff2"),url(/fonts/Inter-Regular.woff) format("woff")}@font-face{font-display:optional;font-family:"Inter UI";font-style:italic;font-weight:400;src:url(/fonts/Inter-Italic.woff2) format("woff2"),url(/fonts/Inter-Italic.woff) format("woff")}@font-face{font-display:optional;font-family:"Inter UI";font-style:normal;font-weight:600;src:url(/fonts/Inter-SemiBold.woff2) format("woff2"),url(/fonts/Inter-SemiBold.woff) format("woff")}@font-face{font-display:optional;font-family:"Inter UI";font-style:italic;font-weight:600;src:url(/fonts/Inter-SemiBoldItalic.woff2) format("woff2"),url(/fonts/Inter-SemiBoldItalic.woff) format("woff")}@font-face{font-display:optional;font-family:"Lora";font-display:swap;font-style:normal;src:url(/fonts/Lora-Regular.ttf) format("truetype")}@font-face{font-display:optional;font-family:"Lora";font-display:swap;font-style:italic;src:url(/fonts/Lora-Italic.ttf) format("truetype")}@font-face{font-display:optional;font-family:"Lora";font-display:swap;font-weight:600;font-style:italic;src:url(/fonts/Lora-SemiBold.ttf) format("truetype")}@font-face{font-display:optional;font-family:"Lora";font-display:swap;font-weight:600;font-style:italic;src:url(/fonts/Lora-SemiBoldItalic.ttf) format("truetype")}@font-face{font-display:optional;font-family:"DM mono";font-display:swap;font-style:normal;src:url(/fonts/DMMono-Regular.ttf) format("truetype")}@font-face{font-display:optional;font-family:"DM mono";font-display:swap;font-style:italic;src:url(/fonts/DMMono-Regular.ttf) format("truetype")}@font-face{font-display:optional;font-family:"Kosugi Maru";font-display:swap;src:url(https://fonts.googleapis.com/css2?family=Kosugi+Maru&display=swap)}@font-face{font-display:optional;font-family:"Inter UI var";font-weight:100 900;font-style:oblique 0deg 10deg;src:url(/fonts/Inter.var.woff2) format("woff2")}@font-face{font-display:optional;font-family:"Inter UI var alt";font-weight:100 900;font-style:normal;font-named-instance:"Regular";src:url(/fonts/Inter-roman.var.woff2) format("woff2")}@font-face{font-display:optional;font-family:"Inter UI var alt";font-weight:100 900;font-style:italic;font-named-instance:"Italic";src:url(/fonts/Inter-italic.var.woff2) format("woff2")}main img{content-visibility:auto}article *{scroll-margin-top:50px}header nav{z-index:1}*{transition:background-color .1s,color .1s}h1,h2,h3,h4,p{text-decoration:none;font-weight:var(--font-weight-normal);margin:0}h1,h2,h3,h4{line-height:1.2}blockquote,li{font-weight:var(--font-weight-normal)}h1{font-size:2rem;padding:3rem 0 1.6rem}h2{font-size:1.6rem;padding:2rem 0 .8rem}h3{font-size:1.4rem;padding:1.6rem 0 .8rem}h4{font-size:1.2rem;padding:1.2rem 0 .8rem}.icon,.icon path{fill:var(--color-primary)}a{text-decoration:none}a:hover{text-decoration:underline}main{margin:50px 0 100px}.caption,.caption a,a{color:var(--color-text-secondary)}.caption,.caption a{font-size:.6rem}.caption a,.post__toc li:hover>a{text-decoration:underline}.tags a::before{content:"#"}.tags{text-transform:capitalize}s{-webkit-text-decoration-color:var(--color-text-secondary);text-decoration-color:var(--color-text-secondary)}blockquote{position:relative;padding:2rem;padding-right:0;margin:1.2rem 0;font-family:var(--font-family-serif)}blockquote::before{top:0;left:0;content:"";position:absolute;display:block;height:100%;width:5px;background-color:var(--color-primary);border-radius:2px}code{font-size:.9em;font-family:var(--font-family-mono)}:not(pre)>code{display:inline-block;padding:.2ch;background-color:var(--color-bg-reverse);color:var(--color-text-reverse);border-radius:.4ch;margin:0 .4ch;line-height:1.1rem}dialog,pre{background-color:var(--color-bg-reverse)}pre{color:var(--color-text-reverse);margin:1.2rem -2rem;padding:1.2rem 2rem;border-radius:var(--block-border-radius);font-size:.9em;line-height:inherit;overflow-x:scroll}dialog{position:fixed;bottom:0;z-index:9999;color:var(--color-secondary);width:100vw;border-width:0;text-align:center;height:-webkit-min-content;height:-moz-min-content;height:min-content}body:not(.dark-theme) #light{display:none}body.dark-theme #dark{display:none}body.dark-theme #light{display:block}body.dark-theme img{filter:brightness(.8) contrast(1.2)}@media (prefers-color-scheme:dark){#light{display:block}img{filter:brightness(.8) contrast(1.2)}}@media (prefers-color-scheme:light){#dark{display:block}}.center{--max-width:63ch;width:100%;display:grid;grid-template-columns:1fr min(var(--max-width),calc(100% - 64px)) 1fr}.center>*{grid-column:2}.center--wide{--max-width:1040px}body .container{display:grid;min-height:100vh;grid-template-rows:auto -webkit-max-content;grid-template-rows:auto max-content}header{top:0;position:sticky;display:flex;align-items:flex-end;margin-top:50px;padding:8px 0 15px;background-color:var(--color-bg);z-index:1}header p{margin-top:0}header>div{width:100%;display:flex;align-items:baseline;justify-content:space-between}#hamburger,.only-mobile{display:none}#hamburger{position:fixed;pointer-events:auto;--hamburger-size:2rem;height:var(--hamburger-size);width:var(--hamburger-size);margin:1.5rem;right:0;z-index:999}#hamburger>*{display:block;width:80%;height:calc(var(--hamburger-size)*.08);background-color:var(--color-primary);position:absolute;top:50%;left:50%;transition:all 400ms cubic-bezier(.84,.06,.52,1.8);transform-origin:center}#hamburger top{transform:translate(-50%,calc(var(--hamburger-size)*.25))}#hamburger mid{transform:translate(-50%,0)}#hamburger btm{transform:translate(-50%,calc(var(--hamburger-size)*-.25))}#hamburger.open top{transform:translate(-50%,0) rotate(45deg)}#hamburger.open mid{opacity:0}#hamburger.open btm{transform:translate(-50%,0) rotate(-45deg)}.header__items,nav{display:flex;align-items:center}.header__items>*{margin:0 .6rem}.header__items svg{height:1rem;width:1rem}.header__theme{height:1rem;overflow:visible}#rss{height:1.2rem;width:1.2rem}nav{align-items:baseline;gap:1.5rem}nav>a{font-size:1rem;font-weight:400;color:var(--color-text-secondary)}.logo{margin:0;padding:0;font-size:1.4rem;text-align:left}.logo a{margin:0;color:var(--color-text)}.logo svg{height:1.5em;position:relative;top:.3em;margin-right:10px}footer{background-color:var(--color-bg-secondary);padding:2rem 0;height:-webkit-min-content;height:-moz-min-content;height:min-content}.footer{display:flex;justify-content:space-between}.footer__info{text-align:right;display:flex;flex-direction:column;gap:1rem}footer nav{visibility:hidden}@media only screen and (max-device-width:576.98px){.only-mobile{display:inherit}#hamburger{display:block}header{position:fixed;margin-top:0;padding-top:6rem;--transition:all 500ms cubic-bezier(0.075, 0.82, 0.165, 1);transition:var(--transition);pointer-events:auto;opacity:1;background-color:var(--color-bg-opacity);height:100%}header .logo{display:none}header:not(.open){transition:var(--transition);background-color:transparent;pointer-events:none;opacity:0}header>div,nav{flex-direction:column;gap:2rem}header>div{align-items:flex-end;padding-right:2rem;align-self:start}nav{align-items:end}.nav>*{margin:0;font-size:1.2em}.header__items svg{height:1.2em;width:1.2em}.logo--mobile{padding:1.5rem 0;z-index:99}.footer{flex-direction:column}footer nav{visibility:visible}footer nav>.logo,nav{margin-bottom:1rem}}.post__time{font-family:var(--font-family-serif);margin:9px 0 4px}.post__time p,.post__title,article{padding:0}.post__toc{position:fixed;top:50%;padding-left:2rem;transform:translateY(-50%);font-size:.8em}.post__toc ol{list-style-type:none;padding:0 0 0 1ch;width:20ch}.post__toc ol ol{width:100%}.post__toc li{width:100%;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;padding:.2em 0}.logo a,.post__toc li a{text-decoration:none}.post__toc .current,.post__toc .current>a{color:var(--color-secondary)}.post__content h1,.post__content h2,.post__content h3,.post__content h4,.post__content h5,.post__content h6{position:relative}.post__content h1 a[href^="#"],.post__content h2 a[href^="#"],.post__content h3 a[href^="#"],.post__content h4 a[href^="#"],.post__content h5 a[href^="#"],.post__content h6 a[href^="#"]{position:absolute;left:-1.4ch}.post__content h1 a:not([href^="#"]),.post__content h2 a:not([href^="#"]),.post__content h3 a:not([href^="#"]),.post__content h4 a:not([href^="#"]),.post__content h5 a:not([href^="#"]),.post__content h6 a:not([href^="#"]){color:inherit;text-decoration:inherit}.post__content li,.post__content p{line-height:1.6}.post__content p{padding:.8rem 0}.post__content li{padding:.2rem 0}.post__content ol,.post__content ul{padding:1.2rem 1rem 1.2rem 1.8rem;font-family:var(--font-family-serif);margin:0}.post__content ol li::marker,.post__content ul li::marker{color:var(--color-text-secondary)}.post__content p~ol,.post__content p~ul{padding-top:0}.post__content ol li::marker{font-size:1.1em}.post__content ol ol,.post__content ol ul,.post__content ul ol,.post__content ul ul{padding:0 1.2rem}.post__content hr{margin-top:4rem;margin-bottom:4rem}.post__content img{max-height:50vh;width:auto;margin:0 auto}.token.doctype{color:#999}.token.function,.token.number{color:#f08d49}.token.property{color:#f8c555}.token.string{color:#7ec699}.token.url{color:#67cdcc}.token.inserted{color:green}.post__link{display:flex;justify-content:space-between;margin-top:2rem}.post__link>div>*{display:block}@media only screen and (max-device-width:576.98px){.post__content img{max-height:30vh}.post__content blockquote{padding:1rem 1.5rem;margin:.6rem 0}.post__content pre{margin-right:0;margin-left:0;padding:1.5rem 2ch;width:calc(100vw - 6ch)}.post__content table{display:block;width:calc(100vw - 6ch);overflow:auto}.post__toc{background-color:var(--color-bg-secondary);position:static;transform:none;padding:3ch;border-radius:var(--block-border-radius)}.post__toc h4{padding-top:0}.post__toc nav{align-items:flex-start;font-size:1rem;margin:0}.post__toc ol{padding-left:2rem;width:auto}.post__toc li a{display:inline-block;padding-bottom:.3em}.post__toc li{white-space:normal}.post__toc nav>ol{padding-left:0;margin:0}.post__toc .current,.post__toc a:active,.post__toc a:hover{color:inherit}}</style></head><body><script csp-hash="sha256-za/u+GpTRqxVmtY0/RJrU1alkYqdlDRMaW2bCpySaa8=">let isUtterancesLoaded = false;
+      const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+      const currentTheme = localStorage.getItem("theme");
+      const isDark = currentTheme != null ?　currentTheme === 'dark' : prefersDarkScheme.matches;
+      if (isDark) {
+          document.body.classList.add('dark-theme');
+          setUtterancesTheme('dark');
+      } else {  
+        document.body.classList.remove('dark-theme');
+          setUtterancesTheme('light');
+      }
+      
+      window.addEventListener('message', event => {
+        if (event.origin !== 'https://utteranc.es') {
+          return;
+        }
+        isUtterancesLoaded = true
+      });
+
+      function setUtterancesTheme(theme) {
+        let utterancesIframe = document.querySelector('.utterances iframe')
+        if (!isUtterancesLoaded) {
+          return requestAnimationFrame(() => setUtterancesTheme(theme))
+        }
+        utterancesIframe.contentWindow.postMessage({
+          type: 'set-theme',
+          theme: theme === 'dark' ? 'dark-blue' : 'github-light'
+        }, 'https://utteranc.es');
+      }</script><dialog id="message"></dialog><header class="center center--wide"><div><nav class="nav"><h1 class="logo"><a href="/" title="Homepage"><svg fill="none" viewBox="0 0 39 33" xmlns="http://www.w3.org/2000/svg" class="icon"><path d="M19.5 0L38.1195 32.25H0.880453L19.5 0Z" fill="#90A0A8"></path></svg> Apprentice Log</a></h1><a href="/tags/">Tags</a> <a href="/about/">About</a></nav><div class="header__items"><div class="header__theme"><svg fill="none" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" class="icon" id="dark" height="16" width="16"><path d="M6.85141 0.219686C7.03763 0.405907 7.11254 0.676155 7.04875 0.931669C6.92055 1.44524 6.85229 1.98329 6.85229 2.53834C6.85229 6.1886 9.81142 9.14773 13.4617 9.14773C14.0167 9.14773 14.5548 9.07948 15.0683 8.95127C15.3239 8.88749 15.5941 8.96239 15.7803 9.14861C15.9665 9.33483 16.0415 9.60508 15.9777 9.8606C15.0974 13.3869 11.9095 16 8.10939 16C3.6307 16 -1.78814e-07 12.3693 0 7.89062C1.78814e-07 4.09054 2.61311 0.902648 6.13943 0.0223469C6.39495 -0.041439 6.66519 0.0334652 6.85141 0.219686ZM5.37954 1.8693C3.09107 2.90847 1.5 5.21444 1.5 7.89062C1.5 11.5409 4.45913 14.5 8.10939 14.5C10.7856 14.5 13.0915 12.9089 14.1307 10.6205C13.91 10.6385 13.6869 10.6477 13.4617 10.6477C8.98299 10.6477 5.35229 7.01703 5.35229 2.53834C5.35229 2.31317 5.36149 2.09003 5.37954 1.8693Z" fill="black" clip-rule="evenodd" fill-rule="evenodd"></path></svg> <svg fill="none" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" class="icon" id="light" height="16" width="16"><path d="M8.00006 1.17009e-09C8.41427 2.28894e-05 8.75004 0.335828 8.75001 0.750041L8.74999 1.25004C8.74996 1.66426 8.41416 2.00002 7.99994 2C7.58573 1.99998 7.24996 1.66417 7.24999 1.24996L7.25001 0.749959C7.25004 0.335745 7.58584 -2.2887e-05 8.00006 1.17009e-09ZM2.34319 2.34311C2.6361 2.05023 3.11097 2.05026 3.40385 2.34316L3.75738 2.69674C4.05026 2.98965 4.05023 3.46452 3.75732 3.7574C3.46441 4.05027 2.98954 4.05025 2.69666 3.75734L2.34313 3.40377C2.05025 3.11086 2.05028 2.63598 2.34319 2.34311ZM13.6569 2.34319C13.9498 2.6361 13.9497 3.11097 13.6568 3.40385L13.3033 3.75738C13.0104 4.05026 12.5355 4.05023 12.2426 3.75732C11.9497 3.46441 11.9498 2.98954 12.2427 2.69666L12.5962 2.34313C12.8891 2.05025 13.364 2.05028 13.6569 2.34319ZM8.00026 5.5C6.61955 5.5 5.50026 6.61929 5.50026 8C5.50026 9.38071 6.61955 10.5 8.00026 10.5C9.38097 10.5 10.5003 9.38071 10.5003 8C10.5003 6.61929 9.38097 5.5 8.00026 5.5ZM4.00026 8C4.00026 5.79086 5.79112 4 8.00026 4C10.2094 4 12.0003 5.79086 12.0003 8C12.0003 10.2091 10.2094 12 8.00026 12C5.79112 12 4.00026 10.2091 4.00026 8ZM1.17006e-09 7.99994C2.28894e-05 7.58573 0.335828 7.24996 0.750041 7.24999L1.25004 7.25001C1.66426 7.25004 2.00002 7.58584 2 8.00006C1.99998 8.41427 1.66417 8.75004 1.24996 8.75001L0.749959 8.74999C0.335745 8.74996 -2.2887e-05 8.41416 1.17006e-09 7.99994ZM14 7.99994C14 7.58573 14.3358 7.24996 14.75 7.24999L15.25 7.25001C15.6643 7.25004 16 7.58584 16 8.00006C16 8.41427 15.6642 8.75004 15.25 8.75001L14.75 8.74999C14.3357 8.74996 14 8.41416 14 7.99994ZM12.2427 12.2426C12.5356 11.9497 13.0105 11.9498 13.3033 12.2427L13.6569 12.5962C13.9498 12.8891 13.9497 13.364 13.6568 13.6569C13.3639 13.9498 12.889 13.9497 12.5962 13.6568L12.2426 13.3033C11.9497 13.0104 11.9498 12.5355 12.2427 12.2426ZM3.7574 12.2427C4.05027 12.5356 4.05025 13.0105 3.75734 13.3033L3.40377 13.6569C3.11086 13.9498 2.63598 13.9497 2.34311 13.6568C2.05023 13.3639 2.05025 12.889 2.34316 12.5962L2.69674 12.2426C2.98965 11.9497 3.46452 11.9498 3.7574 12.2427ZM8.00006 14C8.41427 14 8.75004 14.3358 8.75001 14.75L8.74999 15.25C8.74996 15.6643 8.41416 16 7.99994 16C7.58573 16 7.24996 15.6642 7.24999 15.25L7.25001 14.75C7.25004 14.3357 7.58584 14 8.00006 14Z" fill="black" clip-rule="evenodd" fill-rule="evenodd"></path></svg></div><a href="/feed/feed.xml"><svg fill="none" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" class="icon" id="rss"><path d="M3.75 3C3.33579 3 3 3.33579 3 3.75C3 4.16421 3.33579 4.5 3.75 4.5H4.82759C10.7216 4.5 15.5 9.27925 15.5 15.1751V16.25C15.5 16.6642 15.8358 17 16.25 17C16.6642 17 17 16.6642 17 16.25V15.1751C17 8.45116 11.5504 3 4.82759 3H3.75Z"></path><path d="M3 7.19904C3 6.78482 3.33579 6.44904 3.75 6.44904H4.82759C9.64596 6.44904 13.5517 10.356 13.5517 15.1751V16.2499C13.5517 16.6642 13.2159 16.9999 12.8017 16.9999C12.3875 16.9999 12.0517 16.6642 12.0517 16.2499V15.1751C12.0517 11.1841 8.8172 7.94904 4.82759 7.94904H3.75C3.33579 7.94904 3 7.61325 3 7.19904Z"></path><path d="M3.75 9.89813C3.33579 9.89813 3 10.2339 3 10.6481C3 11.0623 3.33579 11.3981 3.75 11.3981H4.82759C6.91277 11.3981 8.60345 13.089 8.60345 15.1751V16.2499C8.60345 16.6642 8.93923 16.9999 9.35345 16.9999C9.76766 16.9999 10.1034 16.6642 10.1034 16.2499V15.1751C10.1034 12.2609 7.74153 9.89813 4.82759 9.89813H3.75Z"></path><path d="M5 13C3.89543 13 3 13.8954 3 15C3 16.1046 3.89543 17 5 17C6.10457 17 7 16.1046 7 15C7 13.8954 6.10457 13 5 13ZM4.5 15C4.5 14.7239 4.72386 14.5 5 14.5C5.27614 14.5 5.5 14.7239 5.5 15C5.5 15.2761 5.27614 15.5 5 15.5C4.72386 15.5 4.5 15.2761 4.5 15Z" clip-rule="evenodd" fill-rule="evenodd"></path></svg></a></div></div></header><div id="hamburger"><top></top><mid></mid><btm></btm></div><div class="container"><div class="center only-mobile"><h1 class="logo logo--mobile"><a href="/" title="Homepage"><svg fill="none" viewBox="0 0 39 33" xmlns="http://www.w3.org/2000/svg" class="icon"><path d="M19.5 0L38.1195 32.25H0.880453L19.5 0Z" fill="#90A0A8"></path></svg> Apprentice Log</a></h1></div><main class="center"><div class="post__tags tags"><a href="/tags/deploy/">deploy</a></div><h1 class="post__title" id="title">在 AWS 上面部署 LEMP server, PHPmyadmin, FTP</h1><div class="post__time"><p><time datetime="2021-10-17">Oct,17 2021・9min read.</time></p></div><aside class="post__toc"><h4 class="only-mobile">TOC</h4><nav class="toc"><ol><li data-header="aws"><a href="#aws">AWS</a><ol><li data-header="%E5%BB%BA%E7%AB%8B-ec2-instance"><a href="#%E5%BB%BA%E7%AB%8B-ec2-instance">建立 EC2 instance</a></li><li data-header="%E8%A8%AD%E5%AE%9A-security-group"><a href="#%E8%A8%AD%E5%AE%9A-security-group">設定 security group</a></li><li data-header="%E7%94%A8-ssh-%E7%99%BB%E5%85%A5-vps"><a href="#%E7%94%A8-ssh-%E7%99%BB%E5%85%A5-vps">用 ssh 登入 VPS</a></li></ol></li><li data-header="%E5%AE%89%E8%A3%9D-nginx%2C-mysql%2C-php"><a href="#%E5%AE%89%E8%A3%9D-nginx%2C-mysql%2C-php">安裝 nginx, Mysql, PHP</a><ol><li data-header="%E5%AE%89%E8%A3%9D-ngnix"><a href="#%E5%AE%89%E8%A3%9D-ngnix">安裝 Ngnix</a></li><li data-header="%E8%A8%AD%E5%AE%9A%E9%98%B2%E7%81%AB%E7%89%86"><a href="#%E8%A8%AD%E5%AE%9A%E9%98%B2%E7%81%AB%E7%89%86">設定防火牆</a></li><li data-header="%E5%AE%89%E8%A3%9D%E5%8F%8A%E8%A8%AD%E5%AE%9A-mysql-server"><a href="#%E5%AE%89%E8%A3%9D%E5%8F%8A%E8%A8%AD%E5%AE%9A-mysql-server">安裝及設定 mySQL server</a></li><li data-header="php"><a href="#php">PHP</a></li><li data-header="%E6%B8%AC%E8%A9%A6"><a href="#%E6%B8%AC%E8%A9%A6">測試</a></li></ol></li><li data-header="%E9%96%8B%E5%95%9F-php-%E9%81%A0%E7%AB%AF%E9%80%A3%E7%B7%9A"><a href="#%E9%96%8B%E5%95%9F-php-%E9%81%A0%E7%AB%AF%E9%80%A3%E7%B7%9A">開啟 PHP 遠端連線</a><ol><li data-header="%E6%89%93%E9%96%8B%E9%98%B2%E7%81%AB%E7%89%86"><a href="#%E6%89%93%E9%96%8B%E9%98%B2%E7%81%AB%E7%89%86">打開防火牆</a></li><li data-header="%E8%A8%AD%E5%AE%9A%E9%80%A3%E7%B7%9A"><a href="#%E8%A8%AD%E5%AE%9A%E9%80%A3%E7%B7%9A">設定連線</a></li><li data-header="%E5%BB%BA%E7%AB%8B%E5%B8%B3%E6%88%B6%EF%BC%9B%E8%B3%87%E6%96%99%E5%BA%AB%EF%BC%9B%E6%8E%88%E6%AC%8A"><a href="#%E5%BB%BA%E7%AB%8B%E5%B8%B3%E6%88%B6%EF%BC%9B%E8%B3%87%E6%96%99%E5%BA%AB%EF%BC%9B%E6%8E%88%E6%AC%8A">建立帳戶；資料庫；授權</a></li></ol></li><li data-header="%E8%A8%AD%E5%AE%9A-https"><a href="#%E8%A8%AD%E5%AE%9A-https">設定 https</a><ol><li data-header="%E5%AE%89%E8%A3%9D-certbot"><a href="#%E5%AE%89%E8%A3%9D-certbot">安裝 certbot</a></li><li data-header="%E8%A8%AD%E5%AE%9A-nginx"><a href="#%E8%A8%AD%E5%AE%9A-nginx">設定 nginx</a></li><li data-header="%E8%A8%AD%E5%AE%9A%E9%98%B2%E7%81%AB%E7%89%86-2"><a href="#%E8%A8%AD%E5%AE%9A%E9%98%B2%E7%81%AB%E7%89%86-2">設定防火牆</a></li><li data-header="%E7%8D%B2%E5%8F%96-ssl-%E8%AD%89%E6%9B%B8"><a href="#%E7%8D%B2%E5%8F%96-ssl-%E8%AD%89%E6%9B%B8">獲取 SSL 證書</a></li></ol></li><li data-header="phpmyadmin"><a href="#phpmyadmin">PHPmyadmin</a><ol><li data-header="%E5%AE%89%E8%A3%9D"><a href="#%E5%AE%89%E8%A3%9D">安裝</a></li><li data-header="%E6%9B%B4%E6%94%B9%E8%B3%87%E6%96%99%E5%A4%BE%E5%90%8D%E7%A8%B1"><a href="#%E6%9B%B4%E6%94%B9%E8%B3%87%E6%96%99%E5%A4%BE%E5%90%8D%E7%A8%B1">更改資料夾名稱</a></li><li data-header="%E7%A6%81%E6%AD%A2-root-%E4%BD%BF%E7%94%A8-phpmyadmin-%E7%99%BB%E5%85%A5"><a href="#%E7%A6%81%E6%AD%A2-root-%E4%BD%BF%E7%94%A8-phpmyadmin-%E7%99%BB%E5%85%A5">禁止 root 使用 phpmyadmin 登入</a></li><li data-header="%E8%AE%93%E9%80%B2%E5%85%A5-phpmyadmin-%E4%BB%A5%E5%89%8D%E9%9C%80%E8%A6%81%E5%86%8D%E9%80%B2%E8%A1%8C%E9%A9%97%E8%AD%89"><a href="#%E8%AE%93%E9%80%B2%E5%85%A5-phpmyadmin-%E4%BB%A5%E5%89%8D%E9%9C%80%E8%A6%81%E5%86%8D%E9%80%B2%E8%A1%8C%E9%A9%97%E8%AD%89">讓進入 phpmyadmin 以前需要再進行驗證</a></li></ol></li><li data-header="ftp-server"><a href="#ftp-server">FTP server</a><ol><li data-header="%E5%AE%89%E8%A3%9D-vtftpd"><a href="#%E5%AE%89%E8%A3%9D-vtftpd">安裝 vtftpd</a></li><li data-header="%E5%BB%BA%E7%AB%8B%E5%B8%B3%E6%88%B6%E3%80%81%E8%A8%AD%E5%AE%9A%E5%AE%B6%E7%9B%AE%E9%8C%84%E4%BB%A5%E5%8F%8A%E6%AC%8A%E9%99%90"><a href="#%E5%BB%BA%E7%AB%8B%E5%B8%B3%E6%88%B6%E3%80%81%E8%A8%AD%E5%AE%9A%E5%AE%B6%E7%9B%AE%E9%8C%84%E4%BB%A5%E5%8F%8A%E6%AC%8A%E9%99%90">建立帳戶、設定家目錄以及權限</a></li><li data-header="vsftpd-%E8%A8%AD%E5%AE%9A"><a href="#vsftpd-%E8%A8%AD%E5%AE%9A">vsftpd 設定</a></li><li data-header="%E8%A8%AD%E5%AE%9A-ssl"><a href="#%E8%A8%AD%E5%AE%9A-ssl">設定 ssl</a></li></ol></li><li data-header="%E5%8F%83%E8%80%83%E8%B3%87%E6%96%99"><a href="#%E5%8F%83%E8%80%83%E8%B3%87%E6%96%99">參考資料</a></li><li data-header="%E5%85%B6%E4%BB%96%E5%95%8F%E9%A1%8C"><a href="#%E5%85%B6%E4%BB%96%E5%95%8F%E9%A1%8C">其他問題</a></li><li data-header="%E6%84%9F%E6%83%B3"><a href="#%E6%84%9F%E6%83%B3">感想</a></li></ol></nav></aside><article class="post__content"><p>LEMP 在這邊是指下面幾種技術的簡稱：</p><ul><li>Linux</li><li>Nginx</li><li>MySQL</li><li>PHP</li></ul><p>我們會利用這些技術在 AWS 來做一個 web server，並把我們的資料部署到 server 上。我們可以先大概看一下我們做了哪些事情：</p><ul><li>設定 AWS，其中包含<ul><li>建立一個 ubuntu 的 instance</li><li>設定 security group</li></ul></li><li>nignx 比較快比較潮的 web server<ul><li>安裝 PHP 的 CGI</li><li>https</li></ul></li><li>mySQL 資料庫<ul><li>設定可以使用其他程式遠端連線</li><li>建立一個帳戶，而且那帳戶只能存取他自己的 Database</li></ul></li><li>myphpadmin 方便線上操作資料庫，弄起來還是很方便的<ul><li>從瀏覽器登入 myPHPadmin 需要另外設定帳號密碼</li></ul></li><li>FTP server 用來上傳檔案<ul><li>建立帳號</li><li>讓該帳號只能上傳東西到特定的資料夾裡面</li></ul></li></ul><p>這篇會站在巨人們的肩膀上，把蒐集到的資料做個統整，在最後會附上資料的連結。如果覺得我講的很模糊可以直接去看原文，後來覺得這篇文章的定位比較像是導讀的感覺，而且打到後面越來越x懶... 其實好像看參考的原文就好了（？）。</p><h2 id="aws"><a href="#aws" class="direct-link">#</a> AWS</h2><p>AWS 是啥，Amazon Web Services 可以說是一個統稱，泛指 Amazon 旗下的網路服務，但是範圍非常之廣泛，包含很多不同種類的 VPS, Domain name 等等。可以讓你完全用他們的服務來組成一個完整且能附載高流量的 server。</p><p>這次要用的是 EC2 (Elastic Compute Cloud)，本質上他就是一個 VPS ，但優勢是可以自由地控制 VPS 的大小，即使建立之後要改配備的設定（核心數、RAM、硬碟大小）都沒問題，所以才會這麼夯。</p><h3 id="%E5%BB%BA%E7%AB%8B-ec2-instance"><a href="#%E5%BB%BA%E7%AB%8B-ec2-instance" class="direct-link">#</a> 建立 EC2 instance</h3><ol><li>要先辦 AWS 的帳號，然後選擇 EC2，這個就不帶了。</li><li>到 instance 的視窗，然後點選 Launch instance</li></ol><p>AWS 稱每個 VPS 叫做 instance 。另外，建立 instace 要透過所謂的 AMI（Amazon Machine Image），來安裝 OS 還有一些設定，簡單說就像一個模板，所以等你很強你也可以做自己的模板，但現在先不要。</p><p>可以先點 Filter Tier only，就可以看到免費的 template</p><p>上面還可以選國家，聽說可以選近一點的連線比較快，自己沒有實驗過。<br>在這邊自己是選 <code>Ubuntu Server 18.04 LTS (HVM), SSD Volume Type</code></p><p>選 Ubuntu 是因為感覺比較熟悉，版本選舊而不選 20 的是覺得說資源可能比較多，然後後面那個 SSD Volume Type 的意思沒有很了解，不過看 <a href="https://aws.amazon.com/tw/about-aws/whats-new/2014/06/16/introducing-the-amazon-ebs-general-purpose-ssd-volume-type/#:~:text=Introducing%20the%20Amazon%20EBS%20General%20Purpose%20(SSD)%20volume%20type,-Posted%20On%3A%20Jun&amp;text=Backed%20by%20Solid%2DState%20Drives,baseline%20of%203%20IOPS%2FGB.">docs</a> 應該是指說 vps 會使用 SSD，讀寫會比較快？但是疑惑的點是會從安裝 os 這邊來選嗎？所以自己也沒有很清楚。大家可以自己看狀況，其實進去之後 OS 操作應該是大同小異。記得選免費的就好</p><ol start="3"><li>選規格</li></ol><p>其實我們也只能選免費的。這裡的規格大致上是指說我們會分到幾顆 CPU、記憶體的容量等等。有點像在選電腦的感覺。</p><p>除此之外有一些細部規格，不過看不太懂而且用免費的也不用想太多，這邊就先 next。</p><ol start="4"><li>Security Group</li></ol><p>這個但是事後也可以再設定，之後會再提到。</p><p>弄完之後會讓你看一下大概的規格，OK 就可以 launch instance （啟動你的 server）了</p><ol start="5"><li>設定 private key</li></ol><p>因為跟 AWS 連線是使用 SSL 連線，需要 public key 跟 private key，所以他會問你說要建立新的 key，還是用之前設定好的。因為從來沒用過，所以當然是選擇 new key，就照上面的要求打上名子然後 download 下來放到你的<s>寶貝袋</s>資料夾裡面，之後 SSH 連線都會用到。</p><p>到這裡就成功了</p><h3 id="%E8%A8%AD%E5%AE%9A-security-group"><a href="#%E8%A8%AD%E5%AE%9A-security-group" class="direct-link">#</a> 設定 security group</h3><p>security group （後面簡稱SG） 可以設定允許透過哪些 port 可以傳入資料（稱作 inbound），還有透過哪些 port 可以傳出資料（稱作 outbound）。但大部分是只會設定 inbound 而已，因為傳出跟安全性比較沒有關係（就目前自己的了解）。預設是開啟 <code>:22</code> 也就是 ssh 連線的預設 port，如果沒有開這個你就沒辦法連到你的 server 了（還有其他方式可以連到 server 啦，不過這裡先用 ssh）。</p><p>我們可以建立很多不同的 SG，然後依照狀況套用進去。接下來的步驟就是要建立一個 SG，然後開啟我們需要的服務會用到的端口，分別是：</p><ul><li>HTTP: <code>80</code> ipv4</li><li>HTTPS: <code>443</code> ipv4</li><li>FTP: <code>20-21</code> ipv4 &amp; ipv6, <code>900</code>, <code>40000-50000</code></li><li>MySQL: <code>3306</code> ipv4</li></ul><p>為什麼會開這些 port？每個服務都有一個預設的 port，上面這些就是需要的功能的 port，FTP 的部分就比較奇怪，可以之後在了解。那接下來會講怎麼新增 SG。</p><ol><li>點擊 SG 然後 add rule</li><li>SG 的基本設定</li></ol><p>SGname 隨便填，你喜歡就好。descroption 也是建議可以打個容易識別的名子。VPC (Virtual Private Cloud)，簡單來說就是一個屬於你的虛擬 IP 位置這樣，這個東西用預設的就好了。（這個東西自己也沒有很清楚）</p><blockquote><p>❓ VPC是甚麼？<br>自己目前對於 VPC 的理解是，Amazon 只有寥寥幾個 ipv4 的 IP，不可能所有人一人一個，但是他有無數個虛擬。所以他會透過類似 router 的東西，當有人向 寥寥幾個 IP 傳送 Request 時候，用 router 把 request 指向虛擬 IP。不過有一個問題是說他怎麼知道那個原本的 IP 要 router 去哪裡？這個東西關係到網路的東西有點小複雜阿...</p></blockquote><ol start="3"><li>add rule</li></ol><p>點擊 add rule，然後其實他會有一些預設的 set，可以直接選擇，我們需要設定的東西是 Source，能夠設定說允許哪些 IP 位置能夠連線進來。因為我們是 web server，要讓世界各地的人來看我們的網站，所以這裡就不限制，點三角形有一個 anywhere 的選項，全部都設置為 anywhere。</p><p>其實 anywhere 就是設置 ipv4 是 0.0.0.0/0 跟 ipv6</p><blockquote><p>❓ CIDR<br>這裡的標示方法是用 CIDR 表示法，不過 CIDR 是啥，還有子網路遮罩又是啥，這裡還有很多坑要填。直接講說 CIDR 是什麼可能要從 IP 是甚麼開始寫了，直接寫說這樣寫代表的意義是甚麼好了。</p><p>這裡的用 CIDR 的原因是指定 NET_ID，然後允許下面所有的 HOST 可以連線，像是 132.2.123.222/8 就表示說 可以從 132.0.0.0 ~ 132.256.256.256 都可以連線</p><p>不過這裡有問題是說，所以 132.3.123.222/8 跟 132.23.232.222/8 這兩個是一樣的？因為前面的 132 都是相同的</p></blockquote><p>這樣就設定好 SG 了，設定的部分再細節部分可能有點因人而異，不過大方向就是把需要的 port 打開，然後不限制 IP 進來就對了。</p><ol start="4"><li>更改 instance 的 SG</li></ol><p>回到 instance，選擇自己的 instance 之後點擊 action &gt; networking &gt; change security group ，然後選則剛剛設定的 SG，然後按 add。一定要做這步不然沒用喔，還是會連不上去。</p><h3 id="%E7%94%A8-ssh-%E7%99%BB%E5%85%A5-vps"><a href="#%E7%94%A8-ssh-%E7%99%BB%E5%85%A5-vps" class="direct-link">#</a> 用 ssh 登入 VPS</h3><p>打開你的 CLI，用哪個都行，有 ssh 就可以。然後輸入</p><pre><code>格式：
+ssh -i "你的剛剛下載的 key 的位置" ubuntu@"你 insatnce 的 Public IP address"
+範例：
+ssh -i ./location.pem ubuntu@3.232.232.232
+</code></pre><p>會問你 yes 還是 no，不太懂這邊問這個是甚麼意思，不過選 yes 就可以了（就是這種心態才會出問題）</p><p>可以稍微來看一下上面的 command 的意思，<code>-i</code> 的意思是使用檔案的金鑰認證，後面是 <code>用戶名稱@IP位置</code>，要輸入 Public IP DNS 也是可以啦，如果之後有串上自己的 DNS 也可以使用。</p><p>或者是可以點進去你的 instance 然後按裡面的 connect &gt; ssh client 就會有教學，複製上去 CLI 就可以了</p><p>到這裡就正式把 VPS 設定好了。</p><h2 id="%E5%AE%89%E8%A3%9D-nginx%2C-mysql%2C-php"><a href="#%E5%AE%89%E8%A3%9D-nginx%2C-mysql%2C-php" class="direct-link">#</a> 安裝 nginx, Mysql, PHP</h2><p>處理完 instance 就到了安裝的環節了，這裡基本上是參考<a href="https://www.digitalocean.com/community/tutorials/how-to-install-linux-nginx-mysql-php-lemp-stack-ubuntu-18-04">這篇文章</a></p><p>對了，安裝之前，因為讀者可能會找其他的資料（這篇寫的不夠清楚時），要記得盡量找 OS 版本符合的，我們安裝的 OS 是 Ubuntu 18.04。</p><p>首先先更新一下系統：</p><pre><code>sudo apt update &amp;&amp; sudo apt upgrade &amp;&amp; sudo apt dist-upgrade
+</code></pre><p>只要安裝 Package 完他都會問你說（後面也會出現）</p><pre><code>After this operation, 312 kB of additional disk space will be used.
+Do you want to continue? [Y/n]
+</code></pre><p>問你會占用多少容量，要不要安裝，按 yes 就可以了，哪次不 yes。</p><h3 id="%E5%AE%89%E8%A3%9D-ngnix"><a href="#%E5%AE%89%E8%A3%9D-ngnix" class="direct-link">#</a> 安裝 Ngnix</h3><pre><code>sudo apt install nginx
+</code></pre><p>稍微解析一下指令在幹嘛， <code>sudo</code> 是以管理員的身分執行的意思，<code>apt</code> 則是 Ubuntu 管理套件的工具，之後可能會看到 <code>apt-get</code> ，其實是一樣的東西，只是 <code>apt</code> 把常用的東西抽出來，有點像瑞士刀的感覺，詳細可以看<a href="https://www.itread01.com/content/1543804995.html#:~:text=apt%E8%88%87apt%2Dget%E4%B9%8B%E9%96%93%E7%9A%84%E5%8D%80%E5%88%A5&amp;text=apt%20%E5%85%B7%E6%9C%89%E6%9B%B4%E7%B2%BE%E6%B8%9B,%E7%B5%84%E7%B9%94%E6%96%B9%E5%BC%8F%E6%9B%B4%E7%82%BA%E6%9C%89%E6%95%88%E3%80%82&amp;text=%E4%BE%8B%E5%A6%82%EF%BC%8C%E5%8F%AF%E4%BB%A5%E5%9C%A8%E4%BD%BF%E7%94%A8%20apt,get%20%E6%99%82%E7%9B%B8%E5%90%8C%E7%9A%84%E6%93%8D%E4%BD%9C%E3%80%82">這篇</a>，後面就不贅述了，就是下載的 nginx。</p><p>這個階段設定好之後，就可以透過 <code>http://[你的 public IP]</code> 來連線了，AWS 的 Public IP 可以在 Instance 的資料裡面看到。會顯示 nginx 的預設畫面，這個畫面的資料會被放在 <code>var/www/html</code> 裡面，這也是之後我們會放我們東西的地方。</p><h3 id="%E8%A8%AD%E5%AE%9A%E9%98%B2%E7%81%AB%E7%89%86"><a href="#%E8%A8%AD%E5%AE%9A%E9%98%B2%E7%81%AB%E7%89%86" class="direct-link">#</a> 設定防火牆</h3><p>自己這部分沒有設定，有興趣可以看原教學。</p><p>防火牆可以阻擋未經我們允許的連線，來讓 server 更安全，防火牆可以在網路的每一個環節的很多部分去做，像是在路由器、IPS（像是種花電信），我們剛剛設定的 SG 也是防火牆之一。</p><p>因為 aws 的 Security Group 就已經阻擋未開啟的 port 連線 server 的功能了，所以 SG 還有 ufw 的設定功能上是重疊的，詳細可以看<a href="https://serverfault.com/questions/286665/why-have-both-security-groups-and-iptables-on-amazon-ec2">這篇</a>。不過並不是說當你使用 aws，ufw 就完全不用了，ufw 可以做到針對傳遞的內容或者是流量阻擋等等更細節的操作，可以用來防止 DDOS 之類的攻擊。</p><blockquote><p>通常在講設定防火牆，其他文章會提到的大多是 ufw（Uncomplicated FireWall），1不過實際上 ufw 背後也是去設定 iptable（可以看<a href="https://askubuntu.com/questions/952705/ufw-or-iptables-on-ubuntu-for-openvpn">這篇</a>），但是因為 iptable 太複雜了，而且 ubuntu 也已經內建 ufw （ubuntu 18.04），所以大家都用 ufw 去設定。</p></blockquote><h3 id="%E5%AE%89%E8%A3%9D%E5%8F%8A%E8%A8%AD%E5%AE%9A-mysql-server"><a href="#%E5%AE%89%E8%A3%9D%E5%8F%8A%E8%A8%AD%E5%AE%9A-mysql-server" class="direct-link">#</a> 安裝及設定 mySQL server</h3><p>資料庫的部分我們使用 MYsql，先進行下載。</p><pre><code>sudo apt install mysql-server
+</code></pre><pre><code>sudo mysql_secure_installation
+</code></pre><p>接來我們會啟用 mysql-server 的 Validate Password Plugin。後面就不付上指令了，建議自己稍微看一下內容會比較好，能夠理解自己在幹嘛。</p><p>Validate Password Plugin 會強制你的密碼要有一定限制，繼續剛剛的步驟就可以看到有三種規則，看你自己的要求，不過之後 phpmyadmin 還有我們要用遠端連線資料庫的密碼也要遵守這個規則，可以自行斟酌。</p><p>接著會開始設定 root 帳號的密碼， root 帳號是 mySQL 裡面最高權限的帳號，我們在操作資料庫其實不太會直接用這個帳號操作，如果不小心誤操作會造成嚴重的問題。</p><p>設定好密碼之後還有一件事情要做，在 mysql 裡面，root 的預設登入帳號是使用 <code>auth_socket</code>，會直接對已經登入的 linux 帳戶作驗證，就不用另外打 mysql 帳戶的密碼。這裡我們要改一下設定：</p><pre><code>sudo mysql
+</code></pre><p>進入 mysql，使用 mysql 的 CLI。</p><pre><code>SELECT user,authentication_string,plugin,host FROM mysql.user;
+</code></pre><p>我們先來看看原本的登入方法還有用戶資料</p><pre><code>+------------------+-------------------------------------------+-----------------------+-----------+
+| user             | authentication_string                     | plugin                | host      |
++------------------+-------------------------------------------+-----------------------+-----------+
+| root             |                                           | auth_socket           | localhost |
+| mysql.session    | *THISISNOTAVALIDPASSWORDTHATCANBEUSEDHERE | mysql_native_password | localhost |
+| mysql.sys        | *THISISNOTAVALIDPASSWORDTHATCANBEUSEDHERE | mysql_native_password | localhost |
+| debian-sys-maint | *CC744277A401A7D25BE1CA89AFF17BF607F876FF | mysql_native_password | localhost |
++------------------+-------------------------------------------+-----------------------+-----------+
+4 rows in set (0.00 sec)
+</code></pre><p>可以看到 mysql 在安裝的時候就已經會有預設一些帳戶了。而且 root 在 plugin 是 <code>auth_socket</code>，我們要改成 <code>mysql_native_password</code> 來用 mysql 設定的密碼登入。</p><pre><code>ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'password';
+</code></pre><p>指令蠻直觀的，可以看一下內容，就是指定用戶以甚麼樣的方式登入，最後要輸入剛剛設定的密碼。</p><blockquote><p>有看到說可以用另外一個指令來設定</p><pre><code>UPDATE user SET plugin='mysql_native_password' WHERE User='root';
+</code></pre><p>似乎一個是用 mysql 處理帳戶的方式來設定，另外一個就是單純用 UPDATE 的指令來設定身分的 table，而且只改變 plugin。不知道說這兩個有沒有什麼差別。</p></blockquote><pre><code>FLUSH PRIVILEGES;
+</code></pre><p>這個指令是更新權限表，每次修改權限都需要更新才會套用設定。</p><p>剛剛在修改權限時有看到 <code>'root'@'localhost'</code>，這是什麼？我們知道說 <code>root</code> 是我們最高權限的帳號，那 <code>localhost</code> 呢？</p><p>SQL 的權限設定是用 <code>帳號名稱@登入位置</code> 來設定的，跟我們一開始登入 ssh 的概念有點像，這兩個合在一起才可以組成完整的登入帳號。所以 <code>'root'@'localhost'</code> 表示在 <strong>localhost</strong> 上面登入的 <strong>root</strong>，如果你要從外部（例如不透過 ssh，用程式來遠端連線）連線到 SQLserver 用 root 帳號登入是行不通的，只提供從 <code>localhost</code> 連線。也可以設定不管從哪裡連線都可以，後面如果填入 <code>'%'</code> 表示不管從哪裡連線都可以（不確定可不可以填入域名）。</p><p>SQL 還可以設定從不同的地方連線同一個帳戶可以有不同的權限。之後在處理 PHPmyadmin 的時候會提到。</p><p>設定完之後可以在輸入前面 <code>SELECT</code> 的指令看看自己的設定有沒有生效。 OK 就可以</p><pre><code>exit
+</code></pre><p>離開 mysql。設定好之後可能就沒辦法用 <code>sudo mysql</code> 來登入了，會需要使用</p><pre><code>mysql -u root -p
+</code></pre><p>然後輸入密碼登入。</p><blockquote><p>也有看到使用 <code>sudo mysql -u root mysql</code> ，這裡自己沒有詳細研究之間的差別。</p></blockquote><h3 id="php"><a href="#php" class="direct-link">#</a> PHP</h3><p>再來就是 LEMP 的最後一個步驟：PHP。這步驟我們要處理 PHP 的 CGI。什麼是 CGI？ CGI (Common Gateway Interface) 會把接收到的 request 轉化成語言可以解讀的形式，然後再用程式的語法送出 response。所以你才可以用 <code>$GET</code>, <code>$POST</code> 之類的東西來處理 request，然後 <code>echo</code> 就可以送出 response 的 body。</p><p>我們這裡就是要設定 PHP 的 CGI，更準確地來說是 FastCGI，也就是 CGI 的進化版。你也可以自己設定你喜歡的，像是另外一個 P（python），或者是 Ruby 之類的（LEMR 聽起來好像比 LEMP 更酷）。</p><pre><code>sudo apt install php-fpm php-mysql
+</code></pre><blockquote><p>有可能會沒辦法下載(自己有遇到這個問題)，會需要先下載 universe 的 repo</p><pre><code>sudo add-apt-repository universe
+</code></pre></blockquote><p>這樣就下載好 php-fpm （PHP FastCGI Process Manager），我們必須手動把 CGI 串上 web server，也就是 nginx。需要手動修改 nginx 的設定檔。</p><p>這裡講一下 nginx 設定檔的結構：</p><p>nginx 有一個主設定檔 <code>nginx.conf</code> 位在 <code>etc/nginx/</code> 裡面，裡面有這一段</p><pre><code>http {
+      //...
+      include /etc/nginx/conf.d/*.conf;
+      include /etc/nginx/sites-enabled/*;
+}
+</code></pre><p>會引入 <code>/etc/nginx/conf.d/*.conf</code> 還有 <code>/etc/nginx/sites-enabled/*</code>。通常對個別網站的做法是會在 <code>/etc/nginx/sites-available/</code> 裡面寫我們個別網站的設定，然後在透過連結的方式把需要的設定連結到 <code>sites-enabled</code> 裡面。個別網域的東西比較不會去動主設定檔。接下來就開始處理：</p><pre><code>sudo nano /etc/nginx/sites-available/example.com
+</code></pre><p>開一個 <code>example.com</code> 讓我們寫設定檔，名子隨便你，文字編輯器也隨便你，參考文章裡面的 <code>nano</code> 就只是一個文字編輯器而已。</p><pre><code>server {
+        listen 80;
+        root /var/www/html;
+        index index.php index.html index.htm index.nginx-debian.html;
+        server_name example.com;
+
+        location / {
+                try_files $uri $uri/ =404;
+        }
+
+        location ~ \.php$ {
+                include snippets/fastcgi-php.conf;
+                fastcgi_pass unix:/var/run/php/php7.2-fpm.sock;
+        }
+
+        location ~ /\.ht {
+                deny all;
+        }
+}
+</code></pre><p>然後把檔案改成這樣。你也可以直接 cp (複製的指令) <code>sites-available</code> 裡面的 default，在修改檔案</p><pre><code>sudo cp /etc/nginx/sites-available/default /etc/nginx/sites-available/example.com
+</code></pre><p>然後要加的東西加一加，其實 <code>default</code> 裡面都幫你打好了，弄到上面那樣就可以了。</p><pre><code>sudo ln -s /etc/nginx/sites-available/example.com /etc/nginx/sites-enabled/
+sudo unlink /etc/nginx/sites-enabled/default
+</code></pre><pre><code>sudo systemctl reload nginx
+</code></pre><p>接下來就是做剛剛說到的設定連結到 <code>sites-enabled</code> 裡面，而且把 default unlink，最後更新 nginx 的設定。</p><p>在更新之前也可以用 <code>sudo nginx -t</code> 來測試看看說設定有沒有打錯。這樣就設定好 PHP 的 CGI 了。</p><h3 id="%E6%B8%AC%E8%A9%A6"><a href="#%E6%B8%AC%E8%A9%A6" class="direct-link">#</a> 測試</h3><p>最後我們來測試一下</p><pre><code>sudo nano /var/www/html/info.php
+</code></pre><pre><code>&lt;?php
+phpinfo();
+</code></pre><p>建立一個 info.php，輸入上面的指令。這個 PHP 指令可以告訴我們 PHP 的設定，還有裝了那些 PHP 的 plugin。</p><p>然後你就可以瀏覽器瀏覽這個頁面看看</p><pre><code>http://你的網頁/info.php
+</code></pre><p>有跑出東西就是成功了，沒跑出東西就看看設定檔有沒有打錯或者是有沒有更新設定檔，看完記得刪除。</p><p>到這裡就完成 LEMP 的設置了。</p><h2 id="%E9%96%8B%E5%95%9F-php-%E9%81%A0%E7%AB%AF%E9%80%A3%E7%B7%9A"><a href="#%E9%96%8B%E5%95%9F-php-%E9%81%A0%E7%AB%AF%E9%80%A3%E7%B7%9A" class="direct-link">#</a> 開啟 PHP 遠端連線</h2><p>可以參考<a href="https://www.digitalocean.com/community/tutorials/how-to-allow-remote-access-to-mysql">這篇</a></p><p>開啟遠端連線就可以用自己的資料庫軟體來操作了。步驟大概是這樣：</p><ol><li>打開防火牆（包含 ufw &amp; SG）</li><li>設定 mySQL 的連線</li><li>建立一個帳戶</li><li>建立一個專屬於帳戶的資料庫</li><li>設定帳戶權限</li></ol><p>其實也可以自己試著用更開源的 MariaDB，但是設定方式就要再看一下，不過應該沒什麼很大的差異</p><h3 id="%E6%89%93%E9%96%8B%E9%98%B2%E7%81%AB%E7%89%86"><a href="#%E6%89%93%E9%96%8B%E9%98%B2%E7%81%AB%E7%89%86" class="direct-link">#</a> 打開防火牆</h3><p>前面已經開了</p><h3 id="%E8%A8%AD%E5%AE%9A%E9%80%A3%E7%B7%9A"><a href="#%E8%A8%AD%E5%AE%9A%E9%80%A3%E7%B7%9A" class="direct-link">#</a> 設定連線</h3><p>修改 <code>/etc/mysql/mysql.conf.d/mysqld.cnf</code> 修改 <code>bind-address</code> 成為 0.0.0.0，也就是允許任何 IP 連線的意思。</p><pre><code>lc-messages-dir = /usr/share/mysql
+skip-external-locking
+#
+# Instead of skip-networking the default is now to listen only on
+# localhost which is more compatible and is not less secure.
+bind-address   = 0.0.0.0
+</code></pre><pre><code>sudo systemctl restart mysql
+</code></pre><p>然後重新啟動，systemctl 可以用來管理整個 OS 上面的服務。</p><h3 id="%E5%BB%BA%E7%AB%8B%E5%B8%B3%E6%88%B6%EF%BC%9B%E8%B3%87%E6%96%99%E5%BA%AB%EF%BC%9B%E6%8E%88%E6%AC%8A"><a href="#%E5%BB%BA%E7%AB%8B%E5%B8%B3%E6%88%B6%EF%BC%9B%E8%B3%87%E6%96%99%E5%BA%AB%EF%BC%9B%E6%8E%88%E6%AC%8A" class="direct-link">#</a> 建立帳戶；資料庫；授權</h3><pre><code>mysql -u root -p
+</code></pre><pre><code>CREATE USER 'username'@'%' IDENTIFIED BY 'password';
+</code></pre><p>先登入資料庫，後再建立一個新的帳戶，還記得前面提到的帳戶格式嗎？這裡可以用 % 代表你可以從任何 IP 來登入。</p><p>到這裡，可以先用 <code>SHOW GRANTS FOR [user];</code> 來看看自己的權限。</p><pre><code>CREATE DATABASE "database_name";
+</code></pre><pre><code>GRANT ALL PRIVILEGES ON 'database_name'.* TO 'username'@'%' WITH GRANT OPTION;
+</code></pre><p>再檢查一次權限，可以看到已經有指定的 database 有存取的權限了。但是要注意，這樣給的是該資料庫最高的權限，還可以新增帳戶之類的，如果覺得安全性有疑慮不想要設定高的權限，可以看<a href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html">文件</a>照自己的要求來設定。或者是用下面的指令，可以只給予一些基本操作的權限。</p><pre><code>GRANT CREATE, ALTER, DROP, INSERT, UPDATE, DELETE, SELECT, REFERENCES, RELOAD on 'database_name'.* TO 'username'@'%' WITH GRANT OPTION;
+</code></pre><h2 id="%E8%A8%AD%E5%AE%9A-https"><a href="#%E8%A8%AD%E5%AE%9A-https" class="direct-link">#</a> 設定 https</h2><p>在安裝 phpmyadmin 之前要先來設定 https，因為 phpmyadmin 是透過 http/https 連上 server，在透過 PHP 的介面操作資料庫。先設定 https 可以避免我們的操作暴露在網路上。這部分的內容主要參考<a href="https://www.digitalocean.com/community/tutorials/how-to-secure-nginx-with-let-s-encrypt-on-ubuntu-18-04">這篇</a></p><p>https 需要一個 Certificate Authority (CA) 發放的證書 (certificate) 來幫我們的網頁認證。有一個很方便的東西叫做 certbot 可以幫我們處理這點。</p><h3 id="%E5%AE%89%E8%A3%9D-certbot"><a href="#%E5%AE%89%E8%A3%9D-certbot" class="direct-link">#</a> 安裝 certbot</h3><pre><code>sudo add-apt-repository ppa:certbot/certbot
+</code></pre><pre><code>sudo apt install python-certbot-nginx
+</code></pre><p>先下載 certbot 的軟體庫，然後在下載 certbot。因為 certbot 的開發比較活躍，如果你適用預設的 ubuntu 軟體庫來下載的話常常已經是之前的版本了，所以我們這裡使用 certbot 自己提供的軟體庫來拿到最新的版本。</p><h3 id="%E8%A8%AD%E5%AE%9A-nginx"><a href="#%E8%A8%AD%E5%AE%9A-nginx" class="direct-link">#</a> 設定 nginx</h3><p>記得一開始我們設定過 CGI ，現在我們要到同樣的檔案去設定 https。打開一樣的檔案 <code>/etc/nginx/sites-available/example.com</code>，把自己的 domain name 加進去，包含 <code>www.domain.com</code> 以及 <code>domain.com</code>。</p><pre><code>server_name example.com www.example.com;
+</code></pre><p>這裡設定好直接儲存就好了，不用再連結一次，已經之前已經設連結了。</p><p>https 發證書是跟著 domain name 的，不是跟著 IP，所以要跟著設定 domain name 給 nginx 。想到這裡有點好奇說能不能發證書給 IP，有<a href="https://stackoverflow.com/questions/2043617/is-it-possible-to-have-ssl-certificate-for-ip-address-not-domain-name">查到</a>說其實也可以，不過似乎很少這樣處理。</p><p>最後記得測試跟 reload nginx，可以去前面翻指令。</p><h3 id="%E8%A8%AD%E5%AE%9A%E9%98%B2%E7%81%AB%E7%89%86-2"><a href="#%E8%A8%AD%E5%AE%9A%E9%98%B2%E7%81%AB%E7%89%86-2" class="direct-link">#</a> 設定防火牆</h3><p>要把 ngnix 的 port 存取全部打開，SG 有設定了所以這邊沒有設定，想設定可以參考原文。</p><h3 id="%E7%8D%B2%E5%8F%96-ssl-%E8%AD%89%E6%9B%B8"><a href="#%E7%8D%B2%E5%8F%96-ssl-%E8%AD%89%E6%9B%B8" class="direct-link">#</a> 獲取 SSL 證書</h3><p>接下來就超級快了，快到不行那種</p><pre><code>sudo certbot --nginx -d example.com -d www.example.com
+</code></pre><p>輸入上面指令可以獲取證書，如果有想新增的 subdomain 可以再加上自己要的 <code>-d</code>，沒有試過說能不能用 <code>*.example.com</code> 來讓所有的 subdomain 都登記在證書上面。不過應該可以試試看。</p><pre><code>Output
+Please choose whether or not to redirect HTTP traffic to HTTPS, removing HTTP access.
+
+// 選項
+
+Select the appropriate number [1-2] then [enter] (press 'c' to cancel):
+</code></pre><p>中間可能會跳出 email 或什麼的可以照他的指示處理，還有上面這個，我是選 2 啦，內容可以自己看一下，在講要不要自動幫你轉到 https。</p><p>然後就好了，是不是超級快！！快來讓自已的網站也安全起來吧。</p><p>最後講一下說為什麼可以這麼方便幾乎是一行指令就讓你的 server 擁有高枕無憂的 https 連線好了。</p><p>有一個網站叫做 <a href="https://letsencrypt.org/zh-tw/getting-started/">lets encrypt</a> 可以免費頒發 SSL 的證書，而 certbot 就是可以幫你自動連到 lets encrypt 申請證書，甚至在過期的時候也會自動幫你再申請！！簡直是 nice 到不行。</p><p>如果想要強制更新證書來測試說有沒有問題，可以：</p><pre><code>sudo certbot renew --dry-run
+</code></pre><p>如果沒問題就大功告成囉。</p><h2 id="phpmyadmin"><a href="#phpmyadmin" class="direct-link">#</a> PHPmyadmin</h2><p>會把 PHPmyadmin 放在的 https 後面的原因是如果透過 http 連線來存取會比較危險一點（雖然可能沒甚麼要盜用我的資料庫...），所以在設定好 https 之後再開始處理 phpmyadmin。</p><p>phpmyadmin 的部分是參考<a href="https://www.digitalocean.com/community/tutorials/how-to-install-and-secure-phpmyadmin-with-nginx-on-an-ubuntu-18-04-server">這篇</a></p><h3 id="%E5%AE%89%E8%A3%9D"><a href="#%E5%AE%89%E8%A3%9D" class="direct-link">#</a> 安裝</h3><pre><code>sudo apt update
+</code></pre><pre><code>sudo apt install phpmyadmin
+</code></pre><p>首先老步驟，更新還有下載 phpmyadmin。這裡突然很好奇說 apt update 是甚麼意思？是更新系統的意思嗎。後來發現不是，是更新可以下載的套件清單還有版本，所以每次 install 的時候都推薦跑一下。</p><p>中間會選說你用哪個 server，很可惜的都不是。可以直接按 <code>tab</code> 然後 <code>enter</code>。</p><p>再來，phpmyadmin 會幫你在 mySQL 裡面建立一個用戶，來存放 phpmyadmin 的資料，而且會要你輸入密碼，照做設定自己的密碼就可以了。</p><p>接下來會把 phpmyadmin 連結到 web-server 存取的網站資料夾裡面。</p><pre><code>sudo ln -s /usr/share/phpmyadmin /var/www/html/phpmyadmin
+</code></pre><p>追根究柢來說 phpmyadmin 其實就只是一堆 php 檔案而已，這個步驟跟把自己的 index.html 差不多。這個時候其實 phpmyadmin 就弄好了，可以輸入網址看一下。</p><pre><code>https://server_domain_or_IP/phpmyadmin
+</code></pre><p>但是這只是第一步喔，phpmyadmin 超夯，而且超多人在用，別人看到你的網站然後後面接著 <code>/phpmyadmin</code> 就可以看到 phpmyadmin，然後你又一定有個 <code>root</code> 的帳戶，可能你的密碼又超簡單，輕鬆登入你的資料庫，然後 <code>drop</code> 掉你的心血。</p><p>方便總要付出一點代價，雖然有 https 安全很多，但是接下來的設定可以讓你更安心地用 phpmyadmin。大概有這些步驟</p><ul><li>更改 phpmyadmin 的資料夾名稱</li><li>禁用 <code>root</code> 使用 phpmyadmin 登入</li><li>讓進入 phpmyadmin 以前需要再進行驗證</li></ul><h3 id="%E6%9B%B4%E6%94%B9%E8%B3%87%E6%96%99%E5%A4%BE%E5%90%8D%E7%A8%B1"><a href="#%E6%9B%B4%E6%94%B9%E8%B3%87%E6%96%99%E5%A4%BE%E5%90%8D%E7%A8%B1" class="direct-link">#</a> 更改資料夾名稱</h3><p>這步驟超簡單，但是還蠻有用的。</p><pre><code>cd /var/www/html
+
+sudo mv phpmyadmin secret_admin
+</code></pre><p><code>secret_admin</code> 可以自行填入。這樣可以避免自動掃描，或者是那種喜歡動不動就偷看一下的人（像我就是...）。</p><h3 id="%E7%A6%81%E6%AD%A2-root-%E4%BD%BF%E7%94%A8-phpmyadmin-%E7%99%BB%E5%85%A5"><a href="#%E7%A6%81%E6%AD%A2-root-%E4%BD%BF%E7%94%A8-phpmyadmin-%E7%99%BB%E5%85%A5" class="direct-link">#</a> 禁止 <code>root</code> 使用 phpmyadmin 登入</h3><pre><code>sudo nano /etc/phpmyadmin/conf.d/pma_secure.php
+</code></pre><pre><code>&lt;?php
+
+# PhpMyAdmin Settings
+# This should be set to a random string of at least 32 chars
+$cfg['blowfish_secret'] = '任意輸入32字元的字串';
+
+$i=0;
+$i++;
+
+$cfg['Servers'][$i]['auth_type'] = 'cookie';
+$cfg['Servers'][$i]['AllowNoPassword'] = false;
+$cfg['Servers'][$i]['AllowRoot'] = false;
+
+?&gt;
+</code></pre><p>建立一個 pma_secure.php，然後放進去上面的設定。自己也還沒理解所有的設定，但重要的是下面三個。</p><ul><li><code>['auth_type'] = 'cookie'</code>：讓我們可以用 cookie 來連線，預設的連線方式是 config 有點危險，上面的 blowfish 可以設定驗證 cookie 的 token，系統會要求要打滿 32 字。</li><li><code>['AllowNoPassword'] = false;</code>：不讓你用免密碼登入</li><li><code>['AllowRoot'] = false;</code>：這個就是我們的目標了，禁用 root</li></ul><p>設定完之後可以試著用 root 登入看看。</p><h3 id="%E8%AE%93%E9%80%B2%E5%85%A5-phpmyadmin-%E4%BB%A5%E5%89%8D%E9%9C%80%E8%A6%81%E5%86%8D%E9%80%B2%E8%A1%8C%E9%A9%97%E8%AD%89"><a href="#%E8%AE%93%E9%80%B2%E5%85%A5-phpmyadmin-%E4%BB%A5%E5%89%8D%E9%9C%80%E8%A6%81%E5%86%8D%E9%80%B2%E8%A1%8C%E9%A9%97%E8%AD%89" class="direct-link">#</a> 讓進入 phpmyadmin 以前需要再進行驗證</h3><p>大部分的 webserver 可以設定說特定的網站需要透過另外登入才可以進去，這樣可以不讓一些比較邪惡的爬蟲找到我們的 phpmyadmin。</p><p>首先我們要用 openssl 來幫我們建立一組密碼，openssl 是一個提供很多種常用加密方式的工具，已經內建在 ubuntu 上了，常用 linux 會很常看到這個東西。</p><pre><code>openssl passwd
+</code></pre><p>然後輸入你的密碼，會跑出加密過後的密碼。</p><pre><code>Output
+O5az.RSPzd.HE //會跑出你自己加密過的密碼
+</code></pre><p>然後修改 nginx 的設定，把我們的帳戶加進去。</p><pre><code>sudo nano /etc/nginx/pma_pass
+</code></pre><p>加入你自己想要的帳號跟密碼</p><pre><code>你要設定的帳號:剛剛加密過的密碼
+</code></pre><p>再來要設定哪些資料夾需要透過帳號密碼驗證才可以進入，懂這個方法之後，其實你也可以自己把你想要的資料夾加入帳號密碼驗證，可以做一個自己的後台。其實也不難，還記得前面我們的 nginx 設定檔嗎？</p><p>location block 可以設定存取到特定位置時的動作，我們在 <code>/secret_admin</code> (依照剛剛設定的資料夾)裡面設定我們要使用的授權方式，並選擇剛剛建立的帳戶檔案。</p><pre><code>server {
+    . . .
+
+        location / {
+                try_files $uri $uri/ =404;
+        }
+
+        # 只要加這段進去
+        location /secret_admin {
+                auth_basic "Admin Login";
+                auth_basic_user_file /etc/nginx/pma_pass;
+        }
+
+    . . .
+}
+</code></pre><p>內容自己覺得直觀的，雖然這篇沒有提到 nginx 的設定，但是可以稍微理解設定的方法。</p><p>話說這篇可能比較沒內容，覺得這裡的概念似乎沒有那麼複雜。</p><h2 id="ftp-server"><a href="#ftp-server" class="direct-link">#</a> FTP server</h2><p>終於到最後了，這裡就是自己花最多時間的地方。有一個 ftp Server 之後上傳東西會方便很多，這篇的內容參考自<a href="https://www.digitalocean.com/community/tutorials/how-to-set-up-vsftpd-for-a-user-s-directory-on-ubuntu-18-04">How To Set Up vsftpd for a User's Directory on Ubuntu 18.04</a>，但是有修改過很多東西。</p><p>這部分會比較不同，設定大多是自己研究的，有可能有很多問題或者是還有待優化的部分，歡迎大家一起 debug XD，那一樣先來講講要幹嘛。</p><p>我們要做的事情有</p><ul><li>建立一個獨立的帳戶能夠登入 FTP</li><li>可以傳輸我們的檔案到 <code>/etc/www</code> （web server 存取的資料夾）裡面</li><li>這個帳戶透過 FTP 只能存取到 <code>/etc/www</code> 沒辦法再存取上層目錄（安全問題）</li><li>只有這個帳戶可以用 FTP 登入</li><li>開啟 ssl 加密的功能</li></ul><p>為什麼是 <code>/html/www</code>，因為原本想設定 <code>/etc/www/html</code> 然後失敗很多次，灰心喪志，後來發現自己偶然設定成 <code>/html/www</code>，就放過自己了...</p><p>單純的 FTP 就像 http 一樣會讓你在這個網路世界中裸奔，這裡我們會使用 FTPs 來連線，在 FTP 的基礎上使用 ssl 來加密。另外還有一種稱作 SFTP，能夠在 ssh （我們登入 server 採用的協議）的基礎上使用 ftp 傳輸，詳細的內容可以看<a href="https://www.trustauth.cn/wiki/13883.html">這篇</a>。</p><h3 id="%E5%AE%89%E8%A3%9D-vtftpd"><a href="#%E5%AE%89%E8%A3%9D-vtftpd" class="direct-link">#</a> 安裝 vtftpd</h3><p>我們會使用 vsftps 來作為我們的 ftp server，<a href="http://vsftpd.beasts.org/vsftpd_conf.html">這裡</a>是他的文件。首先是下載，應該很熟悉了。</p><pre><code>sudo apt update
+sudo apt install vsftpd
+</code></pre><p>然後我們複製一個 vsftpd 的設定檔，留一個原版之後還原用</p><pre><code>sudo cp /etc/vsftpd.conf /etc/vsftpd.conf.orig
+</code></pre><h3 id="%E5%BB%BA%E7%AB%8B%E5%B8%B3%E6%88%B6%E3%80%81%E8%A8%AD%E5%AE%9A%E5%AE%B6%E7%9B%AE%E9%8C%84%E4%BB%A5%E5%8F%8A%E6%AC%8A%E9%99%90"><a href="#%E5%BB%BA%E7%AB%8B%E5%B8%B3%E6%88%B6%E3%80%81%E8%A8%AD%E5%AE%9A%E5%AE%B6%E7%9B%AE%E9%8C%84%E4%BB%A5%E5%8F%8A%E6%AC%8A%E9%99%90" class="direct-link">#</a> 建立帳戶、設定家目錄以及權限</h3><p>FTP 登入的帳號和 unbuntu 本身帳戶是一樣的。所以我們要先再系統上面建立一個帳戶。</p><pre><code>sudo adduser username
+</code></pre><p>新增完會需要輸入密碼，就依照上面的指示。在來修改家目錄，家目錄就是當我們一開始登入的時候，進入的資料夾，我們會設定 FTP 登入這個帳戶的時候，會直接進入我們的網頁資料夾。passwd 是存放 ubuntu 用戶資料的檔案。</p><pre><code>sudo vim /etc/passwd
+</code></pre><p>可以修改帳戶的一些資料，然後滾到最下面會看到我們剛剛的帳號名稱。到那一行之後，改成下面這行。</p><pre><code>username:x:1001:1001:,,,:/var/www:/bin/bash
+</code></pre><p>基本上就是修改最後一個冒號跟倒數第二個冒號的內容，這裡可以修改家目錄。</p><pre><code>sudo chown -R username /var/www
+</code></pre><p>修改 <code>/var/www</code> 以及底下所有檔案的所有者，原本是屬於 root 的，我們把它改到剛剛設建立的帳戶下面，讓我們可以操作下面的檔案。</p><p>從建立帳戶之後作法可能會有很大的爭議，照理來說你有幾種做法，只要讓新建立的帳戶可以存取就好。列一下自己的幾種想法：</p><ul><li><p>把新帳戶加入 root 群組<br>覺得這個不太妥，很多重要的資料夾都是 root 群組的</p></li><li><p>把 <code>/var/www</code> 的 owner 改成 new_user`<br>這裡是自己採用的做法，想法是這樣可以讓 root 有最高的權限（group 還是 root），又可以讓 new_user 可以存取裡面的東西</p></li><li><p>改變 <code>/var/www</code> 權限變成 776，也就是</p><ul><li>擁有者：讀、寫、執行</li><li>群組：讀、寫、執行</li><li>其他人：讀、寫<br>這個個人是覺得不太妥，這樣權限開太廣了</li></ul></li><li><p>建立一個 new_group，然後把 <code>/var/www</code> 的 group 改成 new_group，在把 new_user 放進去 new_group。<br>這個似乎是最穩妥的作法，但是好麻煩ㄚ...</p></li></ul><p>這裡應該還可以思考看看如何利用帳戶、群組、還有資料夾權限來得到一個最佳解。</p><details><summary>linux 權限</summary><p>剛剛有提到權限 776 ，稍微講解一下，linux 的資料夾權限分：</p><ul><li>三個對象：<ul><li>擁有者</li><li>群組</li><li>他人</li></ul></li><li>三種權限<ul><li>讀取(r, 4)</li><li>寫入(w, 2)</li><li>執行(x, 1)</li></ul></li></ul><p>如果擁有者可以讀取 &amp; 寫入，那擁有者的權限就會是 <code>4 + 2 = 6</code>。然後權限的三個數字會依序是擁有者、群組、他人，所以剛剛的 <code>776</code> 就是：</p><ul><li>擁有者：讀取、寫入、執行</li><li>擁有群組：讀取、寫入、執行</li><li>他人：讀取、寫入</li></ul><p>這個是 Linux 的權限表示法，可以用在更改檔案夾的權限，搭配指令 <code>chmod</code></p><p>也可以用下面指令來看路徑內的檔案及資料夾的所有檔案權限：</p><pre><code>ls -al /path
+</code></pre><p>最前面會有一個第一次看很詭異的表現方式</p><pre><code>-rwxr-xr-x.
+</code></pre><p>第一個字如果是 <code>d</code>，表示是資料夾，是 <code>-</code> 表示是檔案。接下來三個一組分別表示 讀取、寫入、執行。然後三組分別是，擁有者、擁有群組、他人。</p><p>所以上面就是</p><ul><li>不是資料夾</li><li>擁有者：讀取、寫入、執行</li><li>擁有群組：讀取、執行</li><li>他人：讀取、執行</li></ul></details><h3 id="vsftpd-%E8%A8%AD%E5%AE%9A"><a href="#vsftpd-%E8%A8%AD%E5%AE%9A" class="direct-link">#</a> vsftpd 設定</h3><pre><code>sudo nano /etc/vsftpd.conf
+</code></pre><p>編輯設定檔。</p><p>後面的設定一堆，設定原因可以看註解，或者是自己查文件。會提到自己覺得比較特別的，而且這裡是自己的設定，跟參考文章上面有點差別。有 ❗ 的部份表示我自己也沒有非常了解這些設定，但目前這樣是 OK 的，這方面希望多多交流<s>debug</s>。</p><pre><code># Allow anonymous FTP? (Disabled by default).
+anonymous_enable=NO
+#
+# Uncomment this to allow local users to log in.
+local_enable=YES
+
+write_enable=YES
+
+
+chroot_local_user=YES                 # ❗ 讓使用者不能移開設定家目錄以外的地方，不太清楚說是不能離開家目錄還是下面的 local_root，可能需要做實驗
+local_root=/var/www/                  # ❗ 設定進去的資料夾，有點不清楚和家目錄的關係，但目前這樣是可以用的 XD
+allow_writeable_chroot=YES            # 可以在根目錄寫入資料
+
+local_umask=022                       
+file_open_mode=0777                   
+❗ 這兩個要一起看，可以設定上傳上去檔案的權限，自己的理解是，權限會是 `file_open_mode` - `local_umask`，所以就是 777(前面的 0 這裡可以忽略) - `222` = `755`。
+
+# 設定 ftp 被動連線的端口
+pasv_min_port=40000
+pasv_max_port=50000
+
+
+userlist_enable=YES                   # 啟用 userlist 來限定只有特定的用戶可以登入
+userlist_file=/etc/vsftpd.userlist    # 使用 `/etc/vsftpd.userlist` 來作為 userlist
+userlist_deny=NO                      # 在 userlist 代表用戶的白名單，如果是 YES 則代表黑名單
+</code></pre><p>接下來建立 vsftpd.userlist</p><pre><code>echo "sammy" | sudo tee -a /etc/vsftpd.userlist
+</code></pre><p>重啟 vsftpd</p><pre><code>sudo systemctl restart vsftpd
+</code></pre><p>到這裡可以用新增的帳戶登入看看，可以用 filezilla 或者是看上面的參考文章</p><h3 id="%E8%A8%AD%E5%AE%9A-ssl"><a href="#%E8%A8%AD%E5%AE%9A-ssl" class="direct-link">#</a> 設定 ssl</h3><p>建立 ssl 金鑰，其實這裡的金鑰就是 certbot 發給我們的金鑰，所以搞不好也可以沿用，不用自製的？</p><pre><code>sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/vsftpd.pem -out /etc/ssl/private/vsftpd.pem
+</code></pre><pre><code>Output
+Generating a 2048 bit RSA private key
+............................................................................+++
+...........+++
+writing new private key to '/etc/ssl/private/vsftpd.pem'
+-----
+You are about to be asked to enter information that will be incorporated
+into your certificate request.
+What you are about to enter is what is called a Distinguished Name or a DN.
+There are quite a few fields but you can leave some blank
+For some fields there will be a default value,
+If you enter '.', the field will be left blank.
+-----
+Country Name (2 letter code) [AU]:US
+State or Province Name (full name) [Some-State]:NY
+Locality Name (eg, city) []:New York City
+Organization Name (eg, company) [Internet Widgits Pty Ltd]:DigitalOcean
+Organizational Unit Name (eg, section) []:
+Common Name (e.g. server FQDN or YOUR name) []: your_server_ip
+Email Address []:
+</code></pre><p>然後又是改設定了</p><pre><code># rsa_cert_file=/etc/ssl/certs/ssl-cert-snakeoil.pem
+# rsa_private_key_file=/etc/ssl/private/ssl-cert-snakeoil.key
+# 這兩行預設值註解掉
+
+rsa_cert_file=/etc/ssl/private/vsftpd.pem
+rsa_private_key_file=/etc/ssl/private/vsftpd.pem
+# 用自己的金鑰比較有感情
+
+ssl_enable=YES
+
+allow_anon_ssl=NO               # 禁止匿名用戶
+force_local_data_ssl=YES
+force_local_logins_ssl=YES
+
+require_ssl_reuse=NO            
+
+
+# ❗ 下面的我沒有設定但文章有，之前設定好像怪怪的... 但不太清楚原因，可以試試看
+ssl_tlsv1=YES
+ssl_sslv2=NO
+ssl_sslv3=NO
+ssl_ciphers=HIGH
+</code></pre><p>加上前面的設定，自己的設定檔是這樣的（去掉註解）</p><pre><code>listen=NO
+listen_ipv6=YES
+anonymous_enable=NO
+local_enable=YES
+write_enable=YES
+local_umask=022
+file_open_mode=0777
+dirmessage_enable=YES
+use_localtime=YES
+xferlog_enable=YES
+connect_from_port_20=YES
+ chroot_local_user=YES
+secure_chroot_dir=/var/run/vsftpd/empty
+pam_service_name=vsftpd
+rsa_cert_file=/etc/ssl/private/vsftpd.pem
+sa_private_key_file=/etc/ssl/private/vsftpd.pem
+ssl_enable=YES
+allow_anon_ssl=NO
+force_local_data_ssl=YES
+force_local_logins_ssl=YES
+userlist_enable=YES
+userlist_file=/etc/vsftpd.userlist
+userlist_deny=NO
+require_ssl_reuse=NO
+local_root=/var/www/
+allow_writeable_chroot=YES
+pasv_min_port=40000
+pasv_max_port=50000
+</code></pre><p>至少這樣設定應該是沒問題啦。如果一樣了，還不能用就可能是其他問題，可能像是：</p><ul><li>防火牆</li><li>AWS 的 SG</li><li>檔案夾的權限</li><li>帳戶的權限</li></ul><p>上面都是我遇過的問題 😥。最後再 <code>sudo systemctl restart vsftpd</code></p><p>好了之就可以用 filezilla 登入看看了。會跳出說可疑的證書（親手製作的證書被說可疑太傷心了），大方給他按 ok 平反下去，就可以登入啦。</p><h2 id="%E5%8F%83%E8%80%83%E8%B3%87%E6%96%99"><a href="#%E5%8F%83%E8%80%83%E8%B3%87%E6%96%99" class="direct-link">#</a> 參考資料</h2><p>統整一下參考資料</p><p>LEMP server<br><a href="https://www.digitalocean.com/community/tutorials/how-to-install-linux-nginx-mysql-php-lemp-stack-ubuntu-18-04">https://www.digitalocean.com/community/tutorials/how-to-install-linux-nginx-mysql-php-lemp-stack-ubuntu-18-04</a></p><p>phpmyadmin<br><a href="https://www.digitalocean.com/community/tutorials/how-to-install-and-secure-phpmyadmin-with-nginx-on-an-ubuntu-18-04-server">https://www.digitalocean.com/community/tutorials/how-to-install-and-secure-phpmyadmin-with-nginx-on-an-ubuntu-18-04-server</a></p><p>https<br><a href="https://www.digitalocean.com/community/tutorials/how-to-secure-nginx-with-let-s-encrypt-on-ubuntu-18-04">https://www.digitalocean.com/community/tutorials/how-to-secure-nginx-with-let-s-encrypt-on-ubuntu-18-04</a></p><p>mysql 權限<br><a href="https://zhuanlan.zhihu.com/p/55798418">https://zhuanlan.zhihu.com/p/55798418</a><br>如果是 localhost 就表示只能從本地登入（phpmyadmin 也是）如果是 % 就代表全部</p><p>新增 ssh 的 short cut，文中沒提到，可以自己弄看看，很方便<br><a href="https://scotch.io/tutorials/how-to-create-an-ssh-shortcut">https://scotch.io/tutorials/how-to-create-an-ssh-shortcut</a></p><p>FTP server<br><a href="https://www.digitalocean.com/community/tutorials/how-to-set-up-vsftpd-for-a-user-s-directory-on-ubuntu-18-04">https://www.digitalocean.com/community/tutorials/how-to-set-up-vsftpd-for-a-user-s-directory-on-ubuntu-18-04</a></p><p>openssl 的文章<br><a href="https://www.digitalocean.com/community/tutorials/openssl-essentials-working-with-ssl-certificates-private-keys-and-csrs">https://www.digitalocean.com/community/tutorials/openssl-essentials-working-with-ssl-certificates-private-keys-and-csrs</a></p><h2 id="%E5%85%B6%E4%BB%96%E5%95%8F%E9%A1%8C"><a href="#%E5%85%B6%E4%BB%96%E5%95%8F%E9%A1%8C" class="direct-link">#</a> 其他問題</h2><p>❓ 什麼是 SSH<br>Ssh (Secure Shell) 是一種協定，可以用來作為 client 跟 server 的連接，簡單說就是可以讓我們安全的登入 Server。</p><p>❓ security group 跟 linux 裡面的 firewall （像是 ufw 等）有甚麼差別？</p><p>功能上類似，主要是在 server 的哪個環節阻擋的問題。防火牆是可以阻擋網路傳輸內容工具的統稱，實際上可以在很多不同網路的層面來實現這個功能，可能是從 router 就開始阻擋（就是你國小電腦課老師開的東西），或者是運用系統內建的軟體來阻擋（windows 常常莫名其妙跳出來的東西）。</p><p>linux 的內核有提供稱作 netfilter 的模組來阻擋或者說過濾網路傳輸的內容，也就是剛剛提到的軟體防火牆（應該是，有錯在麻煩更正），而操作 netfilter 這個防火牆的介面就是 iptable。因為直接操作 iptable 很麻煩，所以就有了一個 ufw （uncomplicated firewall）來讓我們這些菜鳥也能夠好好的操作 netfilter。</p><p>而 security group 就是在 VPS 外面，AWS 所提供的防火牆，功能跟 ufw 是一樣的。</p><p>參考資料：<br><a href="https://serverfault.com/questions/884156/difference-between-security-groups-on-aws-and-iptables">https://serverfault.com/questions/884156/difference-between-security-groups-on-aws-and-iptables</a><br><a href="https://serverfault.com/questions/286665/why-have-both-security-groups-and-iptables-on-amazon-ec2">https://serverfault.com/questions/286665/why-have-both-security-groups-and-iptables-on-amazon-ec2</a><br><a href="https://www.awsforbusiness.com/aws-security-groups-different-firewalls/">https://www.awsforbusiness.com/aws-security-groups-different-firewalls/</a><br><a href="https://medium.com/awesome-cloud/aws-difference-between-security-groups-and-network-acls-adc632ea29ae">https://medium.com/awesome-cloud/aws-difference-between-security-groups-and-network-acls-adc632ea29ae</a></p><h2 id="%E6%84%9F%E6%83%B3"><a href="#%E6%84%9F%E6%83%B3" class="direct-link">#</a> 感想</h2><blockquote><p>如果你這週是順利的，未來某一天你一樣會經歷這個崩潰的過程。如果你這週本來就很崩潰，放心，以後還有更多讓你崩潰的事。<br>- Huli</p></blockquote><p>好吧這裡先崩潰一次了... 往好處想，至少之後可能不會遇到這麼崩潰的事情（立 flag）</p></article><div class="post__tags tags"><h2>tags</h2><a href="/tags/deploy/">deploy</a></div><div class="post__link"><div></div><div></div></div><hr class="post__devider"><div class="utterances"></div><script async="" src="https://utteranc.es/client.js" crossorigin="anonymous" issue-term="title" label="utterance" repo="Lauviah0622/Lavi-blog" theme="github-light"></script><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "在 AWS 上面部署 LEMP server, PHPmyadmin, FTP",
+  "image": [],
+  "author": "Lavi", 
+  "genre": "Insert a schema.org genre", 
+  "publisher": {
+    "@type": "Organization",
+    "name": "Lavi",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "/img/favicon/favicon-192x192.png?hash=2089033c93"
+    }
+  },
+  "url": "https://lavi-blog.vercel.app/posts/deploy-on-aws/",
+  "mainEntityOfPage": "https://lavi-blog.vercel.app/posts/deploy-on-aws/",
+  "datePublished": "2021-10-17",
+  "dateModified": "2021-10-17",
+  "description": "LEMP 在這邊是指下面幾種技術的簡稱： Linux Nginx MySQL PHP 我們會利用這些技術在 AWS 來做一個 web server，並把我們的資料部署到 server 上。我們可以先大概看一下我們做了哪些事情： 設定 AWS，其中包含 建立一個 ubuntu 的..."
+}</script><script csp-hash="sha256-S74q1WGEGfQZyLlS1Dzl4+dKEQ+b0Z0yGiPJt7XNB5k=">let prevElement;
+ const io = new IntersectionObserver(
+  (entries) => {
+    entries.forEach((entry) => {
+      const id = entry.target.id
+        if (id === "title") {
+          const title = document.querySelector(`#${id}`)
+          if (prevElement) {
+            prevElement.classList.remove('current');
+          }
+          return  
+        }
+        const current = document.querySelector(`[data-header="${id}"]`);
+        if (current == null) return 
+        if (entry.isIntersecting) {
+          current.classList.add('current');
+          if (prevElement && prevElement != current) {
+            prevElement.classList.remove('current');
+          }
+          prevElement = current
+        }
+        
+    });
+  },
+  {
+    rootMargin: "-10% 0% -70% 0%",
+  }
+);
+
+// Declares what to observe, and observes its properties.
+const boxElList = document.querySelectorAll('h1, h2, h3, h4');
+boxElList.forEach((el) => {
+    io.observe(el);
+})</script></main><footer class="center center--wide"><div class="footer"><div><nav class="nav"><h1 class="logo"><a href="/" title="Homepage"><svg fill="none" viewBox="0 0 39 33" xmlns="http://www.w3.org/2000/svg" class="icon"><path d="M19.5 0L38.1195 32.25H0.880453L19.5 0Z" fill="#90A0A8"></path></svg> Apprentice Log</a></h1><a href="/tags/">Tags</a> <a href="/about/">About</a></nav></div><div class="caption footer__info"><div><a href="https://github.com/Lauviah0622" target="_blank"><svg fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" height="24" width="24"><path d="M12.026 2C7.13295 1.99937 2.96183 5.54799 2.17842 10.3779C1.395 15.2079 4.23061 19.893 8.87302 21.439C9.37302 21.529 9.55202 21.222 9.55202 20.958C9.55202 20.721 9.54402 20.093 9.54102 19.258C6.76602 19.858 6.18002 17.92 6.18002 17.92C5.99733 17.317 5.60459 16.7993 5.07302 16.461C4.17302 15.842 5.14202 15.856 5.14202 15.856C5.78269 15.9438 6.34657 16.3235 6.66902 16.884C6.94195 17.3803 7.40177 17.747 7.94632 17.9026C8.49087 18.0583 9.07503 17.99 9.56902 17.713C9.61544 17.207 9.84055 16.7341 10.204 16.379C7.99002 16.128 5.66202 15.272 5.66202 11.449C5.64973 10.4602 6.01691 9.5043 6.68802 8.778C6.38437 7.91731 6.42013 6.97325 6.78802 6.138C6.78802 6.138 7.62502 5.869 9.53002 7.159C11.1639 6.71101 12.8882 6.71101 14.522 7.159C16.428 5.868 17.264 6.138 17.264 6.138C17.6336 6.97286 17.6694 7.91757 17.364 8.778C18.0376 9.50423 18.4045 10.4626 18.388 11.453C18.388 15.286 16.058 16.128 13.836 16.375C14.3153 16.8651 14.5612 17.5373 14.511 18.221C14.511 19.555 14.499 20.631 14.499 20.958C14.499 21.225 14.677 21.535 15.186 21.437C19.8265 19.8884 22.6591 15.203 21.874 10.3743C21.089 5.54565 16.9181 1.99888 12.026 2Z" fill="#2E3A59"></path></svg></a></div><p>© 2020-present Lavi. All Rights Reserved.<br>This website based on <a href="https://www.industrialempathy.com/posts/eleventy-high-performance-blog/">eleventy-high-performance-blog</a>.</p></div></div></footer></div><script csp-hash="sha256-AvHvdkAvA2liH7FoblyZGebwmSzE3eLp/zZiYQ+l2Qk=">const dark = document.querySelector('#dark');
+      const light = document.querySelector('#light');
+      dark.addEventListener('click', () => {
+        document.body.classList.add('dark-theme')
+        localStorage.setItem("theme", 'dark')
+        setUtterancesTheme('dark');
+      })
+      light.addEventListener('click', () => {
+        document.body.classList.remove('dark-theme')
+        localStorage.setItem("theme", 'light')
+        setUtterancesTheme('light');
+      })
+      const ham = document.querySelector('#hamburger');
+      ham.addEventListener('click', () => {
+        document.querySelector('header').classList.toggle('open')
+        ham.classList.toggle('open');
+      })</script></body></html>

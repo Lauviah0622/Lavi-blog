@@ -1,0 +1,13 @@
+{
+  "version": "https://jsonfeed.org/version/1",
+  "title": "Apprentice Log",
+  "home_page_url": "https://lavi-blog.vercel.app",
+  "feed_url": "https://lavi-blog.vercel.app/feed/feed.json",
+  "description": "Description of the website. Update me.",
+  "author": {
+    "name": "Lavi",
+    "url": ""
+  },
+  "items": [
+  ]
+}

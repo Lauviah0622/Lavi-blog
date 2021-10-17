@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+	<title>Apprentice Log</title>
+	<subtitle>Subtitle. Update me.</subtitle>
+	
+	<link href="https://lavi-blog.vercel.app/feed/feed.xml" rel="self"/>
+	<link href="https://lavi-blog.vercel.app"/>
+	<updated>2021-10-17T09:20:19Z</updated>
+	<id>https://lavi-blog.vercel.app</id>
+	<author>
+		<name>Lavi</name>
+		<email></email>
+	</author>
+</feed>
