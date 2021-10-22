@@ -1,6 +1,6 @@
 ---
 title: React 的 batch update 策略，包含 React 18 和 hooks
-date: 2020-06-09
+date: 2021-06-09
 tags: ["react"]
 layout: layouts/post.njk
 ---

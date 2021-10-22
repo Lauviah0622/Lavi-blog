@@ -1196,6 +1196,9 @@ hr {
 .post__link > div:last-of-type span {
     text-align: right;
   }
+.archive.postlist > li{
+  margin-top: 1rem;
+}
 @media only screen and (max-device-width: 576.98px) {
     .post__content img {
       max-height: 30vh;
@@ -1308,6 +1311,7 @@ hr {
   display: grid;
   grid-template-columns: 11ch auto;
   row-gap: 1rem;
+  margin-top: 0;
   grid-template-areas:
     "time title"
     ". tags"

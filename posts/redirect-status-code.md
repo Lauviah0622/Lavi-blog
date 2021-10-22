@@ -1,9 +1,8 @@
 ---
-title: 關於重新導向的 status code
+title: "[極短篇] 關於重新導向的 status code"
 date: 2021-07-15
 tags: ["HTTP"]
 layout: layouts/post.njk
-image: https://cdn.pixabay.com/photo/2020/08/30/20/54/rice-field-5530707_1280.jpg
 ---
 
 想想下面這個情境。
