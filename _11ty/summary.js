@@ -16,22 +16,16 @@ module.exports = function (eleventyConfig) {
     const content = post.templateContent;
     const summaryMatchRes = content.match(summaryRegex);
     
-    console.log('summaryMatchRes')
-    console.log(summaryMatchRes)
     let pureSummary = "";
     if (!summaryMatchRes) {
       return null;
     }
     pureSummary = cleanHTMLTag(summaryMatchRes[1].trim());
-    console.log('pureSummary')
-    console.log(pureSummary)
     
     const mdCommentRegexRes = pureSummary.match(markdownCommentRegex);
     if (!mdCommentRegexRes) return pureSummary;
 
     const markdownComment = mdCommentRegexRes[1].trim();
-    console.log('markdownComment')
-    console.log(markdownComment)
     return markdownComment;
     // TODO 會去除所有的 markdown tag
   });
