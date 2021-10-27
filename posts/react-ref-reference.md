@@ -9,7 +9,6 @@ layout: layouts/post.njk
 <!-- summary -->
 <!-- 除了拿 DOM element 還有存變數外，更全面的了解 Ref 一點點 -->
 <!-- summary -->
-<!-- more -->
 
 # React Ref 的一點研究
 

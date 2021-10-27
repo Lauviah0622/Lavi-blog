@@ -5,8 +5,9 @@ tags: ["browser"]
 layout: layouts/post.njk
 ---
 
-<!-- summary -->  
-看完 inside-browser 系列文，整理後的筆記，簡單記錄下重點。
+
+<!-- summary -->
+<!-- 看完 inside-browser 系列文，整理後的筆記，簡單記錄下重點。 -->
 <!-- summary -->
 
 

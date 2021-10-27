@@ -5,10 +5,8 @@ tags: ["css", "browser"]
 layout: layouts/post.njk
 ---
 
-<!-- summary -->  
-<!-- 
-相同 CSS 但各瀏覽器不同渲染的結果，讓你知道瀏覽器的渲染引擎
--->
+<!-- summary -->
+<!-- 相同 CSS 但各瀏覽器不同渲染的結果，讓你知道渲染引擎如何運作 -->
 <!-- summary -->
 
 有一天看著阮一峰的 [科技愛好者周刊](http://www.ruanyifeng.com/blog/2018/07/weekly-issue-14.html)，突然看到 [這個東西](https://codepen.io/MartijnCuppens/pen/MXojmw) 。

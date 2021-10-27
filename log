@@ -1,0 +1,1002 @@
+
+> eleventy-high-performance-blog@5.0.2 build /Users/feversocial/Documents/personal/Lavi-blog
+> npm run js-build && npm run postcss && eleventy
+
+
+> eleventy-high-performance-blog@5.0.2 js-build
+> rollup -c rollup.config.js
+
+
+> eleventy-high-performance-blog@5.0.2 postcss
+> postcss css/style.css -o css/dist/main.css
+
+summaryMatchRes
+null
+summaryMatchRes
+[
+  '<!-- summary -->\n' +
+    '<!-- 除了拿 DOM element 還有存變數外，更全面的了解 Ref 一點點 -->\n' +
+    '<!-- summary -->',
+  '<!-- 除了拿 DOM element 還有存變數外，更全面的了解 Ref 一點點 -->',
+  index: 0,
+  input: '<!-- summary -->\n' +
+    '<!-- 除了拿 DOM element 還有存變數外，更全面的了解 Ref 一點點 -->\n' +
+    '<!-- summary -->\n' +
+    '<h1 id="react-ref-%E7%9A%84%E4%B8%80%E9%BB%9E%E7%A0%94%E7%A9%B6"><a class="direct-link" href="#react-ref-%E7%9A%84%E4%B8%80%E9%BB%9E%E7%A0%94%E7%A9%B6">#</a> React Ref 的一點研究</h1>\n' +
+    '<blockquote>\n' +
+    '<p>A JavaScript library for building user interfaces</p>\n' +
+    '</blockquote>\n' +
+    '<p>React 是狀態和 UI 的 Library 我們都知道，使用了 React 可以這樣思考：每一個狀態都會產生出對應的 UI。使用了 React 之後，就很少使用像是 DOM 的原生 API 來操作元素了，但還是會有需要直接從 DOM 元素取得資料或者是操作的情境，這時候就是使用 ref 的時候。</p>\n' +
+    '<p>React ref 就是一個可以直接操作 DOM 的出口，透過 <code>createRef</code> / <code>useRef</code>，以及將 ref 作為 props 放入 DOM element ，能透過 ref 直接操作 DOM。就像下面 React <a href="https://reactjs.org/docs/hooks-reference.html#useref">官方文件</a> 中 hooks 的範例：</p>\n' +
+    '<pre class="language-js"><code class="language-js"><span class="token keyword">function</span> <span class="token function">TextInputWithFocusButton</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><br>  <span class="token keyword">const</span> inputEl <span class="token operator">=</span> <span class="token function">useRef</span><span class="token punctuation">(</span><span class="token keyword">null</span><span class="token punctuation">)</span><span class="token punctuation">;</span><br>  <span class="token keyword">const</span> <span class="token function-variable function">onButtonClick</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span><br>    <span class="token comment">// `current` points to the mounted text input element</span><br>    inputEl<span class="token punctuation">.</span>current<span class="token punctuation">.</span><span class="token function">focus</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><br>  <span class="token punctuation">}</span><span class="token punctuation">;</span><br>  <span class="token keyword">return</span> <span class="token punctuation">(</span><br>    <span class="token operator">&lt;</span><span class="token operator">></span><br>      <span class="token operator">&lt;</span>input ref<span class="token operator">=</span><span class="token punctuation">{</span>inputEl<span class="token punctuation">}</span> type<span class="token operator">=</span><span class="token string">"text"</span> <span class="token operator">/</span><span class="token operator">></span><br>      <span class="token operator">&lt;</span>button onClick<span class="token operator">=</span><span class="token punctuation">{</span>onButtonClick<span class="token punctuation">}</span><span class="token operator">></span>Focus the input<span class="token operator">&lt;</span><span class="token operator">/</span>button<span class="token operator">></span><br>    <span class="token operator">&lt;</span><span class="token operator">/</span><span class="token operator">></span><br>  <span class="token punctuation">)</span><span class="token punctuation">;</span><br><span class="token punctuation">}</span></code></pre>\n' +
+    '<p>我們直接透過 <code>input.current</code>，來使用 DOM 的 method。雖然上面是 Hooks 的範例，但其實在 Class component 也沒什麼不同，只是從在 function 中宣告變數變成 class 的內部屬性而已。</p>\n' +
+    '<pre class="language-js"><code class="language-js"><span class="token keyword">class</span> <span class="token class-name">TextInputWithFocusButton</span> <span class="token keyword">extends</span> <span class="token class-name">React<span class="token punctuation">.</span>Component</span> <span class="token punctuation">{</span><br>  <span class="token function">constructor</span><span class="token punctuation">(</span><span class="token parameter">props</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><br>    <span class="token keyword">super</span><span class="token punctuation">(</span>props<span class="token punctuation">)</span><span class="token punctuation">;</span><br>    <span class="token keyword">this</span><span class="token punctuation">.</span>inutEl <span class="token operator">=</span> React<span class="token punctuation">.</span><span class="token function">createRef</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  <br>\t<span class="token keyword">this</span><span class="token punctuation">.</span>handleClick <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">handleClick</span><span class="token punctuation">.</span><span class="token function">bind</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">)</span><br>  <span class="token punctuation">}</span><br>  <br>  <span class="token function">onButtonClick</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><br>\t<span class="token keyword">this</span><span class="token punctuation">.</span>inputEl<span class="token punctuation">.</span>current<span class="token punctuation">.</span><span class="token function">focus</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><br>  <span class="token punctuation">}</span><br>  <br>  <span class="token function">render</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><br>    <span class="token keyword">return</span> <span class="token operator">&lt;</span><span class="token operator">></span><br>      <span class="token operator">&lt;</span>input ref<span class="token operator">=</span><span class="token punctuation">{</span><span class="token keyword">this</span><span class="token punctuation">.</span>inputEl<span class="token punctuation">}</span> type<span class="token operator">=</span><span class="token string">"text"</span> <span class="token operator">/</span><span class="token operator">></span><br>      <span class="token operator">&lt;</span>button onClick<span class="token operator">=</span><span class="token punctuation">{</span>onButtonClick<span class="token punctuation">}</span><span class="token operator">></span>Focus the input<span class="token operator">&lt;</span><span class="token operator">/</span>button<span class="token operator">></span><br>    <span class="token operator">&lt;</span><span class="token operator">/</span><span class="token operator">></span>  <span class="token punctuation">}</span><br><span class="token punctuation">}</span></code></pre>\n' +
+    '<p>另外一個會用到的 ref 的地方是，當你希望儲存一個不會影響 ui 的狀態的時候。在 React 中，每次 state 的改變都會造成 Rerender，進而改變 UI，但並不是每次都會想要這樣。這時候就能夠把值儲存在 ref 裡面：</p>\n' +
+    '<pre class="language-js"><code class="language-js"><span class="token keyword">function</span> <span class="token function">notRefreshCounter</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><br>\t<span class="token keyword">const</span> counterRef <span class="token operator">=</span> <span class="token function">useRef</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span><br>\t<br>\t<span class="token keyword">const</span> <span class="token function-variable function">onClick</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span><br>\t\tcounterRef<span class="token punctuation">.</span>current<span class="token operator">++</span>\t<br>\t<span class="token punctuation">}</span>\t<br>\t<br>\t<span class="token keyword">const</span> <span class="token function-variable function">onPrint</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span><br>\t<br>\t<span class="token punctuation">}</span><br>\t<span class="token keyword">return</span> <span class="token operator">&lt;</span>div<span class="token operator">></span><br>\t\t<span class="token operator">&lt;</span>button <span class="token parameter">onClick</span><span class="token operator">=></span>add <span class="token number">1</span><span class="token operator">&lt;</span><span class="token operator">/</span>button<span class="token operator">></span><br>\t<span class="token operator">&lt;</span><span class="token operator">/</span>div<span class="token operator">></span><br><span class="token punctuation">}</span></code></pre>\n' +
+    '<p>好的，比較基本的用法大概就是這樣了，那可以來談談一些比較有趣的用法。</p>\n' +
+    '<h2 id="callback-ref"><a class="direct-link" href="#callback-ref">#</a> Callback Ref</h2>\n' +
+    '<p>剛剛我們在使用 ref 的時候可以分為兩種用法</p>\n' +
+    '<ol>\n' +
+    '<li>透過將 ref 放入 react element（jsx 語法建立的）的 props，可以操作 element 上面的方法或者讀取屬性。</li>\n' +
+    '<li>儲存不影響 UI 的值。</li>\n' +
+    '</ol>\n' +
+    '<p>雖然講的是 ref，但其實第一種用法我們是透過兩個東西來做到的：</p>\n' +
+    '<ul>\n' +
+    '<li>create Ref 的 API，不論是 <code>React.createRef</code> 還是 <code>React.useRef</code></li>\n' +
+    '<li>React element 上面的  ref 屬性</li>\n' +
+    '</ul>\n' +
+    '<p>然而 React element 的 ref 屬性除了接受 <code>createRef</code> / <code>useRef</code>  以外，還可以接受function 的形式，\t並能夠帶來更大的彈性。</p>\n' +
+    '<pre class="language-js"><code class="language-js"><br><span class="token keyword">function</span> <span class="token function">AutoSelectInput</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><br>  <span class="token keyword">const</span> <span class="token punctuation">[</span>_<span class="token punctuation">,</span> refresh<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token function">useState</span><span cl'... 77704 more characters,
+  groups: undefined
+]
+pureSummary
+<!-- 除了拿 DOM element 還有存變數外，更全面的了解 Ref 一點點 -->
+markdownComment
+除了拿 DOM element 還有存變數外，更全面的了解 Ref 一點點
+summaryMatchRes
+[
+  '<!-- summary -->\n' +
+    '<p>如果拿 Server 來舉例（本篇主要講的內容也是指 server）， server 基本上就是一個程式，而這個程式運行之後其他人就可以透過網路連線到 Server 來拿資料。</p>\n' +
+    '<!-- summary -->',
+  '<p>如果拿 Server 來舉例（本篇主要講的內容也是指 server）， server 基本上就是一個程式，而這個程式運行之後其他人就可以透過網路連線到 Server 來拿資料。</p>',
+  index: 132,
+  input: '<h2 id="deploy-%E6%98%AF%E4%BB%80%E9%BA%BC"><a class="direct-link" href="#deploy-%E6%98%AF%E4%BB%80%E9%BA%BC">#</a> Deploy 是什麼</h2>\n' +
+    '<!-- summary -->\n' +
+    '<p>如果拿 Server 來舉例（本篇主要講的內容也是指 server）， server 基本上就是一個程式，而這個程式運行之後其他人就可以透過網路連線到 Server 來拿資料。</p>\n' +
+    '<!-- summary -->\n' +
+    '<p>而 Deploy，也就是部署，可以視為將已經寫好的程式使其運行的過程。</p>\n' +
+    '<p>可以這樣想，你今天在工廠製造了一台飲料販賣機，把這台販賣機搬到它應該被使用的位置，可能是籃球場旁邊，或者是河濱公園。但你的任務並不只是把它搬過去而已，所以你可能還要找電源幫它插電，甚至第一次還會需要幫它補充飲料，做一些設定等等。這些流程都在部署的範圍。</p>\n' +
+    '<p>但是在軟體上面的部署不用插電，而是需要設定我們使用的電腦，像是安裝作業意系統等，並且在電腦上處理好執行軟體需要的一些設定、或者是執行環境，最後在電腦上執行自己開發的程式。</p>\n' +
+    '<h2 id="%E9%83%A8%E7%BD%B2%E6%96%B9%E5%BC%8F%E7%9A%84%E5%BD%B1%E9%9F%BF"><a class="direct-link" href="#%E9%83%A8%E7%BD%B2%E6%96%B9%E5%BC%8F%E7%9A%84%E5%BD%B1%E9%9F%BF">#</a> 部署方式的影響</h2>\n' +
+    '<p>延續剛剛的比喻，你的飲料販賣機可能以不同的方式供電，<code>220V</code> 或者是 <code>110V</code>，甚至也可能可以吃直流電（比喻），但這些都不影響販賣機的功能還有提供的服務。不過不同的供電方式可能會帶來不同的優缺點像是攜帶性、經濟性等等。部署也一樣，不同的方式帶來的差異並不會影響 Server 的功能，但會影響到的會是：</p>\n' +
+    '<ul>\n' +
+    '<li>你的荷包或者說你老闆的荷包</li>\n' +
+    '<li>可擴充性</li>\n' +
+    '<li>部署的複雜度</li>\n' +
+    '<li>穩定度</li>\n' +
+    '<li>還有很多很多...</li>\n' +
+    '</ul>\n' +
+    '<p>而這些就是在選擇部署方式時需要去做的 Trade-off。那下面會簡單的介紹不同部署方式的一些特性，以及提一下有哪些產品屬於這些方式。</p>\n' +
+    '<h2 id="%E5%90%84%E7%A8%AE%E4%B8%8D%E5%90%8C%E7%9A%84%E9%83%A8%E7%BD%B2%E6%96%B9%E5%BC%8F"><a class="direct-link" href="#%E5%90%84%E7%A8%AE%E4%B8%8D%E5%90%8C%E7%9A%84%E9%83%A8%E7%BD%B2%E6%96%B9%E5%BC%8F">#</a> 各種不同的部署方式</h2>\n' +
+    '<h3 id="%E6%9C%AC%E5%9C%B0"><a class="direct-link" href="#%E6%9C%AC%E5%9C%B0">#</a> 本地</h3>\n' +
+    '<p>簡單說就是部署在你自己的電腦，一台真正你看得到、摸的到，還要幫它插電插網路線的電腦。當然現在已經比較少人這麼幹，大家都丟在各種雲端服務上面，但這麼 old school 的方式還是有他永遠無法取代的特點。</p>\n' +
+    '<blockquote>\n' +
+    '<p>你擁有自己的程式，而不是掌控在別人的手上</p>\n' +
+    '</blockquote>\n' +
+    '<p>把自己的東西緊握在手中，難道不是一種浪漫嗎？</p>\n' +
+    '<p>當然，浪漫要付出的代價可不小，得處理很多問題：像最初需要面臨的就是固定 IP、找個不會被踢到的地方放你的電腦、穩定的供電來源等等。其實如果能解決，部署一些小型的服務像 Blog 等並不是太差的選擇，而且還可以真正的去學習如何去設定 Linux、安裝環境等。</p>\n' +
+    '<p>但如果你只是想要簡單弄一個部落格，甚至是有商業上的需求，這已經不是推薦的作法了。畢竟雲端部署已經方便的太多。</p>\n' +
+    '<h3 id="%E9%9B%B2%E7%AB%AF%E4%B8%BB%E6%A9%9F"><a class="direct-link" href="#%E9%9B%B2%E7%AB%AF%E4%B8%BB%E6%A9%9F">#</a> 雲端主機</h3>\n' +
+    '<p>這就是很常聽到的 IaaS （Infrastructure as a Service，基礎建設即服務），基本上就是租電腦。你不用真正買一台電腦，選好自己需要的規格，像是 CPU 的核心數、記憶體的容量、硬碟的容量等，就能夠建立 instance（instance 就是我們租的電腦）。就像自己的電腦一樣，可以讓 server、資料庫或者是任何的程式在上面運行，雲端有很多好處：</p>\n' +
+    '<ol>\n' +
+    '<li>方便，你不用插電。辦個會員填個信用卡資料就好</li>\n' +
+    '<li>可靠性，你不會踢到插頭或者是機櫃</li>\n' +
+    '<li>便宜，同樣規格的主機你自己買起來至少也要破千</li>\n' +
+    '<li>彈性，想關就關、想擴充就擴充</li>\n' +
+    '<li>幫你弄好固定 IP，甚至還有 https</li>\n' +
+    '</ol>\n' +
+    '<p>而雲端主機的服務有：</p>\n' +
+    '<ul>\n' +
+    '<li>AWS 的 EC2（Amazon Elastic Compute Cloud）</li>\n' +
+    '<li>Google 的 Compute engine</li>\n' +
+    '<li>Azure Virtual Machined</li>\n' +
+    '<li>DigitalOcean Droplets</li>\n' +
+    '<li>Linode</li>\n' +
+    '</ul>\n' +
+    '<p>當然還有很多很多，族繁不及備載。</p>\n' +
+    '<p>雲端主機就像自己的電腦一樣。大部份的雲端主機都是會安裝好 OS 的，使用者可以透過 ssh 連線到 instance，然後使用 CLI 介面操作，來設定對應的執行環境，例如 node 等等。如果是當作網站的 Server 使用的話，還會需要設定像是防火牆，網路連線等等的東西才能夠讓外部網路連線雲端主機。然而這些設定並不容易，尤其是對於 Linux 生態不熟悉的使用者來說。</p>\n' +
+    '<p>除此之外，擴展性也是個問題，畢竟這就是一台電腦，就像如果你想要幫你的電腦換 CPU 或者是更大的 RAM，你就必須把主機關機，而雲端主機同樣的也需要主動的 terminate instance（終止實例，就是電腦關機），而關機就代表著無法提供 Server 的服務。（當然，可以透過多台電腦維持服務不中斷，不過不是這裡討論的範疇。）</p>\n' +
+    '<p>IaaS 雲端主機可以說是其他部署服務的基礎。在 IaaS 的基礎上，服務幫你多做一些事情，而想要建立下一個 Facebook 的你就可以少做一些事情，還能夠有更高的擴展性、更方便的佈署方式。這就是接下來的其他服務。</p>\n' +
+    '<figure tabindex="1"><img src="https://azurecomcdn.azureedge.net/cvt-665f0680393306b6d0a912671748e5cca6b061d55ecee48d4f985eaa8e15e6bf/images/page/overview/what-is-iaas/iaas-paas-saas.png" alt=""><figcaption>Azure 的雲端服務類型</figcaption></figure>\n' +
+    '<h3 id="paas"><a class="direct-link" href="#paas">#</a> PaaS</h3>\n' +
+    '<p>PaaS，Platform as a Service，平台即服務。設定環境真的很麻煩，我們都懂。有沒有一個地方能夠只讓我丟上去程式碼就可以執行，減少設定環境方面等等的事情？</p>\n' +
+    '<p>在 PaaS 服務裡面你不會需要親自去下載那些環境（例如 node），透過描述檔的方式來設定，而 PaaS 的服務就會依照你的描述檔幫你安裝環境，處理前面提到的網路連線等等的問題，並自動部署運行在前面提到的雲端主機上。</p>\n' +
+    '<p>環境的描述檔就像是這樣：</p>\n' +
+    `<pre class="language-yaml"><code class="language-yaml"><span class="token comment"># [START django_app]</span><br><span class="token key atrule">runtime</span><span class="token punctuation">:</span> python37<br><br><span class="token key atrule">handlers</span><span class="token punctuation">:</span><br><span class="token comment"># This configures Google App Engine to serve the files in the app's static</span><br><span class="token comment"># directory.</span><br><span class="token punctuation">-</span> <span class="token key atrule">url</span><span class="token punctuation">:</span> /static<br>  <span class="token key atrule">static_dir</span><span class="token punctuation">:</span> static/<br><br><span class="token comment"># This handler routes all requests not caught above to your main app. It is</span><br><span class="token comment"># required when static routes are defined, but can be omitted (along with</span><br><span class="token comment"># the entire handlers section) when there are no static files defined.</span><br><span class="token punctuation">-</span> <span class="token key atrule">url</span><span class="token punctuation">:</span> /.*<br>  <span class="token key atrule">script</span><span class="token punctuation">:</span> auto<br><span class="token comment"># [END django_app]</span></code></pre>\n` +
+    '<p>此外因為服務會自動幫你執行，所以能夠作到自動擴展。在你的 Server 需要的記憶體不夠時，能夠從 2G 自動升級 4G，在過剩時又能夠降回 2G。可以作到以時間，甚至流量為分割粒度來設定需求。</p>\n' +
+    '<p>總而言之，你只是把你的程式「部署」（某方面來說，甚至可以看做是簡單的「上傳」）到服務上，並寫好環境的描述檔，服務就會幫你處理好一切，Magic～</p>\n' +
+    '<p>而這類型的服務有：</p>\n' +
+    '<ul>\n' +
+    '<li>GCP App engine</li>\n' +
+    '<li>AWS Elastic Beanstalk</li>\n' +
+    '<li>Azure App Service</li>\n' +
+    '<li>Heroku</li>\n' +
+    '<li>Vercel</li>\n' +
+    '<li>還有很多很多...</li>\n' +
+    '</ul>\n' +
+    '<p>但這種很方便的東西一定是有 trade-off 的，一個是這樣的服務能提供的環境類型有限，如果有一位大神用 C++ 寫 Server，那這樣冷門的環境服務就大部分沒辦法提供，再來環境類型有限也意味著控制程度有限，沒辦法作到更詳細的設定。</p>\n' +
+    '<p>面對這樣的問題，容器化技術（Containerization）正好可以解決這樣的問題，而目前最知名的就是大名鼎鼎的 Docker。那什麼是 Docker 呢？</p>\n' +
+    '<h4 id="%E5%AE%B9%E5%99%A8%E5%8C%96%E6%8A%80%E8%A1%93%E8%88%87-docker"><a class="direct-link" href="#%E5%AE%B9%E5%99%A8%E5%8C%96%E6%8A%80%E8%A1%93%E8%88%87-docker">#</a> 容器化技術與 Docker</h4>\n' +
+    '<p>在過去，想要開一家餐廳就必須租一間店面、牽水電、弄灶台流理台櫃台、放置座椅等等。而如果我們的店要搬遷絕對是非常麻煩的事情，光設備就很有可能一台卡車搬不完了，更何況到新的店面還是需要牽水電、佈置電燈之類的。</p>\n' +
+    '<p>但如果只是要開一家小店，可能不用那麼累？我們都看過在路邊賣著漢堡而且讓你流口水的美式餐車，餐車可以使用發電機、攜帶水箱，還有使用攜帶式的爐灶。重點是，這些東西都被放在一台可愛的小卡車上，想去哪裡開店，就去哪裡開店。</p>\n' +
+    '<p>Docker 也是一樣的道理。我們可以把部署所需要的程式碼以及對應的環境，包含作業系統（ubuntu、Debian、Arch ...）、語言的執行環境（Node...）等等。通通包在一起丟到一個容器裡面，就像餐車把需要的設備通通放在卡車上一樣。有了這個容器，我們就不需要再設定環境了，想去哪台 server ，直接執行包好的容器就 OK 。</p>\n' +
+    '<p>這個概念特別適合 PaaS 的服務，原本 PaaS 只能提供特定環境，但有了 Docker，就可以脫離服務的限制，隨心所欲的將自己需要的環境包進 Docker，就能作到想幹嘛就幹嘛。</p>\n' +
+    '<p>大部分 PaaS 服務也除了內建的環境以外，都會提供使用 Docker 來作到更彈性的設定，像 GCP App engine 就可以使用下面的設定來使用 Docker。</p>\n' +
+    '<pre class="language-yaml"><code class="language-yaml"><span class="token key atrule">runtime</span><span class="token punctuation">:</span> flex</code></pre>\n' +
+    '<p>而 AWS 的 Elastic Beanstalk 也能夠設定<a href="https://docs.aws.amazon.com/zh_tw/elasticbeanstalk/latest/dg/create_deploy_docker.html">使用 Docker Image 來部署</a>，如果想要更精準的控制容器像是停止、啟動等等，則可以使用 <a href="https://aws.amazon.com/tw/ecs/faqs/">Elastic Container Service</a>。</p>\n' +
+    '<h4 id="kubernetes"><a class="direct-link" href="#kubernetes">#</a> Kubernetes</h4>\n' +
+    '<p>Kubernetes，唸作哭ㄅ捏題絲，簡稱 K8s。講到 Docker 就會有人提到 K8s，然後就會有人說：</p>\n' +
+    '<blockquote>\n' +
+    "<p>You don't F**kin need Kubernetes</p>\n" +
+    '</blockquote>\n' +
+    '<p>沒有很了解說具體 K8s 能作到哪些，但簡單可以想像成管理多個 Docker 的工具。各大廠也提供了服務，能夠執行 K8s 的 CaaS（Container as a Service）服務。像是：</p>\n' +
+    '<ul>\n' +
+    '<li>Google Kubernetes Engine</li>\n' +
+    '<li>Amazon Elastic Kubernetes Service</li>\n' +
+    '<li>Azure Kubernetes</li>\n' +
+    '</ul>\n' +
+    '<h3 id="faas"><a class="direct-link" href="#faas">#</a> FaaS</h3>\n' +
+    '<p>PaaS 還是有他的問題在。過去我們使用 Server 會讓 Server 運行，等待 Request 後再回傳 Response。但在沒有接收到 Request 時，就 Server 只是待命而已，並沒有實際的使用。但主機的錢還是照樣計算，要知道在雲端上，每一秒都是錢阿！</p>\n' +
+    '<p>於是就有了 FaaS （Function as a Service）的出現。這樣的服務同樣幫你做好環境了，也同樣只需要上傳程式碼。但不同的是，Function 並不是常時運行的。Function 能夠依照特定的事件（像是定時、或者是 Request 等）來去執行你設定好的程式。</p>\n' +
+    '<p>這樣的模式已經離和我們過去的方式大不相同了。過去我們有點像我們開一台機器持續的運轉，已經開好了，等待需要來就立即運作並提供需要的服務。而 FaaS 的方式就像每次需要的時候再開啟機器。這樣還是沒概念的話，平常使用的飲水機先把熱水燒好並且持續保溫，有需要就按下按鍵自動出水。但有一種瞬熱式飲水機，在有需要用熱水的時候才會瞬間加熱，並沒有常時的在保溫。</p>\n' +
+    '<p>這樣的模式會帶來什麼樣好處？</p>\n' +
+    '<ul>\n' +
+    '<li>相對便宜，畢竟有需要才會使用，執行的時間減少了。</li>\n' +
+    '</ul>\n' +
+    '<p>不過相對的也會帶來問題。每次都重新執行</p>\n' +
+    '<ul>\n' +
+    '<li>不適用於需要持久性連結的協議，例如 websocket</li>\n' +
+    '<li>每次的 function 之間是無狀態的，執行時的狀態（或者說資料）若不另外儲存，無法讓下一次的執行使用。</li>\n' +
+    '<li>Cold start：服務會有很高的延遲，因為每次執行時都是從頭開始執行，重新執行程式碼。</li>\n' +
+    '<li>畢竟是服務幫你設置環境的，所以控制權較低...？等等！</li>\n' +
+    '</ul>\n' +
+    '<p>環境控制權的問題有點既視感，沒錯，在 PaaS 也有同樣的問題，但這樣的問題也一樣能夠透過 Docker 來解決。</p>\n' +
+    '<p>這類型的服務有</p>\n' +
+    '<ul>\n' +
+    '<li>GCP cloud functions/ cloud run</li>\n' +
+    '<li>AWS Lambda / AWS Fargate</li>\n' +
+    '<li>Azure Functions Serverless Compute</li>\n' +
+    '</ul>\n' +
+    '<h2 id="%E7%B5%90%E8%AA%9E"><a class="direct-link" href="#%E7%B5%90%E8%AA%9E">#</a> 結語</h2>\n' +
+    '<p>這些不同的部署方式絕對不是越後面就越潮，什麼東西都用最潮 FaaS 服務來做絕對會非常痛苦（甚至根本做不出來）。在技術上的選用永遠是老話一句：選擇自己需求來決定說要使用哪些技術。</p>\n' +
+    '<p>消毒一下，這篇文章的解釋非常粗淺，要是希望用比較好懂的方式來解釋各種不同的部署方式還有雲端服務。還有舉例部份，並不代表完全列出該類型的服務，像是 FaaS 可能在 AWS 上不只有 Lambda 和 Fargate 這兩個服務，畢竟每家公司的產品五花八門，自己也沒有全盤的了解，沒辦法全部列出。</p>\n' +
+    '<p>如果解釋上有任何的問題，或者是舉例的錯誤也歡迎指出，會盡速做修改！感謝打給的收看～</p>\n' +
+    '<p>參考資料：</p>\n' +
+    '<ul>\n' +
+    '<li><a href="https://www.youtube.com/watch?v=uEVmD6n8Il0&amp;t=1s">7 Ways to Deploy a Node.js App</a>：簡單易懂解釋不同的 Deploy 方式</li>\n' +
+    '<li><a href="https://cloud.google.com/free/docs/aws-azure-gcp-service-comparison">Compare AWS and Azure services to Google Cloud</a></li>\n' +
+    '<li><a href="https://aws.amazon.com/cn/blogs/china/lambda-serverless/">带您玩转Lambda，轻松构建Serverless后台！</a></li>\n' +
+    '<li><a href="https://cynthiachuang.github.io/Difference-between-IaaS-PaaS-SaaS-and-FaaS/">雲端計算 IaaS、PaaS、SaaS 與 FaaS</a></li>\n' +
+    '<li><a href="https://azure.microsoft.com/zh-tw/overview/what-is-paas/">何謂 PaaS？</a></li>\n' +
+    '</ul>\n',
+  groups: undefined
+]
+pureSummary
+如果拿 Server 來舉例（本篇主要講的內容也是指 server）， server 基本上就是一個程式，而這個程式運行之後其他人就可以透過網路連線到 Server 來拿資料。
+summaryMatchRes
+null
+summaryMatchRes
+null
+summaryMatchRes
+null
+summaryMatchRes
+null
+summaryMatchRes
+null
+summaryMatchRes
+[
+  '<!-- summary -->\n' +
+    '<!-- 看完 inside-browser 系列文，整理後的筆記，簡單記錄下重點。 -->\n' +
+    '<!-- summary -->',
+  '<!-- 看完 inside-browser 系列文，整理後的筆記，簡單記錄下重點。 -->',
+  index: 0,
+  input: '<!-- summary -->\n' +
+    '<!-- 看完 inside-browser 系列文，整理後的筆記，簡單記錄下重點。 -->\n' +
+    '<!-- summary -->\n' +
+    '<p>大概看完了<a href="https://developers.google.com/web/updates/2018/09/inside-browser-part1">這個</a>系列，想寫一下筆記，現在這個程度看這個文章資訊量還對我來說還是蠻驚人的，雖然 Huli 會說當作科普來看就好，但還是做個筆記吧 XD。不然自己一定會忘記的。</p>\n' +
+    '<p>先概覽一下四個章節分別在講什麼：</p>\n' +
+    '<p>Part1 會講解說 CPU/GPU 各自的功用，還有講解 Process / Thread 之間的差異，而講解這些是為了理解說 chrome multi Process 的設計以及各個 Process 的分工。</p>\n' +
+    '<p>Part2 跟 Part3 會講到我覺得比較重要的部分。Part2 是從輸入瀏覽器到拿到 response 渲染前（這個階段稱作 navigation），Part3 則是從渲染。</p>\n' +
+    '<p>Part4 主要是提到說事件的觸發跟處理，瀏覽器怎麼樣對事件做優化，還有一些在事件上我們可以做的優化部分。</p>\n' +
+    '<p>大概是這樣，了解一下大概的架構，可能會比較好理解自己在哪裡還有在講什麼，比較有安全感，人總是會對未知感到恐懼。</p>\n' +
+    '<h2 id="part1-%E5%BA%95%E5%B1%A4%E8%99%95%E7%90%86%E4%BB%A5%E5%8F%8A%E7%80%8F%E8%A6%BD%E5%99%A8%E6%9E%B6%E6%A7%8B"><a class="direct-link" href="#part1-%E5%BA%95%E5%B1%A4%E8%99%95%E7%90%86%E4%BB%A5%E5%8F%8A%E7%80%8F%E8%A6%BD%E5%99%A8%E6%9E%B6%E6%A7%8B">#</a> Part1 底層處理以及瀏覽器架構</h2>\n' +
+    '<h3 id="cpu%2Fgpu%2C-process%2Fthread"><a class="direct-link" href="#cpu%2Fgpu%2C-process%2Fthread">#</a> CPU/GPU, Process/Thread</h3>\n' +
+    '<p>CPU 跟 GPU，常玩電腦組裝的應該蠻了解的。</p>\n' +
+    '<ul>\n' +
+    '<li>CPU 可以處理任何計算，但是單次處理量較少</li>\n' +
+    '<li>GPU 只能處理特定簡單的運算，但是處理量很大</li>\n' +
+    '</ul>\n' +
+    '<p>在網路上有看到有趣的比喻：</p>\n' +
+    '<blockquote>\n' +
+    '<p>GPU是一群小学生，扎堆算加减法；CPU是一个老教授，能解微积分。CPU的核比GPU复杂得多呢。</p>\n' +
+    '</blockquote>\n' +
+    '<p>這裡要理解的是 CPU 跟 GPU 各有所長，而瀏覽器也會利用他們不同的特性來做不同的運算。接下來我們要理解 Process （程序） 跟 Thread （執行緒）的差異。</p>\n' +
+    '<p>Process 裡面會有很多 Thread。OS 會分配資源給 Process，而 Process 裡面的 thread 可以共享這些資源以及共享彼此間的資訊，但 Process 間的資訊交換就必須透過 IPC (Inter Process Communication)</p>\n' +
+    '<p>上面這些都是關於電腦運作比較底層的基本知識，也必須要先知到這些才有辦法了解 chrome 瀏覽器的運行架構。</p>\n' +
+    '<h3 id="chrome-%E7%9A%84%E9%81%8B%E8%A1%8C%E6%9E%B6%E6%A7%8B"><a class="direct-link" href="#chrome-%E7%9A%84%E9%81%8B%E8%A1%8C%E6%9E%B6%E6%A7%8B">#</a> Chrome 的運行架構</h3>\n' +
+    '<p>chrome 採 multi Process 架構。一個瀏覽器會有很多不同的任務，像是網路連線、UI、儲存還有每個 site 畫面的 render 等等的。而 Chrome 將這些不同的任務交給不同 Process 處理。這樣做的優點是當一個 Process 出問題時，直接關掉那個 Process 就可以，不會影響到其他 Process，舉例來說，Chrome 本身一個網頁的 render 就會作為一個 process，假設其中一個分頁當機了，就算關掉也不會造成影響。</p>\n' +
+    '<p>另一個好處是安全性，Process 間沒辦法輕易地共享資料，將分頁獨立出來可以防止讀取到其他分頁的資料。而這也是 chrome 本身使用 site Isolation 的原因，render Process 是以 site 也就是網頁為單位，如果頁面裡面有 iframe，那iframe 也會獨立成另一個 Process ，這樣可以防止 iframe 的 site 存取到頁面的資料。</p>\n' +
+    '<p>採 Multi Process 的缺點也是顯而易見，就是耗費資源（也是全世界都在詬病的點），尤其是 renderer Process，每一個 Process 都需要一具 V8 engine 才有辦法運行（不是汽車的 V8）。當硬體資源有限的時候，chrome 會把同一個 來源但不同分頁的 site 放進同一個 Process，用來兼顧安全性以及資源。</p>\n' +
+    '<p>除此之外，chrome 也可以透過將 Process Servicification（服務化），可以讓 Process 變成 thread 再組合成一個 process 來節省資源。</p>\n' +
+    '<h2 id="part2-navigation"><a class="direct-link" href="#part2-navigation">#</a> Part2 Navigation</h2>\n' +
+    '<p>先講講說大家對於瀏覽器平常的認識。把網址輸入 address bar，像是 <code>www.google.com</code>，然後瀏覽器 tab 上面的 icon 會先轉轉轉，然後跳出頁面之後，就轉好了。</p>\n' +
+    '<p>上面是一般人的理解，身為前端工程師一定要知道的多一點。</p>\n' +
+    '<p>我們知道說當我們輸入 <code>www.google.com</code> 之後會先送到 DNS server 拿 IP，然後我們再用 IP 連到 server，並且送出 request。等我們收到 server 的 response 之後，瀏覽器會把我們收到的 response（先假設是 html） 解析成我們看到的網頁。</p>\n' +
+    '<p>不過還有一點是，現在 address bar 也可以當作 search bar，當你直接打 <code>google</code> ，就會跑出 <code>google</code> 的 google 搜尋結果，不過道理跟上面一樣，只是瀏覽器會幫你連到 google 的搜尋結果而已。</p>\n' +
+    '<p>現在可以了解更底層的東西，就是瀏覽器幫我們做了什麼，然後是瀏覽器的哪個部分去處理的，然後是這些部分是怎麼樣交換訊息。</p>\n' +
+    '<p>我們可以先把 Navigation 這個階段大概切成幾個步驟，但是這幾個步驟不一定是先後關係，有些可能是平行的。</p>\n' +
+    '<ul>\n' +
+    '<li>處理 adress bar 的 Input</li>\n' +
+    '<li>檢查 Input 有沒有對應的 cache 或者是 service worker</li>\n' +
+    '<li>送出 request</li>\n' +
+    '<li>初始化 renderer Process</li>\n' +
+    '<li>確定 type 並檢查 Body</li>\n' +
+    '</ul>\n' +
+    '<h3 id="%E5%88%A4%E6%96%B7-input"><a class="direct-link" href="#%E5%88%A4%E6%96%B7-input">#</a> 判斷 Input</h3>\n' +
+    '<p>一樣的開始：輸入網址列。網址列本身是由 Browser Process 裡面的 UI thread 所處理的。Browser Process 處理網頁畫面（渲染）以外的所有東西，像是前面講到的瀏覽器 UI、儲存、網路等等...</p>\n' +
+    '<p>UI thread 會讀取你的 input，然後看你輸入的是不是 url，然後開始轉圈圈，接著他會初始化一個 network call，選擇適合的 protocal，接著就把資料丟到 network thread 去處理（這裡詳細的分工可能還是要看一下 docs 或者是 source code）。</p>\n' +
+    '<h3 id="%E6%B1%BA%E5%AE%9A-body-%E7%9A%84%E8%99%95%E7%90%86%E6%96%B9%E5%BC%8F"><a class="direct-link" href="#%E6%B1%BA%E5%AE%9A-body-%E7%9A%84%E8%99%95%E7%90%86%E6%96%B9%E5%BC%8F">#</a> 決定 body 的處理方式</h3>\n' +
+    '<p>server 端的事情不講了，當我們收到 reaponse 之後，有一個東西會決定 response body 要清蒸還是要紅燒，那就是 content-type。瀏覽器會根據 response header 裡面的 content-type 還有 body 的內容（因為 content-type 可能會不見或者是出問題，還是要自己判斷 body 比較準\n' +
+    '）來<a href="https://source.chromium.org/chromium/chromium/src/+/master:net/base/mime_sniffer.cc;l=131">判斷</a>說要怎麼處理，像是圖片的就會跑出圖片、檔案就會進行下載，不同的格式會有不同的處理方式。chromium 相較於各<s>小</s>大瀏覽器比較晚出現，因此這方面也參考了前人的做法，但最後只有 html 的內容才會被進行 render。</p>\n' +
+    '<h3 id="%E5%AE%89%E5%85%A8%E6%AA%A2%E6%9F%A5"><a class="direct-link" href="#%E5%AE%89%E5%85%A8%E6%AA%A2%E6%9F%A5">#</a> 安全檢查</h3>\n' +
+    '<p>值得注意的部分，在這個階段也會檢查 body 有沒有連到怪怪的檔案或者是連到惡意的連結（應該是會有一個 black-list），並且會執行 <a href="https://www.chromium.org/Home/chromium-security/corb-for-developers">CORB</a>（目前看下來這個功能是擋掉一些可疑的 request 方式跟 content-type 還有 body 格式的組合），在想這個部分做的可能不只這些，像是 CORS 的檢查可能也是這部分處理的，真的沒問題才放 response 通過。</p>\n' +
+    '<p>通過之後，network thread 通知 UI thread，而 UI thread 會開啟一個 renderer process，這裡有一種 UI thread 像是主控的感覺？不過我不清楚說是不是在架構設計裡就應該要以 UI 作為整個程式的主控，對 design pattern 還不熟。這裡有一個可以優化的點，Renderer Process 可以在 request 被送出去的時候就同步初始化，先處理一些不需要 response 的部分，等 response 到了之後就可以直接處理 Response。</p>\n' +
+    '<p>當 renderer Process 跟 Response 都 OK 之後就可以 GOGO 了，但是要要記得資料還在 Browser Process 裡面阿，所以要透過我們一開始有提到的 IPC 去傳遞資料給 renderer Process，然後就開始解析囉。</p>\n' +
+    '<h3 id="%E5%85%B6%E4%BB%96-browser-process-%E6%9C%83%E8%99%95%E7%90%86%E7%9A%84%E6%9D%B1%E8%A5%BF"><a class="direct-link" href="#%E5%85%B6%E4%BB%96-browser-process-%E6%9C%83%E8%99%95%E7%90%86%E7%9A%84%E6%9D%B1%E8%A5%BF">#</a> 其他 Browser Process 會處理的東西</h3>\n' +
+    '<p>這裡還有幾個小細節：想一想自己的經驗，假設說網頁跑不出來一直轉，有時候我們會按上一頁返回到上一個頁面。所以我們就可以確定說，歷史紀錄是在 network 拿到 response 之前就確定好的，雖然文章沒有提到，但是我在猜說應該是在初始化 renderer Process 的時候就會處理好歷史紀錄的東西。</p>\n' +
+    '<p>還有當網頁載入完的時候，renderer Process 也會通知 Browser Process，要把網頁的 favicon 顯示出來。</p>\n' +
+    '<p>最後我們不要忘記當我們關閉分頁（site）的時候，Browser 會把我們的網頁放進歷史紀錄裡面做 cache，下次在拜訪這個網頁就可以直接跳出來。</p>\n' +
+    '<p><code>beforeunload</code> 這個事件會在從一個網址導向另一個網址時被觸發，文章裏面有提到，但是覺得沒有很困難，感覺像是小補充而已。</p>\n' +
+    '<h3 id="service-worker"><a class="direct-link" href="#service-worker">#</a> Service worker</h3>\n' +
+    '<p>每次在 Navigation 的時候都會檢查 url 有沒有對應的 Service worker（後面簡稱 SW，讓網頁可以在被關閉的時候也能夠執行程序的東西，推薦<a href="https://medium.com/@kosamari/service-worker-what-are-you-ca0f8df92b65">這篇</a>），有的話就會先執行 SW，因為可能 SW 裡面就有 cache 可以用了，沒有才進行 request。</p>\n' +
+    '<p>但如果 SW 早就決定說不要了怎麼辦，這樣不就會慢了一點嗎？尤其是 SW 又很複雜的時候，所以 FB 就不爽了，直接跟 chrome 說你想個辦法讓 SW 不會影響到 request 送出的速度（超兇的），就這樣有了 <a href="https://developers.google.com/web/updates/2017/02/navigation-preload">Navigation Preload</a> 這個東西，人還是要有靠山說話才能夠大聲啊。</p>\n' +
+    '<h2 id="part3-render-pipeline"><a class="direct-link" href="#part3-render-pipeline">#</a> Part3 Render Pipeline</h2>\n' +
+    '<p>這部分覺得蠻複雜的。但我覺得會是這幾個 Part 裡面最重要的部分，這會大大關係到網頁的效能，你的網頁跑起來卡卡的會跟這部分有很大的關係。</p>\n' +
+    '<p>Render 的中文又叫渲染，自己覺得這個翻譯蠻彆扭的，這個部分會將程式碼（就是 html, css, js）轉化成人類看得懂的文字還有畫面，這個部分分幾個階段，跟上一個 Part 不一樣，有<strong>嚴格的前後關係</strong>，這個步驟會稱作 Render Pipeline。</p>\n' +
+    '<ol>\n' +
+    '<li>Parsing</li>\n' +
+    '<li>Sytle Compute</li>\n' +
+    '<li>Layout</li>\n' +
+    '<li>Paint</li>\n' +
+    '<li>Composite</li>\n' +
+    '</ol>\n' +
+    '<p>首先是 Parsing 解析。這裡的大方向是把 html 的內容解析成 DOM tree，瀏覽器的入口點都是 html 檔案，而瀏覽器會將 html 轉化成瀏覽器還有我們可以操作的形式，那就是 DOM（document object model）。</p>\n' +
+    '<p>tag 有很多種，但是有幾種會影響到我們的 DOM tree，分別是 <code>&lt;script&gt;</code> 還有 <code>&lt;link&gt;</code> 跟 <code>&lt;img&gt;</code> （可能還有其他的）。這些東西會加載其他資源。加載資源要時間的！遇到這種要 request 的東西有個概念：提早做，放旁邊，好了在叫你。在 Navigation 中也是初始化 renderer Process 跟 Request 並行。所以 preload scanner 會先看看有沒有這些 tag，有的話就先交給 browser process （裡面的 network thread）去加載。</p>\n' +
+    '<p>除此之外，<code>&lt;script&gt;</code> 還可能會執行 JS。JS 有可能會改變先前的 DOM tree，所以這裡會先處理 JS 裡面的內容。</p>\n' +
+    '<p>這個部分會影響整個網頁的加載速度很大，若 JS 裡面並沒有會影響 DOM 的內容，可以使用 <code>async</code> 跟 <code>defer</code> 來優化。加載資源也可以透過 <a href="https://developer.mozilla.org/zh-CN/docs/Web/HTML/Preloading_content">preload</a> 的 tag 屬性來指定什麼資源要先行加載。</p>\n' +
+    '<p>接下來是 style compute，可以先想一下說 CSS 到底是什麼？ CSS 是一堆規則，他指定了</p>\n' +
+    '<ol>\n' +
+    '<li>套用的範圍</li>\n' +
+    '<li>套用的樣式</li>\n' +
+    '</ol>\n' +
+    '<p>但是 CSS 沒有指定每個 element 要什麼樣式。</p>\n' +
+    '<p>這是視覺化的第一個步驟，計算每個 element 身上要套哪些 CSS（可以從 devtoole 的 compute 看到，有時後會比看 CSS 好用很多）。這部分還會把瀏覽器預設的 CSS 也加上去。</p>\n' +
+    '<p>從這一個步驟開始就是瀏覽器渲染引擎的工作了，想了解更多可以看看<a href="https://lauviah.coderbridge.io/2020/09/26/1-%E5%80%8B-div-%E5%92%8C-4-%E8%A1%8C-css-%E5%B0%B1%E8%83%BD%E6%9B%B4%E4%BA%86%E8%A7%A3%E7%80%8F%E8%A6%BD%E5%99%A8%E6%B8%B2%E6%9F%93%E5%BC%95%E6%93%8E/">小弟之前的文章</a>有提到。</p>\n' +
+    '<p>第二個步驟是 Layout，我會覺得這個步驟很像畫草稿，把所有的元素定位，不需要定位的去掉，額外要定位的東西加進來，而這個部分的結果叫做 Layout tree。</p>\n' +
+    '<p>什麼是不需要的跟另外要定位的？</p>\n' +
+    '<p>像是 <code>display: none</code> 就完全不會在畫面上出現，所以會在這部份去掉，只會留在 DOM 裡面，而偽元素就是 html 上面原本沒有的，就需要額外加上去。</p>\n' +
+    '<blockquote>\n' +
+    '<p>其實自己對這個東西蠻有興趣的，做個註記以後可以看<a href="https://www.youtube.com/watch?v=Y5Xa4H2wtVA">BlinkOn 会议的一些访谈</a></p>\n' +
+    '</blockquote>\n' +
+    '<h3 id="paint"><a class="direct-link" href="#paint">#</a> Paint</h3>\n' +
+    '<p>打好草稿，那下一個步驟當然就是就是塗色了。不，代誌不是像憨人想的那麼簡單，你忘了考慮分層。剛剛我們定位出了每個元素的 2D 位置，但是每個元素就像紙張一樣，上層會遮蓋掉下層。我們必須要處理這個問題才能夠塗色。</p>\n' +
+    '<p>所以瀏覽器會再遍歷一次 Layout tree，看看那些元素屬於上層那些屬於下層，然後得出說：先畫 A, C 再畫 B, D, E 這樣的順序，然後才開始繪製。有點像是一個一個的指令，告訴瀏覽器說先畫出什麼，再畫出什麼，這樣的指令稱作 Paint Record，這也是 Paint 產出的東西。</p>\n' +
+    '<p>這裡的 Paint 我的理解比較不像是開始繪製，而是制定一個繪製的順序。</p>\n' +
+    '<h3 id="composite"><a class="direct-link" href="#composite">#</a> Composite</h3>\n' +
+    '<p>再理解這個步驟之前要先了解一個東西，叫做 Raster（光柵化），</p>\n' +
+    '<p>Chromium 會把所有的元素先分層然繪製出來。接著在合成 viewport 內的內容（這部分建議看文章，或是文章裡的這個<a href="https://developers.google.com/web/updates/images/inside-browser/part3/composit.mp4">動畫</a>，用講得實在是很抽象），就像把整個內容全部都擺好，然後再用一個框來取景。這樣可以讓滾動更加滑順，因為內容都已經擺擺好了，只需要重新合成框框裡面的內容就好了。Composite 裡面又可以分為三個步驟。</p>\n' +
+    '<ol>\n' +
+    '<li>分層</li>\n' +
+    '<li>光柵化</li>\n' +
+    '<li>合成</li>\n' +
+    '</ol>\n' +
+    '<p>第一是分層。這個步驟 rederer Process 的 Main thread 會上一個步驟的 Layout tree 轉化成不同層的 Layer tree，也就是決定說那些東西要畫在同一層。我們可以透過 <code>will-change</code> 這個屬性，來強制幫元素分層，如果是舊的瀏覽器可以使用 <code>translateZ(0)</code>。文中是沒有特別提到說除了上面兩個 CSS 屬性以外有沒有其他分層的依據，不過我猜應該是有，除了強制分層應該也是會有一些基本的分層方式。</p>\n' +
+    '<p>有了 Layer tree 之後，Main thread 會把 Layer tree 的內容交給 composite thread，而 composite thread 會在把每一層的畫面切分之後，再交給 raster thread 進行 raster。</p>\n' +
+    '<p>這部分也會涉及優化，整個 Layer 很大，可能跟網頁一樣大。瀏覽器會優先處理比較靠近視窗的部分（接下來可能會瀏覽到的部分）。而且再切分時還會考慮到使用者可能會放大縮小，會把整個畫面切分成不同的大小再進行 raster。</p>\n' +
+    '<p>Raster 是啥？我們都知道說螢幕是由很多像素所組成的，但是瀏覽器裡面的資料會像這樣：</p>\n' +
+    '<pre><code>from 1,1  \n' +
+    'to 10,1\n' +
+    'to 10,10\n' +
+    'to 1, 10\n' +
+    'end 1, 1\n' +
+    '</code></pre>\n' +
+    '<p>螢幕是看不懂這個東西的，他只知道什麼座標的像素要呈現什麼顏色。把向量的內容變成螢幕可以呈現的點陣圖像就是 Raster。</p>\n' +
+    '<p>當瀏覽器會每一層都 Raster 好之後，就會開始合成。合成的概念跟 Photoshop 的影像平面化的概念很像'... 7359 more characters,
+  groups: undefined
+]
+pureSummary
+<!-- 看完 inside-browser 系列文，整理後的筆記，簡單記錄下重點。 -->
+markdownComment
+看完 inside-browser 系列文，整理後的筆記，簡單記錄下重點。
+summaryMatchRes
+[
+  '<!-- summary -->\n' +
+    '<!-- 相同 CSS 但各瀏覽器不同渲染的結果，讓你知道渲染引擎如何運作 -->\n' +
+    '<!-- summary -->',
+  '<!-- 相同 CSS 但各瀏覽器不同渲染的結果，讓你知道渲染引擎如何運作 -->',
+  index: 0,
+  input: '<!-- summary -->\n' +
+    '<!-- 相同 CSS 但各瀏覽器不同渲染的結果，讓你知道渲染引擎如何運作 -->\n' +
+    '<!-- summary -->\n' +
+    '<p>有一天看著阮一峰的 <a href="http://www.ruanyifeng.com/blog/2018/07/weekly-issue-14.html">科技愛好者周刊</a>，突然看到 <a href="https://codepen.io/MartijnCuppens/pen/MXojmw">這個東西</a> 。</p>\n' +
+    '<p><a href="https://twitter.com/Martijn_Cuppens/status/1015169981368225793">@Martijn_Cuppens</a> 寫了一個空的 div 還有幾行 CSS，這個 div 就能在瀏覽器上渲染出不同的圖形如下。</p>\n' +
+    '<figure tabindex="1"><img src="/img/post/0__nHm6zS0QfERpQAzz.jpg" alt=""></figure>\n' +
+    '<p>驚！勾起小弟一點好奇心，CSS 也可以做 browser，雖然使用 window 沒辦法使用 safari，來測試，而且 codepen 也不支持 IE，但還是利用手邊的瀏覽器還有一些服務像是 <a href="https://www.browserling.com/">browserling</a>, <a href="https://www.lambdatest.com/">lambdatest</a> 來測試。</p>\n' +
+    '<ul>\n' +
+    '<li>Edge 的結果，這裡是使用 Microsoft Edge 44.18362.449.0 版本的 edge ，所以還沒有換到最新的基於 chromium 的版本。</li>\n' +
+    '</ul>\n' +
+    '<figure tabindex="2"><img src="/img/post/0__u6QZiPRtH2ENt1Ub.jpg" alt=""></figure>\n' +
+    '<ul>\n' +
+    '<li>Firefox 的結果，版本是 76</li>\n' +
+    '</ul>\n' +
+    '<figure tabindex="3"><img src="/img/post/0__Awj74dFF__OVvhDS0.jpg" alt=""></figure>\n' +
+    '<ul>\n' +
+    '<li>用 browserling ，firefox ver.68 在 window 7 上測試的結果是</li>\n' +
+    '</ul>\n' +
+    '<figure tabindex="4"><img src="/img/post/0__DeOeROeZjCJ51iTG.jpg" alt=""></figure>\n' +
+    '<ul>\n' +
+    '<li>chrome 的結果，版本是 84.0.4147.105</li>\n' +
+    '</ul>\n' +
+    '<figure tabindex="5"><img src="/img/post/0__UufqtVjO3cWW5I6I.jpg" alt=""></figure>\n' +
+    '<ul>\n' +
+    '<li>用 lambdatest 在 safari 10.1 上面測試的結果。 codepen 就是傲嬌，嫌不支援又 render 出來</li>\n' +
+    '</ul>\n' +
+    '<figure tabindex="6"><img src="/img/post/0__KD8KruS4a4ly8Jr0.jpg" alt=""></figure>\n' +
+    '<ul>\n' +
+    '<li>用 lambdatest 在 opera 68 上面測試的結果</li>\n' +
+    '</ul>\n' +
+    '<figure tabindex="7"><img src="/img/post/0__XqGjXjT5cmL2Ty__q.jpg" alt=""></figure>\n' +
+    '<p>結果大概是這樣。會有這些結果其實不意外，每個瀏覽器都有自已的渲染引擎，一個 HTML 跟 CSS 卻各自表態，所以實現出來的東西當然也是不一樣。不過厲害的是這個簡單的 CSS 竟然剛好可以在這些主流(?)瀏覽器上可以顯示不一樣的結果。</p>\n' +
+    '<h3 id="%E9%A1%AF%E7%A4%BA%E7%B5%90%E6%9E%9C%E8%88%87%E7%80%8F%E8%A6%BD%E5%99%A8%E7%9A%84%E9%97%9C%E4%BF%82%EF%BC%9F"><a class="direct-link" href="#%E9%A1%AF%E7%A4%BA%E7%B5%90%E6%9E%9C%E8%88%87%E7%80%8F%E8%A6%BD%E5%99%A8%E7%9A%84%E9%97%9C%E4%BF%82%EF%BC%9F">#</a> 顯示結果與瀏覽器的關係？</h3>\n' +
+    '<p>為什麼不同的瀏覽器，但是 Render 的內容出來是一樣的？但有些相同瀏覽器，版本不同卻有不同的結果。</p>\n' +
+    '<p>這就得講到剛剛提到的<a href="https://en.wikipedia.org/wiki/Browser_engine"><strong>渲染引擎</strong></a>，渲染引擎的工作之一就是把 HTML 還有 CSS 的程式碼轉換成我們看的到的圖形介面。（其實這裡自己對渲染引擎還有很多不了解，有錯誤在麻煩各位提點。）</p>\n' +
+    '<p>雖然是不同的瀏覽器，但如果使用相同的渲染引擎，那理所當然會渲染出同樣的畫面（像是筆電有各種牌子，但是作業系統都是 windows，所以畫面相同）。反之，就算是同樣的瀏覽器，可能因為開發成本過高或者是各種原因，不同的版本也可能使用不同的渲染引擎；抑或是引擎本身有更新，也會導致渲染出來的內容不一樣。</p>\n' +
+    '<p>在不同版本更換渲染引擎這點，對前端開發最著名 也是最可喜可賀的案例就是 Edge 吧。從 2020.1.15 開始，Edge 開始基於 <a href="https://zh.wikipedia.org/wiki/Chromium">Chromium</a> 開發，理所當然地也沿用了 Chromium 的渲染引擎。</p>\n' +
+    '<p><img src="/img/post/0__pP9oy__w25Nzt1RqV.jpg" alt="">\n' +
+    '<img src="/img/post/0__H3xqFd1UZ6UBsq83.jpg" alt=""></p>\n' +
+    '<p>雖然沒有測試新版的 edge ，不過可想而知應該會得到相同的結果。</p>\n' +
+    '<p>那既然提到了渲染引擎，那麼目前各瀏覽器的渲染引擎又是那些呢？其實可以從上面的結果大概知道有哪幾種引擎，我們先複習一下剛剛那張圖。</p>\n' +
+    '<figure tabindex="8"><img src="/img/post/0__j206rgz3EuduI8bn.jpg" alt=""></figure>\n' +
+    '<p>可以看到有 Firefox, Edge, Chrome, Safari, IE 這五種瀏覽器各呈現不同的方塊。也各代表不同的渲染引擎：</p>\n' +
+    '<h3 id="css-prefix"><a class="direct-link" href="#css-prefix">#</a> CSS prefix</h3>\n' +
+    '<p>知道有這些渲染引擎有甚麼用？還記得有時候我們會做下面這件事情。也就是幫 CSS 的屬性加上 prefix</p>\n' +
+    '<p><a href="https://gist.github.com/9abe6552429875722405b74998825e3b">https://gist.github.com/9abe6552429875722405b74998825e3b</a></p>\n' +
+    '<p>看到前面的 prefix： <code>-webkit-</code>, <code>-moz-</code> 可能覺得有些眼熟。是的，這些 prefix 就是要寫給渲染引擎看的。有一些比較新或者是還沒被廣泛應用的 CSS 屬性需要加上 prefix 才可以在特定的瀏覽器正常運作。</p>\n' +
+    '<p>不過當去查資料時，會發現支援 chrome 還有 safari 的 prefix 都是 <code>-webkit-</code> ，這是因為 chrome 的引擎 Blink 是從 WebKit <a href="https://zh.wikipedia.org/wiki/WebKit#%E9%96%8B%E7%99%BC%E5%88%86%E8%A3%82">分出來的</a>。所以才會同樣使用 <code>-webkit-</code> ，不過由於實際上是不同的引擎，所以可能會遇到同樣的 CSS 屬性，webkit / Blink 引擎要加 prefix 但是另一個不用加的情形。</p>\n' +
+    '<h3 id="css-%E6%80%8E%E9%BA%BC%E5%B0%8E%E8%87%B4%E9%80%99%E7%A8%AE%E6%83%85%E5%BD%A2%E7%9A%84%EF%BC%9F"><a class="direct-link" href="#css-%E6%80%8E%E9%BA%BC%E5%B0%8E%E8%87%B4%E9%80%99%E7%A8%AE%E6%83%85%E5%BD%A2%E7%9A%84%EF%BC%9F">#</a> CSS 怎麼導致這種情形的？</h3>\n' +
+    '<p>講了那麼多，不過到底是甚麼屬性導致這些瀏覽器各自表態？我們看看 CSS 的原始碼。</p>\n' +
+    '<p><a href="https://gist.github.com/08528f98399d9daa91e00ecf1c7e8c18">https://gist.github.com/08528f98399d9daa91e00ecf1c7e8c18</a></p>\n' +
+    '<p>去掉置中的屬性，真正有趣的是 div 裡面的下面四個。</p>\n' +
+    '<p><a href="https://gist.github.com/e05825df9927e6228f3041d3ce72184b">https://gist.github.com/e05825df9927e6228f3041d3ce72184b</a></p>\n' +
+    '<p><code>width</code> 以及 <code>height</code> 賦予元素高度以及寬度。那 <code>outline</code> 做了些甚麼？我們看一下 <a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/outline-style">MDN</a> 上面的說法：</p>\n' +
+    '<blockquote>\n' +
+    '<p><em>An outline is a line that is drawn around an element, outside the border.</em></p>\n' +
+    '</blockquote>\n' +
+    '<p>outline 可以在 border 外面再加上邊框。而 <code>outline</code> 這個屬性是 <code>outline-style</code>, <code>outline-width</code>, <code>outline-color</code> 這三個屬性的簡寫。分別設定樣式、寬度還有顏色。 案例中的 <code>inset</code> 代表著 <a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/outline-style">outline 會是嵌入狀的樣式</a> 。</p>\n' +
+    '<figure tabindex="9"><img src="/img/post/0__5NPDlxYpxbvLVKcP.jpg" alt=""></figure>\n' +
+    '<p>而 <code>outline-offset</code> 則是設置 outline 的偏移，剛剛講說 outline 可以在 border 外面再加上邊框， <code>outline-offset</code> 的數值可以讓 border 跟 outline 之間新增距離，也就是 border 跟 outline 之間會有間距的意思。</p>\n' +
+    '<figure tabindex="10"><img src="/img/post/0__Iq3kO5DG9__Lu6l3Q.jpg" alt=""></figure>\n' +
+    '<blockquote>\n' +
+    '<p><em>可以看到 offset 增加了 border 跟 outline 之間的空間。</em></p>\n' +
+    '</blockquote>\n' +
+    '<p>那跟呈現剛剛那樣的形狀有甚麼關係？我們先關掉 <code>outline-offset</code> 看看結果。</p>\n' +
+    '<figure tabindex="11"><img src="/img/post/0__WmeLVd5rzByrYG9t.jpg" alt=""></figure>\n' +
+    '<p>可以看到其實蠻正常的，因為沒有 <code>border</code>，所以就是在一個空白的 <code>div</code> 外面加上粗度 100 的 <code>outline</code>，然後用 <code>inset</code> 的樣式。</p>\n' +
+    '<p>找到兇手了！就是 <code>outline-offset</code> ！</p>\n' +
+    '<figure tabindex="12"><img src="/img/post/0__tmHWGl807CtouMtY.jpg" alt=""></figure>\n' +
+    '<p>我們看看這 <code>outline-offset</code> 幹了甚麼好事。</p>\n' +
+    '<p><code>outline-offset: -125px;</code> 代表在 border 外面加上 <code>-125px</code> 的間距，這到底是甚麼意思？如果說正值是以 border 為準，從border 向外推 offset 的距離再開始新增 outline，那負值可以說是向內推再開始新增 outline。</p>\n' +
+    '<p><img src="/img/post/0__iwKcs65P8zYKsd__0.jpg" alt="">\n' +
+    '<img src="/img/post/0__swXYDgauMZvdFWCU.jpg" alt=""></p>\n' +
+    '<blockquote>\n' +
+    '<p><em>因為向內 30px 所以和 border 是同樣的位置，但是 outline 會在 border 之上，所以把 border 遮住了。</em></p>\n' +
+    '</blockquote>\n' +
+    '<p>如果我們把數值改成 <code>outline-offset: -50px;</code> 那會怎麼樣？</p>\n' +
+    '<figure tabindex="13"><img src="/img/post/0__W3XiCUbIyfTDO7CZ.jpg" alt=""></figure>\n' +
+    '<p>這個結果還算蠻合理的，寬和高都是 100px，所以 <code>outline-offset: -50px;</code> 會把整個 div 。那如果數值在繼續降低呢？讓我們繼續看下去。</p>\n' +
+    '<p><img src="/img/post/0__MkOcmyZnr6KsrFk0.jpg" alt="">\n' +
+    '<img src="/img/post/0__xwUfJfjHCodPvV8z.jpg" alt="">\n' +
+    '<img src="/img/post/0____3RJrP8pQdXqkItP.jpg" alt=""></p>\n' +
+    '<p>其實降低到比自身的大小還小我已經不知道發生甚麼事情了… 我想這應該可以說是一個 bug 吧（又者是彩蛋？）。不過可以看到其實數值小於 <code>-100</code> 就可以看到雛型了，數值特別設為 <code>-125</code> 應該只是為了美妙的圖案而已。</p>\n' +
+    '<p>上面的範例都是用 chrome 開啟的，因為 Blink 有自己的算法，小弟也不太清楚這塊，如果有人了解說是哪一個部分會處理到這塊或者是有一些方向歡迎私訊小弟…</p>\n' +
+    '<p>不過我們終於找到答案了，解開說為什麼只是一個 <code>div</code> 的 CSS 。竟然會導致在不同的瀏覽器有不同的圖案呈現：</p>\n' +
+    '<blockquote>\n' +
+    '<p><em>因為</em> <code>_outline-offset_</code> <em>的偏移設為負數，並且小於能夠縮退的自身的高度和寬度，導致渲染引擎的算法渲染出 不可理解的 特殊形狀，</em></p>\n' +
+    '</blockquote>\n' +
+    '<h3 id="%E7%B5%90%E8%AA%9E"><a class="direct-link" href="#%E7%B5%90%E8%AA%9E">#</a> 結語</h3>\n' +
+    '<p>看到這個 case 其實蠻有趣的，不過因為 twitter 上已經是 2018 的文章了，時代在進步，瀏覽器也在更新中，所以現在這個 case 在不同的瀏覽器上已經沒辦法完全渲染出不同的圖形了。</p>\n' +
+    '<p>這個東西可以應用在哪？請諒小弟才疏學淺…我也不知道，反正就是很酷就對了。不過我們可能可以嘗試更多不同的 CSS 屬性組合，找一些 CSS 數值的 edge case，可能也有相同的效果。</p>\n' +
+    '<p>如果有甚麼想法可以多多交流，有錯誤也歡迎在下面指正或者是留言。 Big guy is John，感謝各位收看。</p>\n' +
+    '<p><em>Originally published at</em> <a href="https://gist.github.com/1290f33eca120c10ff394ed1218a53cc"><em>http://github.com</em></a><em>.</em></p>\n',
+  groups: undefined
+]
+pureSummary
+<!-- 相同 CSS 但各瀏覽器不同渲染的結果，讓你知道渲染引擎如何運作 -->
+markdownComment
+相同 CSS 但各瀏覽器不同渲染的結果，讓你知道渲染引擎如何運作
+summaryMatchRes
+null
+summaryMatchRes
+null
+summaryMatchRes
+null
+summaryMatchRes
+null
+summaryMatchRes
+null
+summaryMatchRes
+null
+summaryMatchRes
+null
+summaryMatchRes
+[
+  '<!-- summary -->\n' +
+    '<!-- 相同 CSS 但各瀏覽器不同渲染的結果，讓你知道渲染引擎如何運作 -->\n' +
+    '<!-- summary -->',
+  '<!-- 相同 CSS 但各瀏覽器不同渲染的結果，讓你知道渲染引擎如何運作 -->',
+  index: 0,
+  input: '<!-- summary -->\n' +
+    '<!-- 相同 CSS 但各瀏覽器不同渲染的結果，讓你知道渲染引擎如何運作 -->\n' +
+    '<!-- summary -->\n' +
+    '<p>有一天看著阮一峰的 <a href="http://www.ruanyifeng.com/blog/2018/07/weekly-issue-14.html">科技愛好者周刊</a>，突然看到 <a href="https://codepen.io/MartijnCuppens/pen/MXojmw">這個東西</a> 。</p>\n' +
+    '<p><a href="https://twitter.com/Martijn_Cuppens/status/1015169981368225793">@Martijn_Cuppens</a> 寫了一個空的 div 還有幾行 CSS，這個 div 就能在瀏覽器上渲染出不同的圖形如下。</p>\n' +
+    '<figure tabindex="1"><img src="/img/post/0__nHm6zS0QfERpQAzz.jpg" alt=""></figure>\n' +
+    '<p>驚！勾起小弟一點好奇心，CSS 也可以做 browser，雖然使用 window 沒辦法使用 safari，來測試，而且 codepen 也不支持 IE，但還是利用手邊的瀏覽器還有一些服務像是 <a href="https://www.browserling.com/">browserling</a>, <a href="https://www.lambdatest.com/">lambdatest</a> 來測試。</p>\n' +
+    '<ul>\n' +
+    '<li>Edge 的結果，這裡是使用 Microsoft Edge 44.18362.449.0 版本的 edge ，所以還沒有換到最新的基於 chromium 的版本。</li>\n' +
+    '</ul>\n' +
+    '<figure tabindex="2"><img src="/img/post/0__u6QZiPRtH2ENt1Ub.jpg" alt=""></figure>\n' +
+    '<ul>\n' +
+    '<li>Firefox 的結果，版本是 76</li>\n' +
+    '</ul>\n' +
+    '<figure tabindex="3"><img src="/img/post/0__Awj74dFF__OVvhDS0.jpg" alt=""></figure>\n' +
+    '<ul>\n' +
+    '<li>用 browserling ，firefox ver.68 在 window 7 上測試的結果是</li>\n' +
+    '</ul>\n' +
+    '<figure tabindex="4"><img src="/img/post/0__DeOeROeZjCJ51iTG.jpg" alt=""></figure>\n' +
+    '<ul>\n' +
+    '<li>chrome 的結果，版本是 84.0.4147.105</li>\n' +
+    '</ul>\n' +
+    '<figure tabindex="5"><img src="/img/post/0__UufqtVjO3cWW5I6I.jpg" alt=""></figure>\n' +
+    '<ul>\n' +
+    '<li>用 lambdatest 在 safari 10.1 上面測試的結果。 codepen 就是傲嬌，嫌不支援又 render 出來</li>\n' +
+    '</ul>\n' +
+    '<figure tabindex="6"><img src="/img/post/0__KD8KruS4a4ly8Jr0.jpg" alt=""></figure>\n' +
+    '<ul>\n' +
+    '<li>用 lambdatest 在 opera 68 上面測試的結果</li>\n' +
+    '</ul>\n' +
+    '<figure tabindex="7"><img src="/img/post/0__XqGjXjT5cmL2Ty__q.jpg" alt=""></figure>\n' +
+    '<p>結果大概是這樣。會有這些結果其實不意外，每個瀏覽器都有自已的渲染引擎，一個 HTML 跟 CSS 卻各自表態，所以實現出來的東西當然也是不一樣。不過厲害的是這個簡單的 CSS 竟然剛好可以在這些主流(?)瀏覽器上可以顯示不一樣的結果。</p>\n' +
+    '<h3 id="%E9%A1%AF%E7%A4%BA%E7%B5%90%E6%9E%9C%E8%88%87%E7%80%8F%E8%A6%BD%E5%99%A8%E7%9A%84%E9%97%9C%E4%BF%82%EF%BC%9F"><a class="direct-link" href="#%E9%A1%AF%E7%A4%BA%E7%B5%90%E6%9E%9C%E8%88%87%E7%80%8F%E8%A6%BD%E5%99%A8%E7%9A%84%E9%97%9C%E4%BF%82%EF%BC%9F">#</a> 顯示結果與瀏覽器的關係？</h3>\n' +
+    '<p>為什麼不同的瀏覽器，但是 Render 的內容出來是一樣的？但有些相同瀏覽器，版本不同卻有不同的結果。</p>\n' +
+    '<p>這就得講到剛剛提到的<a href="https://en.wikipedia.org/wiki/Browser_engine"><strong>渲染引擎</strong></a>，渲染引擎的工作之一就是把 HTML 還有 CSS 的程式碼轉換成我們看的到的圖形介面。（其實這裡自己對渲染引擎還有很多不了解，有錯誤在麻煩各位提點。）</p>\n' +
+    '<p>雖然是不同的瀏覽器，但如果使用相同的渲染引擎，那理所當然會渲染出同樣的畫面（像是筆電有各種牌子，但是作業系統都是 windows，所以畫面相同）。反之，就算是同樣的瀏覽器，可能因為開發成本過高或者是各種原因，不同的版本也可能使用不同的渲染引擎；抑或是引擎本身有更新，也會導致渲染出來的內容不一樣。</p>\n' +
+    '<p>在不同版本更換渲染引擎這點，對前端開發最著名 也是最可喜可賀的案例就是 Edge 吧。從 2020.1.15 開始，Edge 開始基於 <a href="https://zh.wikipedia.org/wiki/Chromium">Chromium</a> 開發，理所當然地也沿用了 Chromium 的渲染引擎。</p>\n' +
+    '<p><img src="/img/post/0__pP9oy__w25Nzt1RqV.jpg" alt="">\n' +
+    '<img src="/img/post/0__H3xqFd1UZ6UBsq83.jpg" alt=""></p>\n' +
+    '<p>雖然沒有測試新版的 edge ，不過可想而知應該會得到相同的結果。</p>\n' +
+    '<p>那既然提到了渲染引擎，那麼目前各瀏覽器的渲染引擎又是那些呢？其實可以從上面的結果大概知道有哪幾種引擎，我們先複習一下剛剛那張圖。</p>\n' +
+    '<figure tabindex="8"><img src="/img/post/0__j206rgz3EuduI8bn.jpg" alt=""></figure>\n' +
+    '<p>可以看到有 Firefox, Edge, Chrome, Safari, IE 這五種瀏覽器各呈現不同的方塊。也各代表不同的渲染引擎：</p>\n' +
+    '<h3 id="css-prefix"><a class="direct-link" href="#css-prefix">#</a> CSS prefix</h3>\n' +
+    '<p>知道有這些渲染引擎有甚麼用？還記得有時候我們會做下面這件事情。也就是幫 CSS 的屬性加上 prefix</p>\n' +
+    '<p><a href="https://gist.github.com/9abe6552429875722405b74998825e3b">https://gist.github.com/9abe6552429875722405b74998825e3b</a></p>\n' +
+    '<p>看到前面的 prefix： <code>-webkit-</code>, <code>-moz-</code> 可能覺得有些眼熟。是的，這些 prefix 就是要寫給渲染引擎看的。有一些比較新或者是還沒被廣泛應用的 CSS 屬性需要加上 prefix 才可以在特定的瀏覽器正常運作。</p>\n' +
+    '<p>不過當去查資料時，會發現支援 chrome 還有 safari 的 prefix 都是 <code>-webkit-</code> ，這是因為 chrome 的引擎 Blink 是從 WebKit <a href="https://zh.wikipedia.org/wiki/WebKit#%E9%96%8B%E7%99%BC%E5%88%86%E8%A3%82">分出來的</a>。所以才會同樣使用 <code>-webkit-</code> ，不過由於實際上是不同的引擎，所以可能會遇到同樣的 CSS 屬性，webkit / Blink 引擎要加 prefix 但是另一個不用加的情形。</p>\n' +
+    '<h3 id="css-%E6%80%8E%E9%BA%BC%E5%B0%8E%E8%87%B4%E9%80%99%E7%A8%AE%E6%83%85%E5%BD%A2%E7%9A%84%EF%BC%9F"><a class="direct-link" href="#css-%E6%80%8E%E9%BA%BC%E5%B0%8E%E8%87%B4%E9%80%99%E7%A8%AE%E6%83%85%E5%BD%A2%E7%9A%84%EF%BC%9F">#</a> CSS 怎麼導致這種情形的？</h3>\n' +
+    '<p>講了那麼多，不過到底是甚麼屬性導致這些瀏覽器各自表態？我們看看 CSS 的原始碼。</p>\n' +
+    '<p><a href="https://gist.github.com/08528f98399d9daa91e00ecf1c7e8c18">https://gist.github.com/08528f98399d9daa91e00ecf1c7e8c18</a></p>\n' +
+    '<p>去掉置中的屬性，真正有趣的是 div 裡面的下面四個。</p>\n' +
+    '<p><a href="https://gist.github.com/e05825df9927e6228f3041d3ce72184b">https://gist.github.com/e05825df9927e6228f3041d3ce72184b</a></p>\n' +
+    '<p><code>width</code> 以及 <code>height</code> 賦予元素高度以及寬度。那 <code>outline</code> 做了些甚麼？我們看一下 <a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/outline-style">MDN</a> 上面的說法：</p>\n' +
+    '<blockquote>\n' +
+    '<p><em>An outline is a line that is drawn around an element, outside the border.</em></p>\n' +
+    '</blockquote>\n' +
+    '<p>outline 可以在 border 外面再加上邊框。而 <code>outline</code> 這個屬性是 <code>outline-style</code>, <code>outline-width</code>, <code>outline-color</code> 這三個屬性的簡寫。分別設定樣式、寬度還有顏色。 案例中的 <code>inset</code> 代表著 <a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/outline-style">outline 會是嵌入狀的樣式</a> 。</p>\n' +
+    '<figure tabindex="9"><img src="/img/post/0__5NPDlxYpxbvLVKcP.jpg" alt=""></figure>\n' +
+    '<p>而 <code>outline-offset</code> 則是設置 outline 的偏移，剛剛講說 outline 可以在 border 外面再加上邊框， <code>outline-offset</code> 的數值可以讓 border 跟 outline 之間新增距離，也就是 border 跟 outline 之間會有間距的意思。</p>\n' +
+    '<figure tabindex="10"><img src="/img/post/0__Iq3kO5DG9__Lu6l3Q.jpg" alt=""></figure>\n' +
+    '<blockquote>\n' +
+    '<p><em>可以看到 offset 增加了 border 跟 outline 之間的空間。</em></p>\n' +
+    '</blockquote>\n' +
+    '<p>那跟呈現剛剛那樣的形狀有甚麼關係？我們先關掉 <code>outline-offset</code> 看看結果。</p>\n' +
+    '<figure tabindex="11"><img src="/img/post/0__WmeLVd5rzByrYG9t.jpg" alt=""></figure>\n' +
+    '<p>可以看到其實蠻正常的，因為沒有 <code>border</code>，所以就是在一個空白的 <code>div</code> 外面加上粗度 100 的 <code>outline</code>，然後用 <code>inset</code> 的樣式。</p>\n' +
+    '<p>找到兇手了！就是 <code>outline-offset</code> ！</p>\n' +
+    '<figure tabindex="12"><img src="/img/post/0__tmHWGl807CtouMtY.jpg" alt=""></figure>\n' +
+    '<p>我們看看這 <code>outline-offset</code> 幹了甚麼好事。</p>\n' +
+    '<p><code>outline-offset: -125px;</code> 代表在 border 外面加上 <code>-125px</code> 的間距，這到底是甚麼意思？如果說正值是以 border 為準，從border 向外推 offset 的距離再開始新增 outline，那負值可以說是向內推再開始新增 outline。</p>\n' +
+    '<p><img src="/img/post/0__iwKcs65P8zYKsd__0.jpg" alt="">\n' +
+    '<img src="/img/post/0__swXYDgauMZvdFWCU.jpg" alt=""></p>\n' +
+    '<blockquote>\n' +
+    '<p><em>因為向內 30px 所以和 border 是同樣的位置，但是 outline 會在 border 之上，所以把 border 遮住了。</em></p>\n' +
+    '</blockquote>\n' +
+    '<p>如果我們把數值改成 <code>outline-offset: -50px;</code> 那會怎麼樣？</p>\n' +
+    '<figure tabindex="13"><img src="/img/post/0__W3XiCUbIyfTDO7CZ.jpg" alt=""></figure>\n' +
+    '<p>這個結果還算蠻合理的，寬和高都是 100px，所以 <code>outline-offset: -50px;</code> 會把整個 div 。那如果數值在繼續降低呢？讓我們繼續看下去。</p>\n' +
+    '<p><img src="/img/post/0__MkOcmyZnr6KsrFk0.jpg" alt="">\n' +
+    '<img src="/img/post/0__xwUfJfjHCodPvV8z.jpg" alt="">\n' +
+    '<img src="/img/post/0____3RJrP8pQdXqkItP.jpg" alt=""></p>\n' +
+    '<p>其實降低到比自身的大小還小我已經不知道發生甚麼事情了… 我想這應該可以說是一個 bug 吧（又者是彩蛋？）。不過可以看到其實數值小於 <code>-100</code> 就可以看到雛型了，數值特別設為 <code>-125</code> 應該只是為了美妙的圖案而已。</p>\n' +
+    '<p>上面的範例都是用 chrome 開啟的，因為 Blink 有自己的算法，小弟也不太清楚這塊，如果有人了解說是哪一個部分會處理到這塊或者是有一些方向歡迎私訊小弟…</p>\n' +
+    '<p>不過我們終於找到答案了，解開說為什麼只是一個 <code>div</code> 的 CSS 。竟然會導致在不同的瀏覽器有不同的圖案呈現：</p>\n' +
+    '<blockquote>\n' +
+    '<p><em>因為</em> <code>_outline-offset_</code> <em>的偏移設為負數，並且小於能夠縮退的自身的高度和寬度，導致渲染引擎的算法渲染出 不可理解的 特殊形狀，</em></p>\n' +
+    '</blockquote>\n' +
+    '<h3 id="%E7%B5%90%E8%AA%9E"><a class="direct-link" href="#%E7%B5%90%E8%AA%9E">#</a> 結語</h3>\n' +
+    '<p>看到這個 case 其實蠻有趣的，不過因為 twitter 上已經是 2018 的文章了，時代在進步，瀏覽器也在更新中，所以現在這個 case 在不同的瀏覽器上已經沒辦法完全渲染出不同的圖形了。</p>\n' +
+    '<p>這個東西可以應用在哪？請諒小弟才疏學淺…我也不知道，反正就是很酷就對了。不過我們可能可以嘗試更多不同的 CSS 屬性組合，找一些 CSS 數值的 edge case，可能也有相同的效果。</p>\n' +
+    '<p>如果有甚麼想法可以多多交流，有錯誤也歡迎在下面指正或者是留言。 Big guy is John，感謝各位收看。</p>\n' +
+    '<p><em>Originally published at</em> <a href="https://gist.github.com/1290f33eca120c10ff394ed1218a53cc"><em>http://github.com</em></a><em>.</em></p>\n',
+  groups: undefined
+]
+pureSummary
+<!-- 相同 CSS 但各瀏覽器不同渲染的結果，讓你知道渲染引擎如何運作 -->
+markdownComment
+相同 CSS 但各瀏覽器不同渲染的結果，讓你知道渲染引擎如何運作
+summaryMatchRes
+[
+  '<!-- summary -->\n' +
+    '<!-- 看完 inside-browser 系列文，整理後的筆記，簡單記錄下重點。 -->\n' +
+    '<!-- summary -->',
+  '<!-- 看完 inside-browser 系列文，整理後的筆記，簡單記錄下重點。 -->',
+  index: 0,
+  input: '<!-- summary -->\n' +
+    '<!-- 看完 inside-browser 系列文，整理後的筆記，簡單記錄下重點。 -->\n' +
+    '<!-- summary -->\n' +
+    '<p>大概看完了<a href="https://developers.google.com/web/updates/2018/09/inside-browser-part1">這個</a>系列，想寫一下筆記，現在這個程度看這個文章資訊量還對我來說還是蠻驚人的，雖然 Huli 會說當作科普來看就好，但還是做個筆記吧 XD。不然自己一定會忘記的。</p>\n' +
+    '<p>先概覽一下四個章節分別在講什麼：</p>\n' +
+    '<p>Part1 會講解說 CPU/GPU 各自的功用，還有講解 Process / Thread 之間的差異，而講解這些是為了理解說 chrome multi Process 的設計以及各個 Process 的分工。</p>\n' +
+    '<p>Part2 跟 Part3 會講到我覺得比較重要的部分。Part2 是從輸入瀏覽器到拿到 response 渲染前（這個階段稱作 navigation），Part3 則是從渲染。</p>\n' +
+    '<p>Part4 主要是提到說事件的觸發跟處理，瀏覽器怎麼樣對事件做優化，還有一些在事件上我們可以做的優化部分。</p>\n' +
+    '<p>大概是這樣，了解一下大概的架構，可能會比較好理解自己在哪裡還有在講什麼，比較有安全感，人總是會對未知感到恐懼。</p>\n' +
+    '<h2 id="part1-%E5%BA%95%E5%B1%A4%E8%99%95%E7%90%86%E4%BB%A5%E5%8F%8A%E7%80%8F%E8%A6%BD%E5%99%A8%E6%9E%B6%E6%A7%8B"><a class="direct-link" href="#part1-%E5%BA%95%E5%B1%A4%E8%99%95%E7%90%86%E4%BB%A5%E5%8F%8A%E7%80%8F%E8%A6%BD%E5%99%A8%E6%9E%B6%E6%A7%8B">#</a> Part1 底層處理以及瀏覽器架構</h2>\n' +
+    '<h3 id="cpu%2Fgpu%2C-process%2Fthread"><a class="direct-link" href="#cpu%2Fgpu%2C-process%2Fthread">#</a> CPU/GPU, Process/Thread</h3>\n' +
+    '<p>CPU 跟 GPU，常玩電腦組裝的應該蠻了解的。</p>\n' +
+    '<ul>\n' +
+    '<li>CPU 可以處理任何計算，但是單次處理量較少</li>\n' +
+    '<li>GPU 只能處理特定簡單的運算，但是處理量很大</li>\n' +
+    '</ul>\n' +
+    '<p>在網路上有看到有趣的比喻：</p>\n' +
+    '<blockquote>\n' +
+    '<p>GPU是一群小学生，扎堆算加减法；CPU是一个老教授，能解微积分。CPU的核比GPU复杂得多呢。</p>\n' +
+    '</blockquote>\n' +
+    '<p>這裡要理解的是 CPU 跟 GPU 各有所長，而瀏覽器也會利用他們不同的特性來做不同的運算。接下來我們要理解 Process （程序） 跟 Thread （執行緒）的差異。</p>\n' +
+    '<p>Process 裡面會有很多 Thread。OS 會分配資源給 Process，而 Process 裡面的 thread 可以共享這些資源以及共享彼此間的資訊，但 Process 間的資訊交換就必須透過 IPC (Inter Process Communication)</p>\n' +
+    '<p>上面這些都是關於電腦運作比較底層的基本知識，也必須要先知到這些才有辦法了解 chrome 瀏覽器的運行架構。</p>\n' +
+    '<h3 id="chrome-%E7%9A%84%E9%81%8B%E8%A1%8C%E6%9E%B6%E6%A7%8B"><a class="direct-link" href="#chrome-%E7%9A%84%E9%81%8B%E8%A1%8C%E6%9E%B6%E6%A7%8B">#</a> Chrome 的運行架構</h3>\n' +
+    '<p>chrome 採 multi Process 架構。一個瀏覽器會有很多不同的任務，像是網路連線、UI、儲存還有每個 site 畫面的 render 等等的。而 Chrome 將這些不同的任務交給不同 Process 處理。這樣做的優點是當一個 Process 出問題時，直接關掉那個 Process 就可以，不會影響到其他 Process，舉例來說，Chrome 本身一個網頁的 render 就會作為一個 process，假設其中一個分頁當機了，就算關掉也不會造成影響。</p>\n' +
+    '<p>另一個好處是安全性，Process 間沒辦法輕易地共享資料，將分頁獨立出來可以防止讀取到其他分頁的資料。而這也是 chrome 本身使用 site Isolation 的原因，render Process 是以 site 也就是網頁為單位，如果頁面裡面有 iframe，那iframe 也會獨立成另一個 Process ，這樣可以防止 iframe 的 site 存取到頁面的資料。</p>\n' +
+    '<p>採 Multi Process 的缺點也是顯而易見，就是耗費資源（也是全世界都在詬病的點），尤其是 renderer Process，每一個 Process 都需要一具 V8 engine 才有辦法運行（不是汽車的 V8）。當硬體資源有限的時候，chrome 會把同一個 來源但不同分頁的 site 放進同一個 Process，用來兼顧安全性以及資源。</p>\n' +
+    '<p>除此之外，chrome 也可以透過將 Process Servicification（服務化），可以讓 Process 變成 thread 再組合成一個 process 來節省資源。</p>\n' +
+    '<h2 id="part2-navigation"><a class="direct-link" href="#part2-navigation">#</a> Part2 Navigation</h2>\n' +
+    '<p>先講講說大家對於瀏覽器平常的認識。把網址輸入 address bar，像是 <code>www.google.com</code>，然後瀏覽器 tab 上面的 icon 會先轉轉轉，然後跳出頁面之後，就轉好了。</p>\n' +
+    '<p>上面是一般人的理解，身為前端工程師一定要知道的多一點。</p>\n' +
+    '<p>我們知道說當我們輸入 <code>www.google.com</code> 之後會先送到 DNS server 拿 IP，然後我們再用 IP 連到 server，並且送出 request。等我們收到 server 的 response 之後，瀏覽器會把我們收到的 response（先假設是 html） 解析成我們看到的網頁。</p>\n' +
+    '<p>不過還有一點是，現在 address bar 也可以當作 search bar，當你直接打 <code>google</code> ，就會跑出 <code>google</code> 的 google 搜尋結果，不過道理跟上面一樣，只是瀏覽器會幫你連到 google 的搜尋結果而已。</p>\n' +
+    '<p>現在可以了解更底層的東西，就是瀏覽器幫我們做了什麼，然後是瀏覽器的哪個部分去處理的，然後是這些部分是怎麼樣交換訊息。</p>\n' +
+    '<p>我們可以先把 Navigation 這個階段大概切成幾個步驟，但是這幾個步驟不一定是先後關係，有些可能是平行的。</p>\n' +
+    '<ul>\n' +
+    '<li>處理 adress bar 的 Input</li>\n' +
+    '<li>檢查 Input 有沒有對應的 cache 或者是 service worker</li>\n' +
+    '<li>送出 request</li>\n' +
+    '<li>初始化 renderer Process</li>\n' +
+    '<li>確定 type 並檢查 Body</li>\n' +
+    '</ul>\n' +
+    '<h3 id="%E5%88%A4%E6%96%B7-input"><a class="direct-link" href="#%E5%88%A4%E6%96%B7-input">#</a> 判斷 Input</h3>\n' +
+    '<p>一樣的開始：輸入網址列。網址列本身是由 Browser Process 裡面的 UI thread 所處理的。Browser Process 處理網頁畫面（渲染）以外的所有東西，像是前面講到的瀏覽器 UI、儲存、網路等等...</p>\n' +
+    '<p>UI thread 會讀取你的 input，然後看你輸入的是不是 url，然後開始轉圈圈，接著他會初始化一個 network call，選擇適合的 protocal，接著就把資料丟到 network thread 去處理（這裡詳細的分工可能還是要看一下 docs 或者是 source code）。</p>\n' +
+    '<h3 id="%E6%B1%BA%E5%AE%9A-body-%E7%9A%84%E8%99%95%E7%90%86%E6%96%B9%E5%BC%8F"><a class="direct-link" href="#%E6%B1%BA%E5%AE%9A-body-%E7%9A%84%E8%99%95%E7%90%86%E6%96%B9%E5%BC%8F">#</a> 決定 body 的處理方式</h3>\n' +
+    '<p>server 端的事情不講了，當我們收到 reaponse 之後，有一個東西會決定 response body 要清蒸還是要紅燒，那就是 content-type。瀏覽器會根據 response header 裡面的 content-type 還有 body 的內容（因為 content-type 可能會不見或者是出問題，還是要自己判斷 body 比較準\n' +
+    '）來<a href="https://source.chromium.org/chromium/chromium/src/+/master:net/base/mime_sniffer.cc;l=131">判斷</a>說要怎麼處理，像是圖片的就會跑出圖片、檔案就會進行下載，不同的格式會有不同的處理方式。chromium 相較於各<s>小</s>大瀏覽器比較晚出現，因此這方面也參考了前人的做法，但最後只有 html 的內容才會被進行 render。</p>\n' +
+    '<h3 id="%E5%AE%89%E5%85%A8%E6%AA%A2%E6%9F%A5"><a class="direct-link" href="#%E5%AE%89%E5%85%A8%E6%AA%A2%E6%9F%A5">#</a> 安全檢查</h3>\n' +
+    '<p>值得注意的部分，在這個階段也會檢查 body 有沒有連到怪怪的檔案或者是連到惡意的連結（應該是會有一個 black-list），並且會執行 <a href="https://www.chromium.org/Home/chromium-security/corb-for-developers">CORB</a>（目前看下來這個功能是擋掉一些可疑的 request 方式跟 content-type 還有 body 格式的組合），在想這個部分做的可能不只這些，像是 CORS 的檢查可能也是這部分處理的，真的沒問題才放 response 通過。</p>\n' +
+    '<p>通過之後，network thread 通知 UI thread，而 UI thread 會開啟一個 renderer process，這裡有一種 UI thread 像是主控的感覺？不過我不清楚說是不是在架構設計裡就應該要以 UI 作為整個程式的主控，對 design pattern 還不熟。這裡有一個可以優化的點，Renderer Process 可以在 request 被送出去的時候就同步初始化，先處理一些不需要 response 的部分，等 response 到了之後就可以直接處理 Response。</p>\n' +
+    '<p>當 renderer Process 跟 Response 都 OK 之後就可以 GOGO 了，但是要要記得資料還在 Browser Process 裡面阿，所以要透過我們一開始有提到的 IPC 去傳遞資料給 renderer Process，然後就開始解析囉。</p>\n' +
+    '<h3 id="%E5%85%B6%E4%BB%96-browser-process-%E6%9C%83%E8%99%95%E7%90%86%E7%9A%84%E6%9D%B1%E8%A5%BF"><a class="direct-link" href="#%E5%85%B6%E4%BB%96-browser-process-%E6%9C%83%E8%99%95%E7%90%86%E7%9A%84%E6%9D%B1%E8%A5%BF">#</a> 其他 Browser Process 會處理的東西</h3>\n' +
+    '<p>這裡還有幾個小細節：想一想自己的經驗，假設說網頁跑不出來一直轉，有時候我們會按上一頁返回到上一個頁面。所以我們就可以確定說，歷史紀錄是在 network 拿到 response 之前就確定好的，雖然文章沒有提到，但是我在猜說應該是在初始化 renderer Process 的時候就會處理好歷史紀錄的東西。</p>\n' +
+    '<p>還有當網頁載入完的時候，renderer Process 也會通知 Browser Process，要把網頁的 favicon 顯示出來。</p>\n' +
+    '<p>最後我們不要忘記當我們關閉分頁（site）的時候，Browser 會把我們的網頁放進歷史紀錄裡面做 cache，下次在拜訪這個網頁就可以直接跳出來。</p>\n' +
+    '<p><code>beforeunload</code> 這個事件會在從一個網址導向另一個網址時被觸發，文章裏面有提到，但是覺得沒有很困難，感覺像是小補充而已。</p>\n' +
+    '<h3 id="service-worker"><a class="direct-link" href="#service-worker">#</a> Service worker</h3>\n' +
+    '<p>每次在 Navigation 的時候都會檢查 url 有沒有對應的 Service worker（後面簡稱 SW，讓網頁可以在被關閉的時候也能夠執行程序的東西，推薦<a href="https://medium.com/@kosamari/service-worker-what-are-you-ca0f8df92b65">這篇</a>），有的話就會先執行 SW，因為可能 SW 裡面就有 cache 可以用了，沒有才進行 request。</p>\n' +
+    '<p>但如果 SW 早就決定說不要了怎麼辦，這樣不就會慢了一點嗎？尤其是 SW 又很複雜的時候，所以 FB 就不爽了，直接跟 chrome 說你想個辦法讓 SW 不會影響到 request 送出的速度（超兇的），就這樣有了 <a href="https://developers.google.com/web/updates/2017/02/navigation-preload">Navigation Preload</a> 這個東西，人還是要有靠山說話才能夠大聲啊。</p>\n' +
+    '<h2 id="part3-render-pipeline"><a class="direct-link" href="#part3-render-pipeline">#</a> Part3 Render Pipeline</h2>\n' +
+    '<p>這部分覺得蠻複雜的。但我覺得會是這幾個 Part 裡面最重要的部分，這會大大關係到網頁的效能，你的網頁跑起來卡卡的會跟這部分有很大的關係。</p>\n' +
+    '<p>Render 的中文又叫渲染，自己覺得這個翻譯蠻彆扭的，這個部分會將程式碼（就是 html, css, js）轉化成人類看得懂的文字還有畫面，這個部分分幾個階段，跟上一個 Part 不一樣，有<strong>嚴格的前後關係</strong>，這個步驟會稱作 Render Pipeline。</p>\n' +
+    '<ol>\n' +
+    '<li>Parsing</li>\n' +
+    '<li>Sytle Compute</li>\n' +
+    '<li>Layout</li>\n' +
+    '<li>Paint</li>\n' +
+    '<li>Composite</li>\n' +
+    '</ol>\n' +
+    '<p>首先是 Parsing 解析。這裡的大方向是把 html 的內容解析成 DOM tree，瀏覽器的入口點都是 html 檔案，而瀏覽器會將 html 轉化成瀏覽器還有我們可以操作的形式，那就是 DOM（document object model）。</p>\n' +
+    '<p>tag 有很多種，但是有幾種會影響到我們的 DOM tree，分別是 <code>&lt;script&gt;</code> 還有 <code>&lt;link&gt;</code> 跟 <code>&lt;img&gt;</code> （可能還有其他的）。這些東西會加載其他資源。加載資源要時間的！遇到這種要 request 的東西有個概念：提早做，放旁邊，好了在叫你。在 Navigation 中也是初始化 renderer Process 跟 Request 並行。所以 preload scanner 會先看看有沒有這些 tag，有的話就先交給 browser process （裡面的 network thread）去加載。</p>\n' +
+    '<p>除此之外，<code>&lt;script&gt;</code> 還可能會執行 JS。JS 有可能會改變先前的 DOM tree，所以這裡會先處理 JS 裡面的內容。</p>\n' +
+    '<p>這個部分會影響整個網頁的加載速度很大，若 JS 裡面並沒有會影響 DOM 的內容，可以使用 <code>async</code> 跟 <code>defer</code> 來優化。加載資源也可以透過 <a href="https://developer.mozilla.org/zh-CN/docs/Web/HTML/Preloading_content">preload</a> 的 tag 屬性來指定什麼資源要先行加載。</p>\n' +
+    '<p>接下來是 style compute，可以先想一下說 CSS 到底是什麼？ CSS 是一堆規則，他指定了</p>\n' +
+    '<ol>\n' +
+    '<li>套用的範圍</li>\n' +
+    '<li>套用的樣式</li>\n' +
+    '</ol>\n' +
+    '<p>但是 CSS 沒有指定每個 element 要什麼樣式。</p>\n' +
+    '<p>這是視覺化的第一個步驟，計算每個 element 身上要套哪些 CSS（可以從 devtoole 的 compute 看到，有時後會比看 CSS 好用很多）。這部分還會把瀏覽器預設的 CSS 也加上去。</p>\n' +
+    '<p>從這一個步驟開始就是瀏覽器渲染引擎的工作了，想了解更多可以看看<a href="https://lauviah.coderbridge.io/2020/09/26/1-%E5%80%8B-div-%E5%92%8C-4-%E8%A1%8C-css-%E5%B0%B1%E8%83%BD%E6%9B%B4%E4%BA%86%E8%A7%A3%E7%80%8F%E8%A6%BD%E5%99%A8%E6%B8%B2%E6%9F%93%E5%BC%95%E6%93%8E/">小弟之前的文章</a>有提到。</p>\n' +
+    '<p>第二個步驟是 Layout，我會覺得這個步驟很像畫草稿，把所有的元素定位，不需要定位的去掉，額外要定位的東西加進來，而這個部分的結果叫做 Layout tree。</p>\n' +
+    '<p>什麼是不需要的跟另外要定位的？</p>\n' +
+    '<p>像是 <code>display: none</code> 就完全不會在畫面上出現，所以會在這部份去掉，只會留在 DOM 裡面，而偽元素就是 html 上面原本沒有的，就需要額外加上去。</p>\n' +
+    '<blockquote>\n' +
+    '<p>其實自己對這個東西蠻有興趣的，做個註記以後可以看<a href="https://www.youtube.com/watch?v=Y5Xa4H2wtVA">BlinkOn 会议的一些访谈</a></p>\n' +
+    '</blockquote>\n' +
+    '<h3 id="paint"><a class="direct-link" href="#paint">#</a> Paint</h3>\n' +
+    '<p>打好草稿，那下一個步驟當然就是就是塗色了。不，代誌不是像憨人想的那麼簡單，你忘了考慮分層。剛剛我們定位出了每個元素的 2D 位置，但是每個元素就像紙張一樣，上層會遮蓋掉下層。我們必須要處理這個問題才能夠塗色。</p>\n' +
+    '<p>所以瀏覽器會再遍歷一次 Layout tree，看看那些元素屬於上層那些屬於下層，然後得出說：先畫 A, C 再畫 B, D, E 這樣的順序，然後才開始繪製。有點像是一個一個的指令，告訴瀏覽器說先畫出什麼，再畫出什麼，這樣的指令稱作 Paint Record，這也是 Paint 產出的東西。</p>\n' +
+    '<p>這裡的 Paint 我的理解比較不像是開始繪製，而是制定一個繪製的順序。</p>\n' +
+    '<h3 id="composite"><a class="direct-link" href="#composite">#</a> Composite</h3>\n' +
+    '<p>再理解這個步驟之前要先了解一個東西，叫做 Raster（光柵化），</p>\n' +
+    '<p>Chromium 會把所有的元素先分層然繪製出來。接著在合成 viewport 內的內容（這部分建議看文章，或是文章裡的這個<a href="https://developers.google.com/web/updates/images/inside-browser/part3/composit.mp4">動畫</a>，用講得實在是很抽象），就像把整個內容全部都擺好，然後再用一個框來取景。這樣可以讓滾動更加滑順，因為內容都已經擺擺好了，只需要重新合成框框裡面的內容就好了。Composite 裡面又可以分為三個步驟。</p>\n' +
+    '<ol>\n' +
+    '<li>分層</li>\n' +
+    '<li>光柵化</li>\n' +
+    '<li>合成</li>\n' +
+    '</ol>\n' +
+    '<p>第一是分層。這個步驟 rederer Process 的 Main thread 會上一個步驟的 Layout tree 轉化成不同層的 Layer tree，也就是決定說那些東西要畫在同一層。我們可以透過 <code>will-change</code> 這個屬性，來強制幫元素分層，如果是舊的瀏覽器可以使用 <code>translateZ(0)</code>。文中是沒有特別提到說除了上面兩個 CSS 屬性以外有沒有其他分層的依據，不過我猜應該是有，除了強制分層應該也是會有一些基本的分層方式。</p>\n' +
+    '<p>有了 Layer tree 之後，Main thread 會把 Layer tree 的內容交給 composite thread，而 composite thread 會在把每一層的畫面切分之後，再交給 raster thread 進行 raster。</p>\n' +
+    '<p>這部分也會涉及優化，整個 Layer 很大，可能跟網頁一樣大。瀏覽器會優先處理比較靠近視窗的部分（接下來可能會瀏覽到的部分）。而且再切分時還會考慮到使用者可能會放大縮小，會把整個畫面切分成不同的大小再進行 raster。</p>\n' +
+    '<p>Raster 是啥？我們都知道說螢幕是由很多像素所組成的，但是瀏覽器裡面的資料會像這樣：</p>\n' +
+    '<pre><code>from 1,1  \n' +
+    'to 10,1\n' +
+    'to 10,10\n' +
+    'to 1, 10\n' +
+    'end 1, 1\n' +
+    '</code></pre>\n' +
+    '<p>螢幕是看不懂這個東西的，他只知道什麼座標的像素要呈現什麼顏色。把向量的內容變成螢幕可以呈現的點陣圖像就是 Raster。</p>\n' +
+    '<p>當瀏覽器會每一層都 Raster 好之後，就會開始合成。合成的概念跟 Photoshop 的影像平面化的概念很像'... 7359 more characters,
+  groups: undefined
+]
+pureSummary
+<!-- 看完 inside-browser 系列文，整理後的筆記，簡單記錄下重點。 -->
+markdownComment
+看完 inside-browser 系列文，整理後的筆記，簡單記錄下重點。
+summaryMatchRes
+[
+  '<!-- summary -->\n' +
+    '<!-- 相同 CSS 但各瀏覽器不同渲染的結果，讓你知道渲染引擎如何運作 -->\n' +
+    '<!-- summary -->',
+  '<!-- 相同 CSS 但各瀏覽器不同渲染的結果，讓你知道渲染引擎如何運作 -->',
+  index: 0,
+  input: '<!-- summary -->\n' +
+    '<!-- 相同 CSS 但各瀏覽器不同渲染的結果，讓你知道渲染引擎如何運作 -->\n' +
+    '<!-- summary -->\n' +
+    '<p>有一天看著阮一峰的 <a href="http://www.ruanyifeng.com/blog/2018/07/weekly-issue-14.html">科技愛好者周刊</a>，突然看到 <a href="https://codepen.io/MartijnCuppens/pen/MXojmw">這個東西</a> 。</p>\n' +
+    '<p><a href="https://twitter.com/Martijn_Cuppens/status/1015169981368225793">@Martijn_Cuppens</a> 寫了一個空的 div 還有幾行 CSS，這個 div 就能在瀏覽器上渲染出不同的圖形如下。</p>\n' +
+    '<figure tabindex="1"><img src="/img/post/0__nHm6zS0QfERpQAzz.jpg" alt=""></figure>\n' +
+    '<p>驚！勾起小弟一點好奇心，CSS 也可以做 browser，雖然使用 window 沒辦法使用 safari，來測試，而且 codepen 也不支持 IE，但還是利用手邊的瀏覽器還有一些服務像是 <a href="https://www.browserling.com/">browserling</a>, <a href="https://www.lambdatest.com/">lambdatest</a> 來測試。</p>\n' +
+    '<ul>\n' +
+    '<li>Edge 的結果，這裡是使用 Microsoft Edge 44.18362.449.0 版本的 edge ，所以還沒有換到最新的基於 chromium 的版本。</li>\n' +
+    '</ul>\n' +
+    '<figure tabindex="2"><img src="/img/post/0__u6QZiPRtH2ENt1Ub.jpg" alt=""></figure>\n' +
+    '<ul>\n' +
+    '<li>Firefox 的結果，版本是 76</li>\n' +
+    '</ul>\n' +
+    '<figure tabindex="3"><img src="/img/post/0__Awj74dFF__OVvhDS0.jpg" alt=""></figure>\n' +
+    '<ul>\n' +
+    '<li>用 browserling ，firefox ver.68 在 window 7 上測試的結果是</li>\n' +
+    '</ul>\n' +
+    '<figure tabindex="4"><img src="/img/post/0__DeOeROeZjCJ51iTG.jpg" alt=""></figure>\n' +
+    '<ul>\n' +
+    '<li>chrome 的結果，版本是 84.0.4147.105</li>\n' +
+    '</ul>\n' +
+    '<figure tabindex="5"><img src="/img/post/0__UufqtVjO3cWW5I6I.jpg" alt=""></figure>\n' +
+    '<ul>\n' +
+    '<li>用 lambdatest 在 safari 10.1 上面測試的結果。 codepen 就是傲嬌，嫌不支援又 render 出來</li>\n' +
+    '</ul>\n' +
+    '<figure tabindex="6"><img src="/img/post/0__KD8KruS4a4ly8Jr0.jpg" alt=""></figure>\n' +
+    '<ul>\n' +
+    '<li>用 lambdatest 在 opera 68 上面測試的結果</li>\n' +
+    '</ul>\n' +
+    '<figure tabindex="7"><img src="/img/post/0__XqGjXjT5cmL2Ty__q.jpg" alt=""></figure>\n' +
+    '<p>結果大概是這樣。會有這些結果其實不意外，每個瀏覽器都有自已的渲染引擎，一個 HTML 跟 CSS 卻各自表態，所以實現出來的東西當然也是不一樣。不過厲害的是這個簡單的 CSS 竟然剛好可以在這些主流(?)瀏覽器上可以顯示不一樣的結果。</p>\n' +
+    '<h3 id="%E9%A1%AF%E7%A4%BA%E7%B5%90%E6%9E%9C%E8%88%87%E7%80%8F%E8%A6%BD%E5%99%A8%E7%9A%84%E9%97%9C%E4%BF%82%EF%BC%9F"><a class="direct-link" href="#%E9%A1%AF%E7%A4%BA%E7%B5%90%E6%9E%9C%E8%88%87%E7%80%8F%E8%A6%BD%E5%99%A8%E7%9A%84%E9%97%9C%E4%BF%82%EF%BC%9F">#</a> 顯示結果與瀏覽器的關係？</h3>\n' +
+    '<p>為什麼不同的瀏覽器，但是 Render 的內容出來是一樣的？但有些相同瀏覽器，版本不同卻有不同的結果。</p>\n' +
+    '<p>這就得講到剛剛提到的<a href="https://en.wikipedia.org/wiki/Browser_engine"><strong>渲染引擎</strong></a>，渲染引擎的工作之一就是把 HTML 還有 CSS 的程式碼轉換成我們看的到的圖形介面。（其實這裡自己對渲染引擎還有很多不了解，有錯誤在麻煩各位提點。）</p>\n' +
+    '<p>雖然是不同的瀏覽器，但如果使用相同的渲染引擎，那理所當然會渲染出同樣的畫面（像是筆電有各種牌子，但是作業系統都是 windows，所以畫面相同）。反之，就算是同樣的瀏覽器，可能因為開發成本過高或者是各種原因，不同的版本也可能使用不同的渲染引擎；抑或是引擎本身有更新，也會導致渲染出來的內容不一樣。</p>\n' +
+    '<p>在不同版本更換渲染引擎這點，對前端開發最著名 也是最可喜可賀的案例就是 Edge 吧。從 2020.1.15 開始，Edge 開始基於 <a href="https://zh.wikipedia.org/wiki/Chromium">Chromium</a> 開發，理所當然地也沿用了 Chromium 的渲染引擎。</p>\n' +
+    '<p><img src="/img/post/0__pP9oy__w25Nzt1RqV.jpg" alt="">\n' +
+    '<img src="/img/post/0__H3xqFd1UZ6UBsq83.jpg" alt=""></p>\n' +
+    '<p>雖然沒有測試新版的 edge ，不過可想而知應該會得到相同的結果。</p>\n' +
+    '<p>那既然提到了渲染引擎，那麼目前各瀏覽器的渲染引擎又是那些呢？其實可以從上面的結果大概知道有哪幾種引擎，我們先複習一下剛剛那張圖。</p>\n' +
+    '<figure tabindex="8"><img src="/img/post/0__j206rgz3EuduI8bn.jpg" alt=""></figure>\n' +
+    '<p>可以看到有 Firefox, Edge, Chrome, Safari, IE 這五種瀏覽器各呈現不同的方塊。也各代表不同的渲染引擎：</p>\n' +
+    '<h3 id="css-prefix"><a class="direct-link" href="#css-prefix">#</a> CSS prefix</h3>\n' +
+    '<p>知道有這些渲染引擎有甚麼用？還記得有時候我們會做下面這件事情。也就是幫 CSS 的屬性加上 prefix</p>\n' +
+    '<p><a href="https://gist.github.com/9abe6552429875722405b74998825e3b">https://gist.github.com/9abe6552429875722405b74998825e3b</a></p>\n' +
+    '<p>看到前面的 prefix： <code>-webkit-</code>, <code>-moz-</code> 可能覺得有些眼熟。是的，這些 prefix 就是要寫給渲染引擎看的。有一些比較新或者是還沒被廣泛應用的 CSS 屬性需要加上 prefix 才可以在特定的瀏覽器正常運作。</p>\n' +
+    '<p>不過當去查資料時，會發現支援 chrome 還有 safari 的 prefix 都是 <code>-webkit-</code> ，這是因為 chrome 的引擎 Blink 是從 WebKit <a href="https://zh.wikipedia.org/wiki/WebKit#%E9%96%8B%E7%99%BC%E5%88%86%E8%A3%82">分出來的</a>。所以才會同樣使用 <code>-webkit-</code> ，不過由於實際上是不同的引擎，所以可能會遇到同樣的 CSS 屬性，webkit / Blink 引擎要加 prefix 但是另一個不用加的情形。</p>\n' +
+    '<h3 id="css-%E6%80%8E%E9%BA%BC%E5%B0%8E%E8%87%B4%E9%80%99%E7%A8%AE%E6%83%85%E5%BD%A2%E7%9A%84%EF%BC%9F"><a class="direct-link" href="#css-%E6%80%8E%E9%BA%BC%E5%B0%8E%E8%87%B4%E9%80%99%E7%A8%AE%E6%83%85%E5%BD%A2%E7%9A%84%EF%BC%9F">#</a> CSS 怎麼導致這種情形的？</h3>\n' +
+    '<p>講了那麼多，不過到底是甚麼屬性導致這些瀏覽器各自表態？我們看看 CSS 的原始碼。</p>\n' +
+    '<p><a href="https://gist.github.com/08528f98399d9daa91e00ecf1c7e8c18">https://gist.github.com/08528f98399d9daa91e00ecf1c7e8c18</a></p>\n' +
+    '<p>去掉置中的屬性，真正有趣的是 div 裡面的下面四個。</p>\n' +
+    '<p><a href="https://gist.github.com/e05825df9927e6228f3041d3ce72184b">https://gist.github.com/e05825df9927e6228f3041d3ce72184b</a></p>\n' +
+    '<p><code>width</code> 以及 <code>height</code> 賦予元素高度以及寬度。那 <code>outline</code> 做了些甚麼？我們看一下 <a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/outline-style">MDN</a> 上面的說法：</p>\n' +
+    '<blockquote>\n' +
+    '<p><em>An outline is a line that is drawn around an element, outside the border.</em></p>\n' +
+    '</blockquote>\n' +
+    '<p>outline 可以在 border 外面再加上邊框。而 <code>outline</code> 這個屬性是 <code>outline-style</code>, <code>outline-width</code>, <code>outline-color</code> 這三個屬性的簡寫。分別設定樣式、寬度還有顏色。 案例中的 <code>inset</code> 代表著 <a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/outline-style">outline 會是嵌入狀的樣式</a> 。</p>\n' +
+    '<figure tabindex="9"><img src="/img/post/0__5NPDlxYpxbvLVKcP.jpg" alt=""></figure>\n' +
+    '<p>而 <code>outline-offset</code> 則是設置 outline 的偏移，剛剛講說 outline 可以在 border 外面再加上邊框， <code>outline-offset</code> 的數值可以讓 border 跟 outline 之間新增距離，也就是 border 跟 outline 之間會有間距的意思。</p>\n' +
+    '<figure tabindex="10"><img src="/img/post/0__Iq3kO5DG9__Lu6l3Q.jpg" alt=""></figure>\n' +
+    '<blockquote>\n' +
+    '<p><em>可以看到 offset 增加了 border 跟 outline 之間的空間。</em></p>\n' +
+    '</blockquote>\n' +
+    '<p>那跟呈現剛剛那樣的形狀有甚麼關係？我們先關掉 <code>outline-offset</code> 看看結果。</p>\n' +
+    '<figure tabindex="11"><img src="/img/post/0__WmeLVd5rzByrYG9t.jpg" alt=""></figure>\n' +
+    '<p>可以看到其實蠻正常的，因為沒有 <code>border</code>，所以就是在一個空白的 <code>div</code> 外面加上粗度 100 的 <code>outline</code>，然後用 <code>inset</code> 的樣式。</p>\n' +
+    '<p>找到兇手了！就是 <code>outline-offset</code> ！</p>\n' +
+    '<figure tabindex="12"><img src="/img/post/0__tmHWGl807CtouMtY.jpg" alt=""></figure>\n' +
+    '<p>我們看看這 <code>outline-offset</code> 幹了甚麼好事。</p>\n' +
+    '<p><code>outline-offset: -125px;</code> 代表在 border 外面加上 <code>-125px</code> 的間距，這到底是甚麼意思？如果說正值是以 border 為準，從border 向外推 offset 的距離再開始新增 outline，那負值可以說是向內推再開始新增 outline。</p>\n' +
+    '<p><img src="/img/post/0__iwKcs65P8zYKsd__0.jpg" alt="">\n' +
+    '<img src="/img/post/0__swXYDgauMZvdFWCU.jpg" alt=""></p>\n' +
+    '<blockquote>\n' +
+    '<p><em>因為向內 30px 所以和 border 是同樣的位置，但是 outline 會在 border 之上，所以把 border 遮住了。</em></p>\n' +
+    '</blockquote>\n' +
+    '<p>如果我們把數值改成 <code>outline-offset: -50px;</code> 那會怎麼樣？</p>\n' +
+    '<figure tabindex="13"><img src="/img/post/0__W3XiCUbIyfTDO7CZ.jpg" alt=""></figure>\n' +
+    '<p>這個結果還算蠻合理的，寬和高都是 100px，所以 <code>outline-offset: -50px;</code> 會把整個 div 。那如果數值在繼續降低呢？讓我們繼續看下去。</p>\n' +
+    '<p><img src="/img/post/0__MkOcmyZnr6KsrFk0.jpg" alt="">\n' +
+    '<img src="/img/post/0__xwUfJfjHCodPvV8z.jpg" alt="">\n' +
+    '<img src="/img/post/0____3RJrP8pQdXqkItP.jpg" alt=""></p>\n' +
+    '<p>其實降低到比自身的大小還小我已經不知道發生甚麼事情了… 我想這應該可以說是一個 bug 吧（又者是彩蛋？）。不過可以看到其實數值小於 <code>-100</code> 就可以看到雛型了，數值特別設為 <code>-125</code> 應該只是為了美妙的圖案而已。</p>\n' +
+    '<p>上面的範例都是用 chrome 開啟的，因為 Blink 有自己的算法，小弟也不太清楚這塊，如果有人了解說是哪一個部分會處理到這塊或者是有一些方向歡迎私訊小弟…</p>\n' +
+    '<p>不過我們終於找到答案了，解開說為什麼只是一個 <code>div</code> 的 CSS 。竟然會導致在不同的瀏覽器有不同的圖案呈現：</p>\n' +
+    '<blockquote>\n' +
+    '<p><em>因為</em> <code>_outline-offset_</code> <em>的偏移設為負數，並且小於能夠縮退的自身的高度和寬度，導致渲染引擎的算法渲染出 不可理解的 特殊形狀，</em></p>\n' +
+    '</blockquote>\n' +
+    '<h3 id="%E7%B5%90%E8%AA%9E"><a class="direct-link" href="#%E7%B5%90%E8%AA%9E">#</a> 結語</h3>\n' +
+    '<p>看到這個 case 其實蠻有趣的，不過因為 twitter 上已經是 2018 的文章了，時代在進步，瀏覽器也在更新中，所以現在這個 case 在不同的瀏覽器上已經沒辦法完全渲染出不同的圖形了。</p>\n' +
+    '<p>這個東西可以應用在哪？請諒小弟才疏學淺…我也不知道，反正就是很酷就對了。不過我們可能可以嘗試更多不同的 CSS 屬性組合，找一些 CSS 數值的 edge case，可能也有相同的效果。</p>\n' +
+    '<p>如果有甚麼想法可以多多交流，有錯誤也歡迎在下面指正或者是留言。 Big guy is John，感謝各位收看。</p>\n' +
+    '<p><em>Originally published at</em> <a href="https://gist.github.com/1290f33eca120c10ff394ed1218a53cc"><em>http://github.com</em></a><em>.</em></p>\n',
+  groups: undefined
+]
+pureSummary
+<!-- 相同 CSS 但各瀏覽器不同渲染的結果，讓你知道渲染引擎如何運作 -->
+markdownComment
+相同 CSS 但各瀏覽器不同渲染的結果，讓你知道渲染引擎如何運作
+summaryMatchRes
+null
+summaryMatchRes
+[
+  '<!-- summary -->\n' +
+    '<p>如果拿 Server 來舉例（本篇主要講的內容也是指 server）， server 基本上就是一個程式，而這個程式運行之後其他人就可以透過網路連線到 Server 來拿資料。</p>\n' +
+    '<!-- summary -->',
+  '<p>如果拿 Server 來舉例（本篇主要講的內容也是指 server）， server 基本上就是一個程式，而這個程式運行之後其他人就可以透過網路連線到 Server 來拿資料。</p>',
+  index: 132,
+  input: '<h2 id="deploy-%E6%98%AF%E4%BB%80%E9%BA%BC"><a class="direct-link" href="#deploy-%E6%98%AF%E4%BB%80%E9%BA%BC">#</a> Deploy 是什麼</h2>\n' +
+    '<!-- summary -->\n' +
+    '<p>如果拿 Server 來舉例（本篇主要講的內容也是指 server）， server 基本上就是一個程式，而這個程式運行之後其他人就可以透過網路連線到 Server 來拿資料。</p>\n' +
+    '<!-- summary -->\n' +
+    '<p>而 Deploy，也就是部署，可以視為將已經寫好的程式使其運行的過程。</p>\n' +
+    '<p>可以這樣想，你今天在工廠製造了一台飲料販賣機，把這台販賣機搬到它應該被使用的位置，可能是籃球場旁邊，或者是河濱公園。但你的任務並不只是把它搬過去而已，所以你可能還要找電源幫它插電，甚至第一次還會需要幫它補充飲料，做一些設定等等。這些流程都在部署的範圍。</p>\n' +
+    '<p>但是在軟體上面的部署不用插電，而是需要設定我們使用的電腦，像是安裝作業意系統等，並且在電腦上處理好執行軟體需要的一些設定、或者是執行環境，最後在電腦上執行自己開發的程式。</p>\n' +
+    '<h2 id="%E9%83%A8%E7%BD%B2%E6%96%B9%E5%BC%8F%E7%9A%84%E5%BD%B1%E9%9F%BF"><a class="direct-link" href="#%E9%83%A8%E7%BD%B2%E6%96%B9%E5%BC%8F%E7%9A%84%E5%BD%B1%E9%9F%BF">#</a> 部署方式的影響</h2>\n' +
+    '<p>延續剛剛的比喻，你的飲料販賣機可能以不同的方式供電，<code>220V</code> 或者是 <code>110V</code>，甚至也可能可以吃直流電（比喻），但這些都不影響販賣機的功能還有提供的服務。不過不同的供電方式可能會帶來不同的優缺點像是攜帶性、經濟性等等。部署也一樣，不同的方式帶來的差異並不會影響 Server 的功能，但會影響到的會是：</p>\n' +
+    '<ul>\n' +
+    '<li>你的荷包或者說你老闆的荷包</li>\n' +
+    '<li>可擴充性</li>\n' +
+    '<li>部署的複雜度</li>\n' +
+    '<li>穩定度</li>\n' +
+    '<li>還有很多很多...</li>\n' +
+    '</ul>\n' +
+    '<p>而這些就是在選擇部署方式時需要去做的 Trade-off。那下面會簡單的介紹不同部署方式的一些特性，以及提一下有哪些產品屬於這些方式。</p>\n' +
+    '<h2 id="%E5%90%84%E7%A8%AE%E4%B8%8D%E5%90%8C%E7%9A%84%E9%83%A8%E7%BD%B2%E6%96%B9%E5%BC%8F"><a class="direct-link" href="#%E5%90%84%E7%A8%AE%E4%B8%8D%E5%90%8C%E7%9A%84%E9%83%A8%E7%BD%B2%E6%96%B9%E5%BC%8F">#</a> 各種不同的部署方式</h2>\n' +
+    '<h3 id="%E6%9C%AC%E5%9C%B0"><a class="direct-link" href="#%E6%9C%AC%E5%9C%B0">#</a> 本地</h3>\n' +
+    '<p>簡單說就是部署在你自己的電腦，一台真正你看得到、摸的到，還要幫它插電插網路線的電腦。當然現在已經比較少人這麼幹，大家都丟在各種雲端服務上面，但這麼 old school 的方式還是有他永遠無法取代的特點。</p>\n' +
+    '<blockquote>\n' +
+    '<p>你擁有自己的程式，而不是掌控在別人的手上</p>\n' +
+    '</blockquote>\n' +
+    '<p>把自己的東西緊握在手中，難道不是一種浪漫嗎？</p>\n' +
+    '<p>當然，浪漫要付出的代價可不小，得處理很多問題：像最初需要面臨的就是固定 IP、找個不會被踢到的地方放你的電腦、穩定的供電來源等等。其實如果能解決，部署一些小型的服務像 Blog 等並不是太差的選擇，而且還可以真正的去學習如何去設定 Linux、安裝環境等。</p>\n' +
+    '<p>但如果你只是想要簡單弄一個部落格，甚至是有商業上的需求，這已經不是推薦的作法了。畢竟雲端部署已經方便的太多。</p>\n' +
+    '<h3 id="%E9%9B%B2%E7%AB%AF%E4%B8%BB%E6%A9%9F"><a class="direct-link" href="#%E9%9B%B2%E7%AB%AF%E4%B8%BB%E6%A9%9F">#</a> 雲端主機</h3>\n' +
+    '<p>這就是很常聽到的 IaaS （Infrastructure as a Service，基礎建設即服務），基本上就是租電腦。你不用真正買一台電腦，選好自己需要的規格，像是 CPU 的核心數、記憶體的容量、硬碟的容量等，就能夠建立 instance（instance 就是我們租的電腦）。就像自己的電腦一樣，可以讓 server、資料庫或者是任何的程式在上面運行，雲端有很多好處：</p>\n' +
+    '<ol>\n' +
+    '<li>方便，你不用插電。辦個會員填個信用卡資料就好</li>\n' +
+    '<li>可靠性，你不會踢到插頭或者是機櫃</li>\n' +
+    '<li>便宜，同樣規格的主機你自己買起來至少也要破千</li>\n' +
+    '<li>彈性，想關就關、想擴充就擴充</li>\n' +
+    '<li>幫你弄好固定 IP，甚至還有 https</li>\n' +
+    '</ol>\n' +
+    '<p>而雲端主機的服務有：</p>\n' +
+    '<ul>\n' +
+    '<li>AWS 的 EC2（Amazon Elastic Compute Cloud）</li>\n' +
+    '<li>Google 的 Compute engine</li>\n' +
+    '<li>Azure Virtual Machined</li>\n' +
+    '<li>DigitalOcean Droplets</li>\n' +
+    '<li>Linode</li>\n' +
+    '</ul>\n' +
+    '<p>當然還有很多很多，族繁不及備載。</p>\n' +
+    '<p>雲端主機就像自己的電腦一樣。大部份的雲端主機都是會安裝好 OS 的，使用者可以透過 ssh 連線到 instance，然後使用 CLI 介面操作，來設定對應的執行環境，例如 node 等等。如果是當作網站的 Server 使用的話，還會需要設定像是防火牆，網路連線等等的東西才能夠讓外部網路連線雲端主機。然而這些設定並不容易，尤其是對於 Linux 生態不熟悉的使用者來說。</p>\n' +
+    '<p>除此之外，擴展性也是個問題，畢竟這就是一台電腦，就像如果你想要幫你的電腦換 CPU 或者是更大的 RAM，你就必須把主機關機，而雲端主機同樣的也需要主動的 terminate instance（終止實例，就是電腦關機），而關機就代表著無法提供 Server 的服務。（當然，可以透過多台電腦維持服務不中斷，不過不是這裡討論的範疇。）</p>\n' +
+    '<p>IaaS 雲端主機可以說是其他部署服務的基礎。在 IaaS 的基礎上，服務幫你多做一些事情，而想要建立下一個 Facebook 的你就可以少做一些事情，還能夠有更高的擴展性、更方便的佈署方式。這就是接下來的其他服務。</p>\n' +
+    '<figure tabindex="1"><img src="https://azurecomcdn.azureedge.net/cvt-665f0680393306b6d0a912671748e5cca6b061d55ecee48d4f985eaa8e15e6bf/images/page/overview/what-is-iaas/iaas-paas-saas.png" alt=""><figcaption>Azure 的雲端服務類型</figcaption></figure>\n' +
+    '<h3 id="paas"><a class="direct-link" href="#paas">#</a> PaaS</h3>\n' +
+    '<p>PaaS，Platform as a Service，平台即服務。設定環境真的很麻煩，我們都懂。有沒有一個地方能夠只讓我丟上去程式碼就可以執行，減少設定環境方面等等的事情？</p>\n' +
+    '<p>在 PaaS 服務裡面你不會需要親自去下載那些環境（例如 node），透過描述檔的方式來設定，而 PaaS 的服務就會依照你的描述檔幫你安裝環境，處理前面提到的網路連線等等的問題，並自動部署運行在前面提到的雲端主機上。</p>\n' +
+    '<p>環境的描述檔就像是這樣：</p>\n' +
+    `<pre class="language-yaml"><code class="language-yaml"><span class="token comment"># [START django_app]</span><br><span class="token key atrule">runtime</span><span class="token punctuation">:</span> python37<br><br><span class="token key atrule">handlers</span><span class="token punctuation">:</span><br><span class="token comment"># This configures Google App Engine to serve the files in the app's static</span><br><span class="token comment"># directory.</span><br><span class="token punctuation">-</span> <span class="token key atrule">url</span><span class="token punctuation">:</span> /static<br>  <span class="token key atrule">static_dir</span><span class="token punctuation">:</span> static/<br><br><span class="token comment"># This handler routes all requests not caught above to your main app. It is</span><br><span class="token comment"># required when static routes are defined, but can be omitted (along with</span><br><span class="token comment"># the entire handlers section) when there are no static files defined.</span><br><span class="token punctuation">-</span> <span class="token key atrule">url</span><span class="token punctuation">:</span> /.*<br>  <span class="token key atrule">script</span><span class="token punctuation">:</span> auto<br><span class="token comment"># [END django_app]</span></code></pre>\n` +
+    '<p>此外因為服務會自動幫你執行，所以能夠作到自動擴展。在你的 Server 需要的記憶體不夠時，能夠從 2G 自動升級 4G，在過剩時又能夠降回 2G。可以作到以時間，甚至流量為分割粒度來設定需求。</p>\n' +
+    '<p>總而言之，你只是把你的程式「部署」（某方面來說，甚至可以看做是簡單的「上傳」）到服務上，並寫好環境的描述檔，服務就會幫你處理好一切，Magic～</p>\n' +
+    '<p>而這類型的服務有：</p>\n' +
+    '<ul>\n' +
+    '<li>GCP App engine</li>\n' +
+    '<li>AWS Elastic Beanstalk</li>\n' +
+    '<li>Azure App Service</li>\n' +
+    '<li>Heroku</li>\n' +
+    '<li>Vercel</li>\n' +
+    '<li>還有很多很多...</li>\n' +
+    '</ul>\n' +
+    '<p>但這種很方便的東西一定是有 trade-off 的，一個是這樣的服務能提供的環境類型有限，如果有一位大神用 C++ 寫 Server，那這樣冷門的環境服務就大部分沒辦法提供，再來環境類型有限也意味著控制程度有限，沒辦法作到更詳細的設定。</p>\n' +
+    '<p>面對這樣的問題，容器化技術（Containerization）正好可以解決這樣的問題，而目前最知名的就是大名鼎鼎的 Docker。那什麼是 Docker 呢？</p>\n' +
+    '<h4 id="%E5%AE%B9%E5%99%A8%E5%8C%96%E6%8A%80%E8%A1%93%E8%88%87-docker"><a class="direct-link" href="#%E5%AE%B9%E5%99%A8%E5%8C%96%E6%8A%80%E8%A1%93%E8%88%87-docker">#</a> 容器化技術與 Docker</h4>\n' +
+    '<p>在過去，想要開一家餐廳就必須租一間店面、牽水電、弄灶台流理台櫃台、放置座椅等等。而如果我們的店要搬遷絕對是非常麻煩的事情，光設備就很有可能一台卡車搬不完了，更何況到新的店面還是需要牽水電、佈置電燈之類的。</p>\n' +
+    '<p>但如果只是要開一家小店，可能不用那麼累？我們都看過在路邊賣著漢堡而且讓你流口水的美式餐車，餐車可以使用發電機、攜帶水箱，還有使用攜帶式的爐灶。重點是，這些東西都被放在一台可愛的小卡車上，想去哪裡開店，就去哪裡開店。</p>\n' +
+    '<p>Docker 也是一樣的道理。我們可以把部署所需要的程式碼以及對應的環境，包含作業系統（ubuntu、Debian、Arch ...）、語言的執行環境（Node...）等等。通通包在一起丟到一個容器裡面，就像餐車把需要的設備通通放在卡車上一樣。有了這個容器，我們就不需要再設定環境了，想去哪台 server ，直接執行包好的容器就 OK 。</p>\n' +
+    '<p>這個概念特別適合 PaaS 的服務，原本 PaaS 只能提供特定環境，但有了 Docker，就可以脫離服務的限制，隨心所欲的將自己需要的環境包進 Docker，就能作到想幹嘛就幹嘛。</p>\n' +
+    '<p>大部分 PaaS 服務也除了內建的環境以外，都會提供使用 Docker 來作到更彈性的設定，像 GCP App engine 就可以使用下面的設定來使用 Docker。</p>\n' +
+    '<pre class="language-yaml"><code class="language-yaml"><span class="token key atrule">runtime</span><span class="token punctuation">:</span> flex</code></pre>\n' +
+    '<p>而 AWS 的 Elastic Beanstalk 也能夠設定<a href="https://docs.aws.amazon.com/zh_tw/elasticbeanstalk/latest/dg/create_deploy_docker.html">使用 Docker Image 來部署</a>，如果想要更精準的控制容器像是停止、啟動等等，則可以使用 <a href="https://aws.amazon.com/tw/ecs/faqs/">Elastic Container Service</a>。</p>\n' +
+    '<h4 id="kubernetes"><a class="direct-link" href="#kubernetes">#</a> Kubernetes</h4>\n' +
+    '<p>Kubernetes，唸作哭ㄅ捏題絲，簡稱 K8s。講到 Docker 就會有人提到 K8s，然後就會有人說：</p>\n' +
+    '<blockquote>\n' +
+    "<p>You don't F**kin need Kubernetes</p>\n" +
+    '</blockquote>\n' +
+    '<p>沒有很了解說具體 K8s 能作到哪些，但簡單可以想像成管理多個 Docker 的工具。各大廠也提供了服務，能夠執行 K8s 的 CaaS（Container as a Service）服務。像是：</p>\n' +
+    '<ul>\n' +
+    '<li>Google Kubernetes Engine</li>\n' +
+    '<li>Amazon Elastic Kubernetes Service</li>\n' +
+    '<li>Azure Kubernetes</li>\n' +
+    '</ul>\n' +
+    '<h3 id="faas"><a class="direct-link" href="#faas">#</a> FaaS</h3>\n' +
+    '<p>PaaS 還是有他的問題在。過去我們使用 Server 會讓 Server 運行，等待 Request 後再回傳 Response。但在沒有接收到 Request 時，就 Server 只是待命而已，並沒有實際的使用。但主機的錢還是照樣計算，要知道在雲端上，每一秒都是錢阿！</p>\n' +
+    '<p>於是就有了 FaaS （Function as a Service）的出現。這樣的服務同樣幫你做好環境了，也同樣只需要上傳程式碼。但不同的是，Function 並不是常時運行的。Function 能夠依照特定的事件（像是定時、或者是 Request 等）來去執行你設定好的程式。</p>\n' +
+    '<p>這樣的模式已經離和我們過去的方式大不相同了。過去我們有點像我們開一台機器持續的運轉，已經開好了，等待需要來就立即運作並提供需要的服務。而 FaaS 的方式就像每次需要的時候再開啟機器。這樣還是沒概念的話，平常使用的飲水機先把熱水燒好並且持續保溫，有需要就按下按鍵自動出水。但有一種瞬熱式飲水機，在有需要用熱水的時候才會瞬間加熱，並沒有常時的在保溫。</p>\n' +
+    '<p>這樣的模式會帶來什麼樣好處？</p>\n' +
+    '<ul>\n' +
+    '<li>相對便宜，畢竟有需要才會使用，執行的時間減少了。</li>\n' +
+    '</ul>\n' +
+    '<p>不過相對的也會帶來問題。每次都重新執行</p>\n' +
+    '<ul>\n' +
+    '<li>不適用於需要持久性連結的協議，例如 websocket</li>\n' +
+    '<li>每次的 function 之間是無狀態的，執行時的狀態（或者說資料）若不另外儲存，無法讓下一次的執行使用。</li>\n' +
+    '<li>Cold start：服務會有很高的延遲，因為每次執行時都是從頭開始執行，重新執行程式碼。</li>\n' +
+    '<li>畢竟是服務幫你設置環境的，所以控制權較低...？等等！</li>\n' +
+    '</ul>\n' +
+    '<p>環境控制權的問題有點既視感，沒錯，在 PaaS 也有同樣的問題，但這樣的問題也一樣能夠透過 Docker 來解決。</p>\n' +
+    '<p>這類型的服務有</p>\n' +
+    '<ul>\n' +
+    '<li>GCP cloud functions/ cloud run</li>\n' +
+    '<li>AWS Lambda / AWS Fargate</li>\n' +
+    '<li>Azure Functions Serverless Compute</li>\n' +
+    '</ul>\n' +
+    '<h2 id="%E7%B5%90%E8%AA%9E"><a class="direct-link" href="#%E7%B5%90%E8%AA%9E">#</a> 結語</h2>\n' +
+    '<p>這些不同的部署方式絕對不是越後面就越潮，什麼東西都用最潮 FaaS 服務來做絕對會非常痛苦（甚至根本做不出來）。在技術上的選用永遠是老話一句：選擇自己需求來決定說要使用哪些技術。</p>\n' +
+    '<p>消毒一下，這篇文章的解釋非常粗淺，要是希望用比較好懂的方式來解釋各種不同的部署方式還有雲端服務。還有舉例部份，並不代表完全列出該類型的服務，像是 FaaS 可能在 AWS 上不只有 Lambda 和 Fargate 這兩個服務，畢竟每家公司的產品五花八門，自己也沒有全盤的了解，沒辦法全部列出。</p>\n' +
+    '<p>如果解釋上有任何的問題，或者是舉例的錯誤也歡迎指出，會盡速做修改！感謝打給的收看～</p>\n' +
+    '<p>參考資料：</p>\n' +
+    '<ul>\n' +
+    '<li><a href="https://www.youtube.com/watch?v=uEVmD6n8Il0&amp;t=1s">7 Ways to Deploy a Node.js App</a>：簡單易懂解釋不同的 Deploy 方式</li>\n' +
+    '<li><a href="https://cloud.google.com/free/docs/aws-azure-gcp-service-comparison">Compare AWS and Azure services to Google Cloud</a></li>\n' +
+    '<li><a href="https://aws.amazon.com/cn/blogs/china/lambda-serverless/">带您玩转Lambda，轻松构建Serverless后台！</a></li>\n' +
+    '<li><a href="https://cynthiachuang.github.io/Difference-between-IaaS-PaaS-SaaS-and-FaaS/">雲端計算 IaaS、PaaS、SaaS 與 FaaS</a></li>\n' +
+    '<li><a href="https://azure.microsoft.com/zh-tw/overview/what-is-paas/">何謂 PaaS？</a></li>\n' +
+    '</ul>\n',
+  groups: undefined
+]
+pureSummary
+如果拿 Server 來舉例（本篇主要講的內容也是指 server）， server 基本上就是一個程式，而這個程式運行之後其他人就可以透過網路連線到 Server 來拿資料。
+summaryMatchRes
+null
+summaryMatchRes
+null
+summaryMatchRes
+null
+summaryMatchRes
+null
+summaryMatchRes
+null
+summaryMatchRes
+null
+summaryMatchRes
+[
+  '<!-- summary -->\n' +
+    '<!-- 除了拿 DOM element 還有存變數外，更全面的了解 Ref 一點點 -->\n' +
+    '<!-- summary -->',
+  '<!-- 除了拿 DOM element 還有存變數外，更全面的了解 Ref 一點點 -->',
+  index: 0,
+  input: '<!-- summary -->\n' +
+    '<!-- 除了拿 DOM element 還有存變數外，更全面的了解 Ref 一點點 -->\n' +
+    '<!-- summary -->\n' +
+    '<h1 id="react-ref-%E7%9A%84%E4%B8%80%E9%BB%9E%E7%A0%94%E7%A9%B6"><a class="direct-link" href="#react-ref-%E7%9A%84%E4%B8%80%E9%BB%9E%E7%A0%94%E7%A9%B6">#</a> React Ref 的一點研究</h1>\n' +
+    '<blockquote>\n' +
+    '<p>A JavaScript library for building user interfaces</p>\n' +
+    '</blockquote>\n' +
+    '<p>React 是狀態和 UI 的 Library 我們都知道，使用了 React 可以這樣思考：每一個狀態都會產生出對應的 UI。使用了 React 之後，就很少使用像是 DOM 的原生 API 來操作元素了，但還是會有需要直接從 DOM 元素取得資料或者是操作的情境，這時候就是使用 ref 的時候。</p>\n' +
+    '<p>React ref 就是一個可以直接操作 DOM 的出口，透過 <code>createRef</code> / <code>useRef</code>，以及將 ref 作為 props 放入 DOM element ，能透過 ref 直接操作 DOM。就像下面 React <a href="https://reactjs.org/docs/hooks-reference.html#useref">官方文件</a> 中 hooks 的範例：</p>\n' +
+    '<pre class="language-js"><code class="language-js"><span class="token keyword">function</span> <span class="token function">TextInputWithFocusButton</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><br>  <span class="token keyword">const</span> inputEl <span class="token operator">=</span> <span class="token function">useRef</span><span class="token punctuation">(</span><span class="token keyword">null</span><span class="token punctuation">)</span><span class="token punctuation">;</span><br>  <span class="token keyword">const</span> <span class="token function-variable function">onButtonClick</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span><br>    <span class="token comment">// `current` points to the mounted text input element</span><br>    inputEl<span class="token punctuation">.</span>current<span class="token punctuation">.</span><span class="token function">focus</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><br>  <span class="token punctuation">}</span><span class="token punctuation">;</span><br>  <span class="token keyword">return</span> <span class="token punctuation">(</span><br>    <span class="token operator">&lt;</span><span class="token operator">></span><br>      <span class="token operator">&lt;</span>input ref<span class="token operator">=</span><span class="token punctuation">{</span>inputEl<span class="token punctuation">}</span> type<span class="token operator">=</span><span class="token string">"text"</span> <span class="token operator">/</span><span class="token operator">></span><br>      <span class="token operator">&lt;</span>button onClick<span class="token operator">=</span><span class="token punctuation">{</span>onButtonClick<span class="token punctuation">}</span><span class="token operator">></span>Focus the input<span class="token operator">&lt;</span><span class="token operator">/</span>button<span class="token operator">></span><br>    <span class="token operator">&lt;</span><span class="token operator">/</span><span class="token operator">></span><br>  <span class="token punctuation">)</span><span class="token punctuation">;</span><br><span class="token punctuation">}</span></code></pre>\n' +
+    '<p>我們直接透過 <code>input.current</code>，來使用 DOM 的 method。雖然上面是 Hooks 的範例，但其實在 Class component 也沒什麼不同，只是從在 function 中宣告變數變成 class 的內部屬性而已。</p>\n' +
+    '<pre class="language-js"><code class="language-js"><span class="token keyword">class</span> <span class="token class-name">TextInputWithFocusButton</span> <span class="token keyword">extends</span> <span class="token class-name">React<span class="token punctuation">.</span>Component</span> <span class="token punctuation">{</span><br>  <span class="token function">constructor</span><span class="token punctuation">(</span><span class="token parameter">props</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><br>    <span class="token keyword">super</span><span class="token punctuation">(</span>props<span class="token punctuation">)</span><span class="token punctuation">;</span><br>    <span class="token keyword">this</span><span class="token punctuation">.</span>inutEl <span class="token operator">=</span> React<span class="token punctuation">.</span><span class="token function">createRef</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  <br>\t<span class="token keyword">this</span><span class="token punctuation">.</span>handleClick <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">handleClick</span><span class="token punctuation">.</span><span class="token function">bind</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">)</span><br>  <span class="token punctuation">}</span><br>  <br>  <span class="token function">onButtonClick</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><br>\t<span class="token keyword">this</span><span class="token punctuation">.</span>inputEl<span class="token punctuation">.</span>current<span class="token punctuation">.</span><span class="token function">focus</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><br>  <span class="token punctuation">}</span><br>  <br>  <span class="token function">render</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><br>    <span class="token keyword">return</span> <span class="token operator">&lt;</span><span class="token operator">></span><br>      <span class="token operator">&lt;</span>input ref<span class="token operator">=</span><span class="token punctuation">{</span><span class="token keyword">this</span><span class="token punctuation">.</span>inputEl<span class="token punctuation">}</span> type<span class="token operator">=</span><span class="token string">"text"</span> <span class="token operator">/</span><span class="token operator">></span><br>      <span class="token operator">&lt;</span>button onClick<span class="token operator">=</span><span class="token punctuation">{</span>onButtonClick<span class="token punctuation">}</span><span class="token operator">></span>Focus the input<span class="token operator">&lt;</span><span class="token operator">/</span>button<span class="token operator">></span><br>    <span class="token operator">&lt;</span><span class="token operator">/</span><span class="token operator">></span>  <span class="token punctuation">}</span><br><span class="token punctuation">}</span></code></pre>\n' +
+    '<p>另外一個會用到的 ref 的地方是，當你希望儲存一個不會影響 ui 的狀態的時候。在 React 中，每次 state 的改變都會造成 Rerender，進而改變 UI，但並不是每次都會想要這樣。這時候就能夠把值儲存在 ref 裡面：</p>\n' +
+    '<pre class="language-js"><code class="language-js"><span class="token keyword">function</span> <span class="token function">notRefreshCounter</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><br>\t<span class="token keyword">const</span> counterRef <span class="token operator">=</span> <span class="token function">useRef</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span><br>\t<br>\t<span class="token keyword">const</span> <span class="token function-variable function">onClick</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span><br>\t\tcounterRef<span class="token punctuation">.</span>current<span class="token operator">++</span>\t<br>\t<span class="token punctuation">}</span>\t<br>\t<br>\t<span class="token keyword">const</span> <span class="token function-variable function">onPrint</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span><br>\t<br>\t<span class="token punctuation">}</span><br>\t<span class="token keyword">return</span> <span class="token operator">&lt;</span>div<span class="token operator">></span><br>\t\t<span class="token operator">&lt;</span>button <span class="token parameter">onClick</span><span class="token operator">=></span>add <span class="token number">1</span><span class="token operator">&lt;</span><span class="token operator">/</span>button<span class="token operator">></span><br>\t<span class="token operator">&lt;</span><span class="token operator">/</span>div<span class="token operator">></span><br><span class="token punctuation">}</span></code></pre>\n' +
+    '<p>好的，比較基本的用法大概就是這樣了，那可以來談談一些比較有趣的用法。</p>\n' +
+    '<h2 id="callback-ref"><a class="direct-link" href="#callback-ref">#</a> Callback Ref</h2>\n' +
+    '<p>剛剛我們在使用 ref 的時候可以分為兩種用法</p>\n' +
+    '<ol>\n' +
+    '<li>透過將 ref 放入 react element（jsx 語法建立的）的 props，可以操作 element 上面的方法或者讀取屬性。</li>\n' +
+    '<li>儲存不影響 UI 的值。</li>\n' +
+    '</ol>\n' +
+    '<p>雖然講的是 ref，但其實第一種用法我們是透過兩個東西來做到的：</p>\n' +
+    '<ul>\n' +
+    '<li>create Ref 的 API，不論是 <code>React.createRef</code> 還是 <code>React.useRef</code></li>\n' +
+    '<li>React element 上面的  ref 屬性</li>\n' +
+    '</ul>\n' +
+    '<p>然而 React element 的 ref 屬性除了接受 <code>createRef</code> / <code>useRef</code>  以外，還可以接受function 的形式，\t並能夠帶來更大的彈性。</p>\n' +
+    '<pre class="language-js"><code class="language-js"><br><span class="token keyword">function</span> <span class="token function">AutoSelectInput</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><br>  <span class="token keyword">const</span> <span class="token punctuation">[</span>_<span class="token punctuation">,</span> refresh<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token function">useState</span><span cl'... 77704 more characters,
+  groups: undefined
+]
+pureSummary
+<!-- 除了拿 DOM element 還有存變數外，更全面的了解 Ref 一點點 -->
+markdownComment
+除了拿 DOM element 還有存變數外，更全面的了解 Ref 一點點
+summaryMatchRes
+null
+Writing _site/favicon.svg from ./favicon.svg.njk.
+Writing _site/sitemap.xml from ./sitemap.xml.njk.
+Writing _site/feed/feed.xml from ./feed/feed.njk.
+Writing _site/feed/.htaccess from ./feed/htaccess.njk.
+Writing _site/feed/feed.json from ./feed/json.njk.
+Writing _site/about/index.html from ./about/index.md.
+Writing _site/posts/index.html from ./archive.njk.
+Writing _site/404.html from ./404.md.
+Writing _site/page-list/index.html from ./page-list.njk.
+Writing _site/tags/index.html from ./tags-list.njk.
+Writing _site/index.html from ./index.njk.
+Writing _site/tag/personal/index.html from ./tags.njk.
+Writing _site/posts/deploy-on-aws/index.html from ./posts/deploy-on-aws.md.
+Writing _site/posts/mini-database-acid/index.html from ./posts/mini-database-acid.md.
+Writing _site/posts/inside-look-modern-browser/index.html from ./posts/inside-look-modern-browser.md.
+Writing _site/posts/mini-jsonp/index.html from ./posts/mini-jsonp.md.
+Writing _site/posts/mini-sql-injection/index.html from ./posts/mini-sql-injection.md.
+Writing _site/posts/react-batch-update/index.html from ./posts/react-batch-update.md.
+Writing _site/posts/react-ref-reference/index.html from ./posts/react-ref-reference.md.
+Writing _site/posts/mini-why-iife/index.html from ./posts/mini-why-iife.md.
+Writing _site/posts/redirect-status-code/index.html from ./posts/redirect-status-code.md.
+Writing _site/posts/about-2020-2021/index.html from ./posts/about-2020-2021.md.
+Writing _site/posts/about-writing/index.html from ./posts/about-writing.md.
+Writing _site/page-list/1/index.html from ./page-list.njk.
+Writing _site/articles/1/index.html from ./index.njk.
+Writing _site/tag/css/index.html from ./tags.njk.
+Writing _site/posts/deploy-and-cloud/index.html from ./posts/deploy-and-cloud.md.
+Writing _site/posts/mini-safe-method-idempotent-method/index.html from ./posts/mini-safe-method-idempotent-method.md.
+Writing _site/posts/what-is-api/index.html from ./posts/what-is-api.md.
+Writing _site/posts/1-div-4-css/index.html from ./posts/1-div-4-css.md.
+Writing _site/tag/browser/index.html from ./tags.njk.
+Writing _site/tag/deploy/index.html from ./tags.njk.
+Writing _site/tag/database/index.html from ./tags.njk.
+Writing _site/tag/javascript/index.html from ./tags.njk.
+Writing _site/tag/http/index.html from ./tags.njk.
+Writing _site/tag/security/index.html from ./tags.njk.
+Writing _site/tag/react/index.html from ./tags.njk.
+Copied 86 files / Wrote 37 files in 14.43 seconds (390.0ms each, v0.12.1)
