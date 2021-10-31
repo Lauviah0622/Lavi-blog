@@ -14,8 +14,7 @@
     "js-build-watch": "rollup -c rollup.config.js -w",
     "debug": "DEBUG=* eleventy && npm run test",
     "test": "mocha test/test*.js",
-    "test-watch": "mocha test/test*.js --watch",
-    "tailwind": "npx tailwindcss -i css/tailwind.css -o css/bundle.css --minify"
+    "test-watch": "mocha test/test*.js --watch"
   },
   "pre-push": [
     "build"
