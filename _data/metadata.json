@@ -2,12 +2,12 @@
   "title": "Apprentice Log",
   "url": "https://lavi-blog.vercel.app",
   "domain": "lavi-blog.vercel.app",
-  "description": "Description of the website. Update me.",
-  "genre": "Insert a schema.org genre",
+  "description": "工程師學徒的一點記錄",
+  "genre": "tech",
   "googleAnalyticsId": "GA ID. Update me. Note, that this is not compatible with the not-yet-commonly used version 4 of Google Analytics",
   "sendWebVitals": false,
   "feed": {
-    "subtitle": "Subtitle. Update me.",
+    "subtitle": "工程師學徒的一點記錄",
     "filename": "feed.xml",
     "path": "/feed/feed.xml",
     "id": "https://lavi-blog.vercel.app"

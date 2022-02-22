@@ -587,13 +587,16 @@ blockquote > ol,
   blockquote > ul {
     padding: 0;
   }
+blockquote pre {
+    margin: 0;
+  }
 code {
   font-size: 0.9em;
   font-family: var(--font-family-mono);
 }
 *:not(pre) > code {
   display: inline-block;
-  padding: 0.2ch;
+  padding: .4ch .5ch;
   background-color: var(--color-bg-reverse);
   color: var(--color-text-reverse);
   border-radius: 0.4ch;
@@ -603,8 +606,8 @@ code {
 pre {
   background-color: var(--color-bg-reverse);
   color: var(--color-text-reverse);
-  margin: 1.2rem -2rem;
-  padding: 1.2rem 2rem;
+  margin: 1.2rem -1.5rem;
+  padding: 1.2rem 1.5rem;
   border-radius: var(--block-border-radius);
   font-size: 0.9em;
   line-height: inherit;
@@ -667,21 +670,6 @@ dialog {
   height: min-content;
 }
 /* ================== class  ================== */
-body:not(.dark-theme) #light {
-    display: none;
-  }
-body.dark-theme #dark {
-      display: none;
-    }
-body.dark-theme #light {
-      display: block;
-    }
-body.dark-theme img {
-      filter: brightness(0.8) contrast(1.2);
-    }
-body.dark-theme .post__content h1 a[href^="#"], body.dark-theme .post__content h2 a[href^="#"], body.dark-theme .post__content h3 a[href^="#"], body.dark-theme .post__content h5 a[href^="#"], body.dark-theme .post__content h4 a[href^="#"], body.dark-theme .post__content h6 a[href^="#"] {
-          color: var(--color-secondary);
-        }
 @media (prefers-color-scheme: dark) {
   #light {
     display: block;
@@ -695,7 +683,29 @@ body.dark-theme .post__content h1 a[href^="#"], body.dark-theme .post__content h
   #dark {
     display: block;
   }
+
+  img {
+    filter: none;
+  }
 }
+body:not(.dark-theme) #light {
+    display: none;
+  }
+body:not(.dark-theme) img {
+      filter: none;
+    }
+body.dark-theme #dark {
+      display: none;
+    }
+body.dark-theme #light {
+      display: block;
+    }
+body.dark-theme img {
+      filter: brightness(0.8) contrast(1.2);
+    }
+body.dark-theme .post__content h1 a[href^="#"], body.dark-theme .post__content h2 a[href^="#"], body.dark-theme .post__content h3 a[href^="#"], body.dark-theme .post__content h5 a[href^="#"], body.dark-theme .post__content h4 a[href^="#"], body.dark-theme .post__content h6 a[href^="#"] {
+          color: var(--color-secondary);
+        }
 .center {
   --max-width: 63ch;
   width: 100%;
@@ -1116,7 +1126,7 @@ hr {
 .post__content img {
     max-height: 50vh;
     width: auto;
-
+    max-width: 100%;
     margin: 0 auto;
   }
 .token.block-comment,

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 	<title>Apprentice Log</title>
-	<subtitle>Subtitle. Update me.</subtitle>
+	<subtitle>工程師學徒的一點記錄</subtitle>
 	
 	<link href="https://lavi-blog.vercel.app/feed/feed.xml" rel="self"/>
 	<link href="https://lavi-blog.vercel.app"/>
@@ -2169,8 +2169,12 @@ Ssh (Secure Shell) 是一種協定，可以用來作為 client 跟 server 的連
 		<updated>2021-10-31T00:00:00Z</updated>
 		<id>https://lavi-blog.vercel.app/posts/blog-log/</id>
 		<content type="html">
-		  &lt;p&gt;最近剛架好部落格，來分享一下自己的心得。&lt;/p&gt;
-&lt;p&gt;最近一個月左右的時間都在架設部洛格，利用這篇把回顧一下過程，也記錄一下心得。&lt;/p&gt;
+		  &lt;h2 id=&quot;td%3Blr&quot;&gt;&lt;a class=&quot;direct-link&quot; href=&quot;https://lavi-blog.vercel.app/posts/blog-log/#td%3Blr&quot;&gt;#&lt;/a&gt; TD;LR&lt;/h2&gt;
+&lt;!-- summary --&gt;
+&lt;p&gt;從規劃、設計、開發到部署，簡單談談用 eleventy 架設部落的心得。&lt;/p&gt;
+&lt;!-- summary --&gt;
+&lt;hr /&gt;
+&lt;p&gt;最近一個月左右的時間都在架設部落格，利用這篇回顧一下過程，也記錄一下心得。&lt;/p&gt;
 &lt;p&gt;在正式開始前先提一下為什麼決定自己架部落格好了。&lt;/p&gt;
 &lt;p&gt;自己過去有在 Medium 還有 CoderBridge 放一些內容，在 Medium 平台上寫技術文章的問題，在網路上有已經有非常多的討論，可以左轉 Huli 的&lt;a href=&quot;https://hulitw.medium.com/do-you-really-want-to-write-tech-blog-on-medium-3dd25640f26c&quot;&gt;在 Medium 上寫技術文章，你確定嗎？&lt;/a&gt;或其他文章。&lt;/p&gt;
 &lt;p&gt;不過對於自己而言問題 Medium 主要體現在兩個部分：寫文章體驗、沒有文章列表和分類。&lt;/p&gt;
@@ -2179,7 +2183,7 @@ Ssh (Secure Shell) 是一種協定，可以用來作為 client 跟 server 的連
 &lt;p&gt;Medium 這個平台的推力對於自己主要就是這兩項，其他比較常提到的 SEO、搬家麻煩等等的問題其實對我而言也沒有那麼嚴重。自己本來文章就不多，搬家的過程其實並沒有想像中的那麼困難（後面會提到如何搬家），SEO 部分沒什麼流量所以還不需要擔心。&lt;/p&gt;
 &lt;p&gt;再來是 CoderBridge ，CoderBridge 的確是蠻方便的平台，功能上也很完整，沒甚麼好挑剔的，蠻推薦初期想要寫自己的技術文章但是還沒有能力或懶得建立自己部落格的人，自己大多的技術文章也都放在上面。&lt;/p&gt;
 &lt;p&gt;不過做為工程師到了一個程度之後就會開始想要架設自己的部落格，一方面可以累積一些內容，還有之前在面試的時候就有被問到為什麼沒有自己架設，這樣的問題不管怎麼回答都是滿滿的尷尬。&lt;/p&gt;
-&lt;p&gt;另外一點是，總覺得自己的部落格算是一個工程師技術能力上的證明，在處理部落格的過程中，從前端、&lt;s&gt;後端&lt;/s&gt;（不，根本沒有）、部署都能夠接觸到，也能夠踩到一些坑還有處理問題，也算是不錯的經歷。有個平台&lt;/p&gt;
+&lt;p&gt;另外一點是，總覺得自己的部落格算是一個工程師技術能力上的證明，在處理部落格的過程中，從前端、&lt;s&gt;後端&lt;/s&gt;（不，根本沒有）、部署都能夠接觸到，也能夠踩到一些坑還有處理問題，也算是不錯的經歷。也有個平台可以累積內容。&lt;/p&gt;
 &lt;p&gt;好了，建立部落格的原因大概講到這裡，正文開始。&lt;/p&gt;
 &lt;h2 id=&quot;%E5%B7%A5%E5%85%B7%E6%A3%A7&quot;&gt;&lt;a class=&quot;direct-link&quot; href=&quot;https://lavi-blog.vercel.app/posts/blog-log/#%E5%B7%A5%E5%85%B7%E6%A3%A7&quot;&gt;#&lt;/a&gt; 工具棧&lt;/h2&gt;
 &lt;p&gt;整個部落格大概有五個步驟：規劃、設計、開發、搬家、部署，這篇文章也大概會依照這樣的脈絡下去敘述。&lt;/p&gt;
@@ -2198,17 +2202,17 @@ Ssh (Secure Shell) 是一種協定，可以用來作為 client 跟 server 的連
 &lt;li&gt;archive 文章列表&lt;/li&gt;
 &lt;li&gt;post 文章頁面&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;另外，除了頁面之後，也需要列出每一頁共同區塊。像是最基本的 Footer 和 Header 的資訊架構。列出資訊架構後，在後面的設計與開發，基本上會依照這些頁面和區塊作為基本單位去執行。&lt;/p&gt;
+&lt;p&gt;另外，除了頁面之後，也需要列出每一頁共同區塊。像是最基本的 Footer 和 Header 的資訊架構。列出資訊架構後，在後面的設計與開發，會依照這些頁面和區塊作為基本單位去執行。&lt;/p&gt;
 &lt;h2 id=&quot;%E8%A8%AD%E8%A8%88&quot;&gt;&lt;a class=&quot;direct-link&quot; href=&quot;https://lavi-blog.vercel.app/posts/blog-log/#%E8%A8%AD%E8%A8%88&quot;&gt;#&lt;/a&gt; 設計&lt;/h2&gt;
 &lt;p&gt;在軟體上是用 Figma。至於設計的流程部分，自己不是什麼正統的設計師，並沒有非常嚴謹清楚的方法論，只是分享下個人經驗。&lt;/p&gt;
 &lt;p&gt;自己在設計上的順序是這樣：&lt;/p&gt;
 &lt;ol&gt;
-&lt;li&gt;顏色和字體：自己覺得會決定整個網頁的調性&lt;/li&gt;
+&lt;li&gt;顏色和字體：自己認為會決定整個網頁的調性&lt;/li&gt;
 &lt;li&gt;文章中的出現的元素&lt;/li&gt;
 &lt;li&gt;將元素微調，組合成各個頁面需要的功能&lt;/li&gt;
 &lt;/ol&gt;
 &lt;h3 id=&quot;%E8%89%B2%E5%BD%A9%E5%92%8C%E5%AD%97%E9%AB%94&quot;&gt;&lt;a class=&quot;direct-link&quot; href=&quot;https://lavi-blog.vercel.app/posts/blog-log/#%E8%89%B2%E5%BD%A9%E5%92%8C%E5%AD%97%E9%AB%94&quot;&gt;#&lt;/a&gt; 色彩和字體&lt;/h3&gt;
-&lt;p&gt;起初是希望走比較乾淨的風格，但又不要太嚴肅（希望有做到）。所以在字體上就先決定用無襯線體作為主要的文字，在小部分預計用襯線體則作點綴。&lt;/p&gt;
+&lt;p&gt;起初是希望走比較乾淨的風格，但又不要太嚴肅（希望有做到）。所以在字體上就先決定用無襯線體作為主要的文字，在比較細節的部分則用襯線體做為點綴。&lt;/p&gt;
 &lt;p&gt;色彩部分，定義了這些顏色：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Primary：主色&lt;/li&gt;
@@ -2223,9 +2227,9 @@ Ssh (Secure Shell) 是一種協定，可以用來作為 client 跟 server 的連
 &lt;figure tabindex=&quot;1&quot;&gt;&lt;img src=&quot;https://lavi-blog.vercel.app/img/post/blog-log/Pasted%20image%2020211026222438.png&quot; alt=&quot;&quot; /&gt;&lt;/figure&gt;
 &lt;p&gt;在這個階段會先做一個非非常簡單的文章 Mockup，能夠比較好想像顏色組合的結果，也可以先在這個階段初步的避免掉易讀性的問題。&lt;/p&gt;
 &lt;figure tabindex=&quot;2&quot;&gt;&lt;img src=&quot;https://lavi-blog.vercel.app/img/post/blog-log/Pasted%20image%2020211026222708.png&quot; alt=&quot;&quot; /&gt;&lt;/figure&gt;
-&lt;p&gt;在這個階段自己顏色只是抓一個方向，在最後開發的時候還會在明度、彩度上根據易讀性作更精細的調整。&lt;/p&gt;
+&lt;p&gt;在這個階段只是抓一個方向，在最後開發的時候還會在明度、彩度上根據易讀性作更細節的調整。&lt;/p&gt;
 &lt;h3 id=&quot;%E5%85%83%E7%B4%A0&quot;&gt;&lt;a class=&quot;direct-link&quot; href=&quot;https://lavi-blog.vercel.app/posts/blog-log/#%E5%85%83%E7%B4%A0&quot;&gt;#&lt;/a&gt; 元素&lt;/h3&gt;
-&lt;p&gt;設計過程比較特別部分在於，自己是先從文章內容中的元素開始設計，文章中有哪些元素呢？這並不是太難的問題，基本上 Markdown 裡面有哪些元素，文章中就有哪些，可以找一些 markdown-demo 來確定有哪些元素。這邊簡單列舉&lt;/p&gt;
+&lt;p&gt;設計過程比較特別部分在於，自己是先從文章內容中的元素開始設計，文章中有哪些元素呢？這並不是太難的問題，基本上 Markdown 裡面有哪些元素，文章中就有哪些，可以找一些 markdown-demo 來確定有哪些元素。這邊簡單列舉：&lt;/p&gt;
 &lt;p&gt;行內元素樣式：&lt;strong&gt;粗體&lt;/strong&gt;、&lt;em&gt;斜體&lt;/em&gt;、&lt;s&gt;橫線&lt;/s&gt;、&lt;a href=&quot;https://lavi-blog.vercel.app/posts/blog-log/&quot;&gt;連結&lt;/a&gt;、&lt;code&gt;code&lt;/code&gt;等&lt;/p&gt;
 &lt;p&gt;區塊元素樣式：&lt;/p&gt;
 &lt;ul&gt;
@@ -2240,7 +2244,7 @@ Ssh (Secure Shell) 是一種協定，可以用來作為 client 跟 server 的連
 &lt;p&gt;在設計區塊樣式時，除了要滿足單一元素的使用情境，而凸顯元素使用情境的方式在於和其他元素之間做出區別。&lt;/p&gt;
 &lt;p&gt;在設計的時候可以先把最簡單的內文段落（paragraph）樣式設定出來（包含字距、行距等），然後把內文作為最基礎的樣式來做變化。&lt;/p&gt;
 &lt;p&gt;像是清單（order list/ unordered list） 主要的目的是要能夠清楚的列出項目，那在行距上就需要再大一點，來和內文做出區別。&lt;/p&gt;
-&lt;p&gt;還有像引用區塊的文字，本身視覺上是不是真的帶來「引用」的感覺（通常的設計在左邊會有直線，或者是放在方框裡面），並和普通的段落有所區別。都是在設計的時候需要思考的。&lt;/p&gt;
+&lt;p&gt;還有像引用區塊的文字，本身視覺上是不是真的帶來「引用」的感覺（通常的設計在左邊會有直線，或者是放在方框裡面），並和普通的段落有所區別。&lt;/p&gt;
 &lt;p&gt;除了個別的樣式外，在區塊會有兩不同類型的互動，一種是相鄰，另一種是嵌套。&lt;/p&gt;
 &lt;p&gt;在兩相鄰區塊的設計上，就必須要注意區塊間距的拿捏，需要在比行距還要大、但又不能過大導致太分離難以閱讀。而在嵌套上，像是 list 和 quoteblock 能夠再包住其他區塊像是其他 list，這時如何同時內外兩層元素樣式的融合是需要思考的部分。&lt;/p&gt;
 &lt;p&gt;在使用 Figma 設計時有一個訣竅，可以上述每個元素都做成 Figma 的 Component，並在旁邊直接互相組合排列，模擬真實的文章，來檢視自己的設計。&lt;/p&gt;
@@ -2250,17 +2254,17 @@ Ssh (Secure Shell) 是一種協定，可以用來作為 client 跟 server 的連
 &lt;figure tabindex=&quot;4&quot;&gt;&lt;img src=&quot;https://lavi-blog.vercel.app/img/post/blog-log/Pasted%20image%2020211027220350.png&quot; alt=&quot;&quot; /&gt;&lt;/figure&gt;
 &lt;p&gt;而在每個文章項目都是由原本文章中的元素（標題、內文段落等等）做樣式上的調整後再進行組合。&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;在文章標題上，就直接採用 H1 標題的樣式&lt;/li&gt;
+&lt;li&gt;在文章標題上，就直接採用 h1 標題的樣式&lt;/li&gt;
 &lt;li&gt;標籤則是連結的樣式，所以帶有 &lt;code&gt;hever:underline&lt;/code&gt; 的效果&lt;/li&gt;
 &lt;li&gt;時間上，基本上是內文段落的樣式（顏色、字距）但使用襯線體的字型做出區別&lt;/li&gt;
 &lt;li&gt;概要也是內文段落的樣式，但運用顏色做出區別&lt;/li&gt;
 &lt;li&gt;分隔線就直接採用文章的分隔線&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;除此之外不同頁面之間的元件，如果資訊架構上相似的話，也是可以共用的。像是自己的主頁文章列表和標籤文章列表的樣式基本上就沒有太大差異，只是缺少了上方的 tag 而已。&lt;/p&gt;
+&lt;p&gt;除此之外不同頁面之間的元件，如果資訊架構上相似的話，也是可以共用的。像主頁文章列表和標籤文章列表的樣式基本上就沒有太大差異，只是缺少了上方的 tag 而已。&lt;/p&gt;
 &lt;figure tabindex=&quot;5&quot;&gt;&lt;img src=&quot;https://lavi-blog.vercel.app/img/post/blog-log/Pasted%20image%2020211027232241.png&quot; alt=&quot;&quot; /&gt;&lt;figcaption&gt;標籤頁文章列表&lt;/figcaption&gt;&lt;/figure&gt;
 &lt;p&gt;將元素重組的好處一來是省時間，二來是整體的樣式會比較一致，當然缺點就是看起來會比較呆板無變化。相信好的設計還是能夠在樣式和一致性上取得平衡，但自己能力有限，也希望讀者把注意放在文章上，樣式的變化就比較次之。&lt;/p&gt;
 &lt;h2 id=&quot;%E9%96%8B%E7%99%BC&quot;&gt;&lt;a class=&quot;direct-link&quot; href=&quot;https://lavi-blog.vercel.app/posts/blog-log/#%E9%96%8B%E7%99%BC&quot;&gt;#&lt;/a&gt; 開發&lt;/h2&gt;
-&lt;p&gt;再來是開發，這裡先提一下使用到的開發上使用的工具。自己在開發上是用 eleventy 這個 stactic site generator（後面簡稱 11ty）。一開始其實沒想過這個選擇，身為 React 仔，一開始的方案其實是朝 Gatsby 或者是 Next，覺得還可以順便寫熟悉的 React 根本是一舉兩得，不過拖延症卻讓自己遲遲還沒開始動工。&lt;/p&gt;
+&lt;p&gt;再來是開發，這裡先提一下使用到的開發上使用的工具。自己在開發上是用 eleventy 這個 static site generator（後面簡稱 11ty）。一開始其實沒想過這個選擇，身為 React 仔，一開始的方案其實是朝 Gatsby 或者是 Next，覺得還可以順便寫熟悉的 React 根本是一舉兩得，不過拖延症卻讓自己遲遲還沒開始動工。&lt;/p&gt;
 &lt;p&gt;後來因為在 &lt;a href=&quot;https://blog.errorbaker.tw/&quot;&gt;Errorbaker&lt;/a&gt; 上參與共筆部落格，而部落格本身也是用 11ty 寫的。了解後發現是個輕量的選擇，想想與其要花時間在學習新的框架，那不如就先採用個簡單的方案，看看能不能在短時間內就把部落格架起來（寫完之後，自己的答案是不太行🥲）。&lt;/p&gt;
 &lt;p&gt;那在這部分也會提一下自己使用 11ty 和 &lt;a href=&quot;https://github.com/google/eleventy-high-performance-blog&quot;&gt;&lt;br /&gt;
 eleventy-high-performance-blog&lt;/a&gt; 這個 template 的心得，以及自己額外做的處理。&lt;/p&gt;

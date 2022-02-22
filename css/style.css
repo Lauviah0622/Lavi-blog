@@ -188,6 +188,10 @@ blockquote {
   & > ul {
     padding: 0;
   }
+
+  & pre {
+    margin: 0;
+  }
 }
 
 code {
@@ -197,7 +201,7 @@ code {
 
 *:not(pre) > code {
   display: inline-block;
-  padding: 0.2ch;
+  padding: .4ch .5ch;
   background-color: var(--color-bg-reverse);
   color: var(--color-text-reverse);
   border-radius: 0.4ch;
@@ -208,8 +212,8 @@ code {
 pre {
   background-color: var(--color-bg-reverse);
   color: var(--color-text-reverse);
-  margin: 1.2rem -2rem;
-  padding: 1.2rem 2rem;
+  margin: 1.2rem -1.5rem;
+  padding: 1.2rem 1.5rem;
   border-radius: var(--block-border-radius);
   font-size: 0.9em;
   line-height: inherit;
@@ -282,9 +286,36 @@ dialog {
 
 /* ================== class  ================== */
 
+
+@media (prefers-color-scheme: dark) {
+  #light {
+    display: block;
+  }
+
+  img {
+    filter: brightness(0.8) contrast(1.2);
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  #dark {
+    display: block;
+  }
+
+  img {
+    filter: none;
+  }
+}
+
 body {
   &:not(.dark-theme) #light {
     display: none;
+  }
+
+  &:not(.dark-theme) {
+    & img {
+      filter: none;
+    }
   }
 
   &.dark-theme {
@@ -313,21 +344,6 @@ body {
   }
 }
 
-@media (prefers-color-scheme: dark) {
-  #light {
-    display: block;
-  }
-
-  img {
-    filter: brightness(0.8) contrast(1.2);
-  }
-}
-
-@media (prefers-color-scheme: light) {
-  #dark {
-    display: block;
-  }
-}
 
 .center {
   --max-width: 63ch;
@@ -812,7 +828,7 @@ hr {
   & img {
     max-height: 50vh;
     width: auto;
-
+    max-width: 100%;
     margin: 0 auto;
   }
 }

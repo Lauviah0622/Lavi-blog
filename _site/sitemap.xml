@@ -281,6 +281,32 @@
   
   
   <url>
+    <loc>https://lavi-blog.vercel.app/tag/deploy/</loc>
+    <lastmod>2021-10-17T09:38:58.321Z</lastmod>
+  </url>
+  
+  
+  
+  
+  
+  
+    
+  
+  
+  <url>
+    <loc>https://lavi-blog.vercel.app/tag/database/</loc>
+    <lastmod>2021-10-17T09:38:58.321Z</lastmod>
+  </url>
+  
+  
+  
+  
+  
+  
+    
+  
+  
+  <url>
     <loc>https://lavi-blog.vercel.app/tag/css/</loc>
     <lastmod>2021-10-17T09:38:58.321Z</lastmod>
   </url>
@@ -320,59 +346,7 @@
   
   
   <url>
-    <loc>https://lavi-blog.vercel.app/tag/deploy/</loc>
-    <lastmod>2021-10-17T09:38:58.321Z</lastmod>
-  </url>
-  
-  
-  
-  
-  
-  
-    
-  
-  
-  <url>
-    <loc>https://lavi-blog.vercel.app/tag/eleventy/</loc>
-    <lastmod>2021-10-17T09:38:58.321Z</lastmod>
-  </url>
-  
-  
-  
-  
-  
-  
-    
-  
-  
-  <url>
     <loc>https://lavi-blog.vercel.app/tag/javascript/</loc>
-    <lastmod>2021-10-17T09:38:58.321Z</lastmod>
-  </url>
-  
-  
-  
-  
-  
-  
-    
-  
-  
-  <url>
-    <loc>https://lavi-blog.vercel.app/tag/database/</loc>
-    <lastmod>2021-10-17T09:38:58.321Z</lastmod>
-  </url>
-  
-  
-  
-  
-  
-  
-    
-  
-  
-  <url>
-    <loc>https://lavi-blog.vercel.app/tag/http/</loc>
     <lastmod>2021-10-17T09:38:58.321Z</lastmod>
   </url>
   
@@ -410,6 +384,32 @@
     
   
   
+  <url>
+    <loc>https://lavi-blog.vercel.app/tag/eleventy/</loc>
+    <lastmod>2021-10-17T09:38:58.321Z</lastmod>
+  </url>
+  
+  
+  
+  
+  
+  
+    
+  
+  
+  <url>
+    <loc>https://lavi-blog.vercel.app/tag/http/</loc>
+    <lastmod>2021-10-17T09:38:58.321Z</lastmod>
+  </url>
+  
+  
+  
+  
+  
+  
+    
+  
+  
     
   
   <url>
@@ -425,8 +425,10 @@
     
   
   
+    
+  
   <url>
     <loc>https://lavi-blog.vercel.app/posts/blog-log/</loc>
-    <lastmod>2021-10-31T00:00:00.000Z</lastmod>
+    <lastmod>2021-10-31T08:53:33.000Z</lastmod>
   </url>
 </urlset>
